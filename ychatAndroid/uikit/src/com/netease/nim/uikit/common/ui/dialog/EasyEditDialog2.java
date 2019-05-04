@@ -241,7 +241,7 @@ public class EasyEditDialog2 extends Dialog {
     /**
      * 计算最佳采样率
      *计算合适的采样率(当然这里还可以自己定义计算规则)，reqWidth和reqHeight为期望的图片大小，单位是px
-     * test branch
+     * test branch2222
      */
     private static int calculateSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         int sourceWidth = options.outWidth;
