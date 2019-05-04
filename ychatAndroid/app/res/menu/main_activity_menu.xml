@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/create_search_team"
+        android:title="@string/mine_search" />
+
+    <item
+        android:id="@+id/create_normal_team"
+        android:title="@string/mine_scan" />
+    <item
+        android:id="@+id/create_regular_team"
+        android:title="@string/create_advanced_team" />
+    <item
+        android:id="@+id/search_advanced_team"
+        android:title="@string/search_advanced_team" />
+</menu>

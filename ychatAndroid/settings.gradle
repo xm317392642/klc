@@ -1,0 +1,4 @@
+include ':app', ':pickerview', ':wheelview'
+include ':uikit'
+include ':avchatkit'
+include ':faceunity'

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/action_bar_height"
+            android:background="@color/color_be6913"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true">
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:ellipsize="end"
+                    android:maxWidth="210dp"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlCtrl"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/app_bar_layout"
+            android:background="@color/white"
+            android:minHeight="50dp"
+            android:visibility="visible">
+
+            <com.netease.nim.uikit.common.ui.widget.RoundRectTextView
+                android:id="@+id/btnSelect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6dip"
+                android:layout_marginRight="6dip"
+                android:gravity="center"
+                android:paddingLeft="9dp"
+                android:paddingRight="9dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="确定(0)"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:bgColor="#BE6913"
+                app:pressBgColor="#d2BE6913"
+                app:rrtRadius="3dp" />
+
+
+
+            <HorizontalScrollView
+                android:id="@+id/contact_select_area"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/btnSelect"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="6dip"
+                    android:paddingRight="6dip">
+
+                    <GridView
+                        android:id="@+id/contact_select_area_grid"
+                        style="@style/grid_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:horizontalSpacing="0dip"
+                        android:listSelector="@android:color/transparent"
+                        android:paddingTop="3dp"
+                        android:verticalSpacing="0dip" />
+                </LinearLayout>
+            </HorizontalScrollView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/rlCtrl"
+            android:background="@color/transparent">
+
+            <ListView
+                android:id="@+id/contact_list_view"
+                style="@style/list_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_toLeftOf="@+id/liv_index"
+                android:cacheColorHint="@color/white"
+                android:divider="@color/transparent"
+                android:listSelector="@color/transparent"
+                android:nextFocusLeft="@+id/contact_select_back"
+                android:nextFocusRight="@+id/btnAlSelected"
+                android:nextFocusUp="@+id/contact_select_back"
+                android:scrollbars="none" />
+
+            <ImageView
+                android:id="@+id/img_hit_letter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/nim_contact_hit_letter_bg"
+                android:contentDescription="@string/empty"
+                android:padding="40dip"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tv_hit_letter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="#ffffff"
+                android:textSize="40sp"
+                android:visibility="invisible" />
+
+            <com.netease.nim.uikit.common.ui.liv.LetterIndexView
+                android:id="@+id/liv_index"
+                android:layout_width="15dip"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:background="#00000000" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</FrameLayout>

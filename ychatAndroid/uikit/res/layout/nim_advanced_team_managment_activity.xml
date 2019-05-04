@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_bar_height"
+        android:background="@color/color_be6913"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:maxWidth="210dp"
+                android:maxLines="1"
+                android:text="群管理"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/action_bar_right_clickable_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_height"
+                android:layout_gravity="end|center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/color_f2f2f2"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/team_member_protect_layout"
+                layout="@layout/nim_advanced_team_info_notification_layout" />
+
+            <TextView
+                android:id="@+id/tx_member_protect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="12dp"
+                android:text="开启后，群成员之间无法通过该群添加好友"
+                android:textSize="13sp" />
+            <!-- 群成员活跃度-->
+            <include
+                android:id="@+id/team_member_mute_layout"
+                layout="@layout/nim_advanced_team_info_divider_item" />
+
+            <!-- 群成员活跃度-->
+            <include
+                android:id="@+id/team_member_activity_layout"
+                layout="@layout/nim_advanced_team_info_divider_item" />
+            <!-- 群成员变动记录-->
+            <include
+                android:id="@+id/team_member_change_record_layout"
+                layout="@layout/nim_advanced_team_info_divider_item"
+
+                />
+            <!-- 禁止群成员收发红包-->
+            <include
+                android:id="@+id/team_member_forbid_redpacket_layout"
+                layout="@layout/nim_advanced_team_info_divider_item" />
+            <!-- 机器人-->
+            <include
+                android:id="@+id/team_member_robot_layout"
+                layout="@layout/nim_advanced_team_info_divider_item" />
+            <include
+                android:id="@+id/team_authentication_layout"
+                layout="@layout/nim_advanced_team_info_divider_item" />
+
+
+            <include
+                android:id="@+id/team_invite_layout"
+                layout="@layout/nim_advanced_team_info_divider_item" />
+
+            <include
+                android:id="@+id/team_info_update_layout"
+                layout="@layout/nim_advanced_team_info_divider_item" />
+
+            <include
+                android:id="@+id/team_invitee_authen_layout"
+                layout="@layout/nim_advanced_team_info_divider_item" />
+            <include
+                android:id="@+id/team_member_control_exit_layout"
+                layout="@layout/nim_advanced_team_info_notification_layout" />
+
+            <TextView
+                android:id="@+id/team_member_control_exit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="12dp"
+                android:text="开启后，成员退群需要群主同意方可退群"
+                android:textSize="13sp" />
+            <include
+                android:id="@+id/team_copy_layout"
+                layout="@layout/nim_advanced_team_info_divider_item" />
+
+            <include
+                android:id="@+id/team_transfer_team_layout"
+                layout="@layout/nim_advanced_team_info_divider_item" />
+
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

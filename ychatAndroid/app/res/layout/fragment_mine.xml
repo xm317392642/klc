@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_f2f2f2"
+    android:orientation="vertical"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/mine_information"
+        android:layout_width="match_parent"
+        android:layout_height="124dp"
+        android:background="@drawable/nim_semitransparency_selector">
+
+        <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+            android:id="@+id/mine_avatar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="20dp"
+            android:src="@mipmap/logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_corner_radius="7dp" />
+
+        <TextView
+            android:id="@+id/mine_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="7dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/mine_avatar"
+            app:layout_constraintTop_toTopOf="@+id/mine_avatar"
+            tools:text="昵称最长最长可十个" />
+
+        <TextView
+            android:id="@+id/mine_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/color_grey_888888"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@+id/mine_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/mine_name"
+            tools:text="空了吹号：xdjdfijexdjdfije" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/mine_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="61dp"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginRight="@dimen/default_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/mine_next" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/mine_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="@dimen/default_margin"
+            app:layout_constraintEnd_toStartOf="@+id/mine_next"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/mine_code" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_f2f2f2" />
+
+    <TextView
+        android:id="@+id/mine_scan"
+        style="@style/MineItemStyle"
+        android:drawableStart="@drawable/mine_scan"
+        android:text="@string/mine_scan" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_f2f2f2" />
+
+    <TextView
+        android:id="@+id/mine_packet"
+        style="@style/MineItemStyle"
+        android:drawableStart="@drawable/mine_alipay"
+        android:text="@string/mine_alipay" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_f2f2f2" />
+
+    <TextView
+        android:id="@+id/mine_setting"
+        style="@style/MineItemStyle"
+        android:drawableStart="@drawable/mine_settings"
+        android:text="@string/mine_setting" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_d2d2d2" />
+
+    <TextView
+        android:id="@+id/mine_help"
+        style="@style/MineItemStyle"
+        android:drawableStart="@drawable/mine_help"
+        android:text="@string/mine_help" />
+</LinearLayout>

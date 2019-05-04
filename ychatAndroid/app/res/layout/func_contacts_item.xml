@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/img_head"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/empty"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_secretary" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tv_func_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginEnd="15dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="系统功能"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_head"
+        app:layout_constraintEnd_toStartOf="@+id/tab_new_msg_label"
+        app:layout_constraintStart_toEndOf="@+id/img_head"
+        app:layout_constraintTop_toTopOf="@+id/img_head" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tab_new_msg_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:background="@drawable/nim_g_unread_badge"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/img_head"
+        app:layout_constraintStart_toEndOf="@+id/tv_func_name"
+        app:layout_constraintTop_toTopOf="@+id/img_head" />
+
+    <View
+        android:id="@+id/item_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_f2f2f2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_func_name"
+        app:layout_constraintTop_toBottomOf="@+id/img_head" />
+
+</android.support.constraint.ConstraintLayout>
+
+

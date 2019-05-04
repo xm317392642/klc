@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="c80000000">#80000000</color>
+    <color name="colorTranslucent">#00000000</color>
+    <color name="colorWhite">#ffffffff</color>
+    <color name="faceunityYellow">#ffcb15</color>
+    <color name="percent60translucentBlack">#99000000</color>
+    <color name="unselect_gray">#48ffffff</color>
+    <color name="white">#ffffff</color>
+    <dimen name="blur_circle_size">40dp</dimen>
+    <dimen name="min_space">5dp</dimen>
+    <dimen name="normal_space">8dp</dimen>
+    <string name="app_name">faceunity</string>
+    <style name="AppTheme" parent="android:Theme.DeviceDefault.Light">
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="FullScreenTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <!-- Customize your theme here. -->
+    </style>
+</resources>

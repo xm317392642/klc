@@ -1,0 +1,151 @@
+apply plugin: 'com.android.application'
+//图片压缩插件配置,后文有对配置信息介绍
+apply plugin: 'img-compressor'
+imgCompressOpt{
+    way="pngquant"
+    test = false
+    whiteFiles=["text_pic1.png","test_pic2.jpg"]
+    minSize=0
+    tinyKeys=["your key"]
+}
+def static getGitVersion() {
+    try {
+        return 'git rev-parse --short HEAD'.execute().text.trim()
+    } catch (Throwable th) {
+        th.printStackTrace()
+        return ""
+    }
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    signingConfigs {
+        release {
+            keyAlias 'xinran'
+            keyPassword 'xinran1178'
+            storeFile file("$rootDir/ychat.jks")
+            storePassword 'xinran1178'
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.xr.ychat"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.appTargetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+
+        buildConfigField "String", "GIT_REVISION", "\"${getGitVersion()}\""
+        buildConfigField "String", "BUILD_DATE", "\"${new Date().toLocaleString()}\""
+        multiDexEnabled true
+
+        ndk {
+            abiFilters "armeabi-v7a", "armeabi"
+        }
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "String", "BUGLY_APPID", "\"ce5b727c4c\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [AMAP_KEY: "a0a2e4dc8649324619acc771c0df6c89"]
+            signingConfig signingConfigs.release
+        }
+
+        release {
+            //shrinkResources true
+            //minifyEnabled true
+            //zipAlignEnabled true
+            buildConfigField "String", "BUGLY_APPID", "\"5af150eeeb\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [AMAP_KEY: "a0a2e4dc8649324619acc771c0df6c89"]
+            signingConfig signingConfigs.release
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res', 'res-chatroom', 'res-rp']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs', 'libs-sdk']
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    dexOptions {
+        preDexLibraries false
+        jumboMode true
+        javaMaxHeapSize "4g"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    aaptOptions {
+        cruncherEnabled = false
+        useNewCruncher = false
+    }
+
+    flavorDimensions "rc"
+
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.appSourceCompatibility
+        targetCompatibility rootProject.ext.appTargetCompatibility
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation fileTree(include: '*.jar', dir: 'libs')
+
+    implementation project(path: ':uikit')
+    implementation project(path: ':avchatkit')
+    implementation project(path: ':pickerview')
+    implementation(name: 'alipaySdk-15.5.9-20181123210601', ext: 'aar')
+
+    // ViewModel and LiveData
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    // Java8 support for Lifecycles
+    implementation "android.arch.lifecycle:common-java8:1.1.1"
+    implementation 'com.huawei.android.hms:push:2.6.0.301'
+    // 基础功能 (必需)
+    implementation 'com.netease.nimlib:basesdk:5.9.0'
+    // 音视频和互动白板服务需要
+    //implementation 'com.netease.nimlib:nrtc:5.9.0'
+    // 音视频需要
+    //implementation 'com.netease.nimlib:avchat:5.9.0'
+    // 聊天室需要
+    //implementation 'com.netease.nimlib:chatroom:5.9.0'
+    // 互动白板服务需要
+    //implementation 'com.netease.nimlib:rts:5.9.0'
+    // 全文检索服务需要
+    implementation 'com.netease.nimlib:lucene:5.9.0'
+    // 小米、华为、魅族、fcm 推送
+    implementation 'com.netease.nimlib:push:5.9.0'
+    implementation 'com.meizu.flyme.internet:push-internal:3.6.3@aar'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+
+    implementation  'com.tencent.bugly:crashreport:latest.release'
+    implementation  'com.tencent.bugly:nativecrashreport:latest.release'
+
+    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+    implementation "cc.linkedme.deeplinks:link-page:1.0.29"
+    //微信分享
+    implementation  'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+
+
+}

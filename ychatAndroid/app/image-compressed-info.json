@@ -1,0 +1,1530 @@
+[
+    {
+        "preSize": 1297,
+        "outputPath": "\\res-rp\\drawable-xxhdpi\\red_packet_open_tip.png",
+        "md5": "b3715d51fca55c58218953d5a66cc1be",
+        "ratio": "89%",
+        "compressedSize": 1166,
+        "path": "\\res-rp\\drawable-xxhdpi\\red_packet_open_tip.png"
+    },
+    {
+        "preSize": 760,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\red_packet_open_tip.png",
+        "md5": "d1e4a86edecd5b839a8371b226169e54",
+        "ratio": "83%",
+        "compressedSize": 632,
+        "path": "\\res-rp\\drawable-xhdpi\\red_packet_open_tip.png"
+    },
+    {
+        "preSize": 1579,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\red_packet_close.png",
+        "md5": "76761fc44d522dfaf087adbc707d3c10",
+        "ratio": "82%",
+        "compressedSize": 1309,
+        "path": "\\res-rp\\drawable-xhdpi\\red_packet_close.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res-rp\\drawable-hdpi\\red_packet_open_tip.png",
+        "md5": "3fa5de7e24f28e2a3ad022d3dc3140ca",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res-rp\\drawable-hdpi\\red_packet_open_tip.png"
+    },
+    {
+        "preSize": 2558,
+        "outputPath": "\\res\\mipmap-xhdpi\\wechat_circle.png",
+        "md5": "40d1db72c457f6e7f118fa9afaa19e05",
+        "ratio": "72%",
+        "compressedSize": 1855,
+        "path": "\\res\\mipmap-xhdpi\\wechat_circle.png"
+    },
+    {
+        "preSize": 1781,
+        "outputPath": "\\res\\mipmap-xhdpi\\wechat.png",
+        "md5": "1981c6a8392a49d8db2e3eaa73d7582c",
+        "ratio": "78%",
+        "compressedSize": 1397,
+        "path": "\\res\\mipmap-xhdpi\\wechat.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\mipmap-xhdpi\\login_btn_wechat.png",
+        "md5": "86d5b3a8a05dbdb3f36b795a93e863bf",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\mipmap-xhdpi\\login_btn_wechat.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-xxhdpi\\ic_stat_notify_msg.png",
+        "md5": "7d5ea50cb8f62e99c8e2c7ba77ac6c4b",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-xxhdpi\\ic_stat_notify_msg.png"
+    },
+    {
+        "preSize": 1472,
+        "outputPath": "\\res\\drawable-xhdpi\\user_pwd_lock_icon.png",
+        "md5": "acb60f5a2f229af1d41135574afdebf6",
+        "ratio": "99%",
+        "compressedSize": 1462,
+        "path": "\\res\\drawable-xhdpi\\user_pwd_lock_icon.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-xhdpi\\user_account_icon.png",
+        "md5": "4252a80da1c38d7b6af6bded7b559238",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-xhdpi\\user_account_icon.png"
+    },
+    {
+        "preSize": 441,
+        "outputPath": "\\res\\drawable-xhdpi\\updown_arrow.png",
+        "md5": "c3c6608ebb22120e2b474004ca72e3a2",
+        "ratio": "92%",
+        "compressedSize": 409,
+        "path": "\\res\\drawable-xhdpi\\updown_arrow.png"
+    },
+    {
+        "preSize": 1951,
+        "outputPath": "\\res\\drawable-xhdpi\\seekbar_thumb.png",
+        "md5": "410acd5ae1746b40e0d7ea530955f866",
+        "ratio": "80%",
+        "compressedSize": 1562,
+        "path": "\\res\\drawable-xhdpi\\seekbar_thumb.png"
+    },
+    {
+        "preSize": 292,
+        "outputPath": "\\res\\drawable-xhdpi\\seekbar_bg.png",
+        "md5": "91a707e9cb3eac7b8146a057f8dd648b",
+        "ratio": "55%",
+        "compressedSize": 163,
+        "path": "\\res\\drawable-xhdpi\\seekbar_bg.png"
+    },
+    {
+        "preSize": 694,
+        "outputPath": "\\res\\drawable-xhdpi\\search_green.png",
+        "md5": "5daa6b60e2134c16e07fcdd2eb3d28ce",
+        "ratio": "89%",
+        "compressedSize": 619,
+        "path": "\\res\\drawable-xhdpi\\search_green.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-xhdpi\\redpacket_record_pulldown.png",
+        "md5": "8e622f2232c519e7a253d6665486edd6",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-xhdpi\\redpacket_record_pulldown.png"
+    },
+    {
+        "preSize": 1310,
+        "outputPath": "\\res\\drawable-xhdpi\\redpacket_record_alipay.png",
+        "md5": "710582f0d61dff7c0a06f726ab85193b",
+        "ratio": "98%",
+        "compressedSize": 1293,
+        "path": "\\res\\drawable-xhdpi\\redpacket_record_alipay.png"
+    },
+    {
+        "preSize": 958,
+        "outputPath": "\\res\\drawable-xhdpi\\nim_message_item_right_bc.png",
+        "md5": "78321bc26a686a5f20dd295dca027020",
+        "ratio": "69%",
+        "compressedSize": 664,
+        "path": "\\res\\drawable-xhdpi\\nim_message_item_right_bc.png"
+    },
+    {
+        "preSize": 998,
+        "outputPath": "\\res\\drawable-xhdpi\\nim_message_item_left_bc.png",
+        "md5": "6af4777c226214787e1d453169459bde",
+        "ratio": "71%",
+        "compressedSize": 715,
+        "path": "\\res\\drawable-xhdpi\\nim_message_item_left_bc.png"
+    },
+    {
+        "preSize": 748,
+        "outputPath": "\\res\\drawable-xhdpi\\nim_male.png",
+        "md5": "c852ee548a79d011ea451cdc9aa2ac6e",
+        "ratio": "86%",
+        "compressedSize": 646,
+        "path": "\\res\\drawable-xhdpi\\nim_male.png"
+    },
+    {
+        "preSize": 791,
+        "outputPath": "\\res\\drawable-xhdpi\\nim_female.png",
+        "md5": "755405239b9378dbe82c159cda1dbe26",
+        "ratio": "85%",
+        "compressedSize": 677,
+        "path": "\\res\\drawable-xhdpi\\nim_female.png"
+    },
+    {
+        "preSize": 1879,
+        "outputPath": "\\res\\drawable-xhdpi\\nim_checkbox_not_checked.png",
+        "md5": "8ab427a357454e5968747066f5b71c88",
+        "ratio": "88%",
+        "compressedSize": 1658,
+        "path": "\\res\\drawable-xhdpi\\nim_checkbox_not_checked.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-xhdpi\\nick_name_icon.png",
+        "md5": "a40bb286afbe16e8e7bab5b60d9792f2",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-xhdpi\\nick_name_icon.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-xhdpi\\mine_settings.png",
+        "md5": "925b55703fe953615c4051f712b479da",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-xhdpi\\mine_settings.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-xhdpi\\mine_scan.png",
+        "md5": "72e27fe3860aaed832c3f72858ccc576",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-xhdpi\\mine_scan.png"
+    },
+    {
+        "preSize": 551,
+        "outputPath": "\\res\\drawable-xhdpi\\mine_next.png",
+        "md5": "c5846dea5cd41c02f758d701da2f5751",
+        "ratio": "77%",
+        "compressedSize": 425,
+        "path": "\\res\\drawable-xhdpi\\mine_next.png"
+    },
+    {
+        "preSize": 1330,
+        "outputPath": "\\res\\drawable-xhdpi\\mine_help.png",
+        "md5": "8d39432e9960b3838b9a21371abdf59e",
+        "ratio": "91%",
+        "compressedSize": 1215,
+        "path": "\\res\\drawable-xhdpi\\mine_help.png"
+    },
+    {
+        "preSize": 1089,
+        "outputPath": "\\res\\drawable-xhdpi\\mine_code.png",
+        "md5": "128cefda80dce6784ca8cf5ffe1db6c6",
+        "ratio": "74%",
+        "compressedSize": 810,
+        "path": "\\res\\drawable-xhdpi\\mine_code.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-xhdpi\\mine_alipay.png",
+        "md5": "9ab85d1b4c423ef118ba02380bc80924",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-xhdpi\\mine_alipay.png"
+    },
+    {
+        "preSize": 2298,
+        "outputPath": "\\res\\drawable-xhdpi\\message_plus_snapchat_pressed.png",
+        "md5": "a5f4fabb6522e1c59e1b44762cedf3d0",
+        "ratio": "82%",
+        "compressedSize": 1885,
+        "path": "\\res\\drawable-xhdpi\\message_plus_snapchat_pressed.png"
+    },
+    {
+        "preSize": 2015,
+        "outputPath": "\\res\\drawable-xhdpi\\message_plus_red_packet_pressed.png",
+        "md5": "8bfdf9c8c5a9fe8c0398c18bfa515e6e",
+        "ratio": "81%",
+        "compressedSize": 1636,
+        "path": "\\res\\drawable-xhdpi\\message_plus_red_packet_pressed.png"
+    },
+    {
+        "preSize": 2944,
+        "outputPath": "\\res\\drawable-xhdpi\\message_plus_guess_pressed.png",
+        "md5": "22caa8f39b0b0f681e60a23af9f15f8a",
+        "ratio": "82%",
+        "compressedSize": 2435,
+        "path": "\\res\\drawable-xhdpi\\message_plus_guess_pressed.png"
+    },
+    {
+        "preSize": 2967,
+        "outputPath": "\\res\\drawable-xhdpi\\message_plus_guess_normal.png",
+        "md5": "45282ed4bb00be0619f074996990468c",
+        "ratio": "82%",
+        "compressedSize": 2456,
+        "path": "\\res\\drawable-xhdpi\\message_plus_guess_normal.png"
+    },
+    {
+        "preSize": 2580,
+        "outputPath": "\\res\\drawable-xhdpi\\message_plus_file_pressed.png",
+        "md5": "862402e51efb1a99ba68160fd44dc514",
+        "ratio": "79%",
+        "compressedSize": 2042,
+        "path": "\\res\\drawable-xhdpi\\message_plus_file_pressed.png"
+    },
+    {
+        "preSize": 2618,
+        "outputPath": "\\res\\drawable-xhdpi\\message_plus_file_normal.png",
+        "md5": "37143926449766c272c55a80b20df196",
+        "ratio": "80%",
+        "compressedSize": 2106,
+        "path": "\\res\\drawable-xhdpi\\message_plus_file_normal.png"
+    },
+    {
+        "preSize": 891,
+        "outputPath": "\\res\\drawable-xhdpi\\main_menu_scan.png",
+        "md5": "87e460f1a8c34ae4147e6e16096cdb02",
+        "ratio": "93%",
+        "compressedSize": 830,
+        "path": "\\res\\drawable-xhdpi\\main_menu_scan.png"
+    },
+    {
+        "preSize": 828,
+        "outputPath": "\\res\\drawable-xhdpi\\main_menu_chat.png",
+        "md5": "0158d20f06063ad9c09992a0cb364f8f",
+        "ratio": "92%",
+        "compressedSize": 767,
+        "path": "\\res\\drawable-xhdpi\\main_menu_chat.png"
+    },
+    {
+        "preSize": 847,
+        "outputPath": "\\res\\drawable-xhdpi\\main_menu_add.png",
+        "md5": "82687fff7cff2b923bfb0f47de9b5095",
+        "ratio": "90%",
+        "compressedSize": 769,
+        "path": "\\res\\drawable-xhdpi\\main_menu_add.png"
+    },
+    {
+        "preSize": 2254,
+        "outputPath": "\\res\\drawable-xhdpi\\main_add_action.png",
+        "md5": "360d5fa204808b9391c440b25f4dcd42",
+        "ratio": "94%",
+        "compressedSize": 2140,
+        "path": "\\res\\drawable-xhdpi\\main_add_action.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-xhdpi\\ic_stat_notify_msg.png",
+        "md5": "24295092c15f860d70765726c76d8435",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-xhdpi\\ic_stat_notify_msg.png"
+    },
+    {
+        "preSize": 2859,
+        "outputPath": "\\res\\drawable-xhdpi\\ic_robot.png",
+        "md5": "be45c8b4e0777f9b4521f22f94eaab76",
+        "ratio": "83%",
+        "compressedSize": 2374,
+        "path": "\\res\\drawable-xhdpi\\ic_robot.png"
+    },
+    {
+        "preSize": 1911,
+        "outputPath": "\\res\\drawable-xhdpi\\ic_new_friend.png",
+        "md5": "09dd9765156c9b4ddc9fbdf6a223eb1d",
+        "ratio": "60%",
+        "compressedSize": 1160,
+        "path": "\\res\\drawable-xhdpi\\ic_new_friend.png"
+    },
+    {
+        "preSize": 1281,
+        "outputPath": "\\res\\drawable-xhdpi\\ic_multiport.png",
+        "md5": "7f6cecfb811223047e82de96129284a8",
+        "ratio": "95%",
+        "compressedSize": 1218,
+        "path": "\\res\\drawable-xhdpi\\ic_multiport.png"
+    },
+    {
+        "preSize": 2117,
+        "outputPath": "\\res\\drawable-xhdpi\\ic_black_list.png",
+        "md5": "ea6a922e20bbd2aa6c97a596d82dce1d",
+        "ratio": "61%",
+        "compressedSize": 1302,
+        "path": "\\res\\drawable-xhdpi\\ic_black_list.png"
+    },
+    {
+        "preSize": 2145,
+        "outputPath": "\\res\\drawable-xhdpi\\ic_advanced_team.png",
+        "md5": "d2be087c306dfd100d9c46b4684e79ca",
+        "ratio": "58%",
+        "compressedSize": 1262,
+        "path": "\\res\\drawable-xhdpi\\ic_advanced_team.png"
+    },
+    {
+        "preSize": 1960,
+        "outputPath": "\\res\\drawable-xhdpi\\icon_verify_remind.png",
+        "md5": "34e5173c5e397e98433a1718ffb640f0",
+        "ratio": "59%",
+        "compressedSize": 1171,
+        "path": "\\res\\drawable-xhdpi\\icon_verify_remind.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-xhdpi\\icon_scan_line.png",
+        "md5": "f93470808449b71ce10105a3e12e6695",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-xhdpi\\icon_scan_line.png"
+    },
+    {
+        "preSize": 2093,
+        "outputPath": "\\res\\drawable-xhdpi\\icon_rts_send.png",
+        "md5": "54d0ca1d9da71d871d344a126446a5e9",
+        "ratio": "90%",
+        "compressedSize": 1897,
+        "path": "\\res\\drawable-xhdpi\\icon_rts_send.png"
+    },
+    {
+        "preSize": 1078,
+        "outputPath": "\\res\\drawable-xhdpi\\icon_delete_pressed.png",
+        "md5": "1f3bad06f1aa2f0f9a11f5f9a90ca36f",
+        "ratio": "93%",
+        "compressedSize": 1005,
+        "path": "\\res\\drawable-xhdpi\\icon_delete_pressed.png"
+    },
+    {
+        "preSize": 1075,
+        "outputPath": "\\res\\drawable-xhdpi\\icon_delete_normal.png",
+        "md5": "ef2bce214b450a48064331d5e2c31a49",
+        "ratio": "93%",
+        "compressedSize": 1005,
+        "path": "\\res\\drawable-xhdpi\\icon_delete_normal.png"
+    },
+    {
+        "preSize": 1295,
+        "outputPath": "\\res\\drawable-xhdpi\\icon_close.png",
+        "md5": "31bdbcb08eacc27525f2718998bfcaaf",
+        "ratio": "94%",
+        "compressedSize": 1222,
+        "path": "\\res\\drawable-xhdpi\\icon_close.png"
+    },
+    {
+        "preSize": 1338,
+        "outputPath": "\\res\\drawable-xhdpi\\home_tab_mine_selected.png",
+        "md5": "6a9c0f1d4fa4de875169b428a7f8a67f",
+        "ratio": "66%",
+        "compressedSize": 887,
+        "path": "\\res\\drawable-xhdpi\\home_tab_mine_selected.png"
+    },
+    {
+        "preSize": 1494,
+        "outputPath": "\\res\\drawable-xhdpi\\home_tab_mine_normal.png",
+        "md5": "e10d02a91cd0a7f7c372f8265b7f9a28",
+        "ratio": "93%",
+        "compressedSize": 1400,
+        "path": "\\res\\drawable-xhdpi\\home_tab_mine_normal.png"
+    },
+    {
+        "preSize": 1481,
+        "outputPath": "\\res\\drawable-xhdpi\\home_tab_contact_selected.png",
+        "md5": "2d22bbcd3dbd48f36e224c5b12c9eafb",
+        "ratio": "72%",
+        "compressedSize": 1072,
+        "path": "\\res\\drawable-xhdpi\\home_tab_contact_selected.png"
+    },
+    {
+        "preSize": 1574,
+        "outputPath": "\\res\\drawable-xhdpi\\home_tab_contact_normal.png",
+        "md5": "31bf8c2ad06607675ed5749ca9572715",
+        "ratio": "95%",
+        "compressedSize": 1509,
+        "path": "\\res\\drawable-xhdpi\\home_tab_contact_normal.png"
+    },
+    {
+        "preSize": 1322,
+        "outputPath": "\\res\\drawable-xhdpi\\home_tab_chat_selected.png",
+        "md5": "f99d56d53b54d17e81e3c0d5e8f88d27",
+        "ratio": "73%",
+        "compressedSize": 969,
+        "path": "\\res\\drawable-xhdpi\\home_tab_chat_selected.png"
+    },
+    {
+        "preSize": 1577,
+        "outputPath": "\\res\\drawable-xhdpi\\home_tab_chat_normal.png",
+        "md5": "a66f50b32d7046dabe1e5647ae515468",
+        "ratio": "89%",
+        "compressedSize": 1413,
+        "path": "\\res\\drawable-xhdpi\\home_tab_chat_normal.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-xhdpi\\back_white_icon.png",
+        "md5": "dd60a753665da59b676ae6e17f44d00a",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-xhdpi\\back_white_icon.png"
+    },
+    {
+        "preSize": 1152,
+        "outputPath": "\\res\\drawable-xhdpi\\add_friend_icon.png",
+        "md5": "9e340a19f6c4132eddf6fd9353c25a43",
+        "ratio": "73%",
+        "compressedSize": 847,
+        "path": "\\res\\drawable-xhdpi\\add_friend_icon.png"
+    },
+    {
+        "preSize": 1253,
+        "outputPath": "\\res\\drawable-xhdpi\\action_bar_black_more_icon.png",
+        "md5": "f4d07729799207e6cacb87259eb9e5c7",
+        "ratio": "88%",
+        "compressedSize": 1113,
+        "path": "\\res\\drawable-xhdpi\\action_bar_black_more_icon.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-xhdpi\\actionbar_white_logo_icon.png",
+        "md5": "b7c97094117ec21655528880255ad37d",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-xhdpi\\actionbar_white_logo_icon.png"
+    },
+    {
+        "preSize": 1220,
+        "outputPath": "\\res\\drawable-xhdpi\\actionbar_dark_back_icon.png",
+        "md5": "7ca501563cf5015827a686f50fb5bfad",
+        "ratio": "93%",
+        "compressedSize": 1138,
+        "path": "\\res\\drawable-xhdpi\\actionbar_dark_back_icon.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-mdpi\\ic_stat_notify_msg.png",
+        "md5": "aa8371181d4cc5c663a38794fa7f4ba0",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-mdpi\\ic_stat_notify_msg.png"
+    },
+    {
+        "preSize": 2159,
+        "outputPath": "\\res\\drawable-mdpi\\ic_logo.png",
+        "md5": "678a42ca40d08a89c0acae412c26e439",
+        "ratio": "95%",
+        "compressedSize": 2053,
+        "path": "\\res\\drawable-mdpi\\ic_logo.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-hdpi\\user_pwd_lock_icon.png",
+        "md5": "dc26d4e37281f9db9f669cc4a6ce2235",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-hdpi\\user_pwd_lock_icon.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-hdpi\\user_account_icon.png",
+        "md5": "19a3f357c7beefc714ca4aec71ed5b92",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-hdpi\\user_account_icon.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-hdpi\\nim_male.png",
+        "md5": "6f2616f2f906b66b553787d2fdd382ba",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-hdpi\\nim_male.png"
+    },
+    {
+        "preSize": 1522,
+        "outputPath": "\\res\\drawable-hdpi\\nim_ic_messge_history.png",
+        "md5": "c4a0d0705f757e111df576f12faaa21a",
+        "ratio": "93%",
+        "compressedSize": 1419,
+        "path": "\\res\\drawable-hdpi\\nim_ic_messge_history.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-hdpi\\nim_ic_message_actionbar_team.png",
+        "md5": "b431237605772d0a796e88e6bd06f19a",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-hdpi\\nim_ic_message_actionbar_team.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-hdpi\\nim_ic_message_actionbar_p2p_add.png",
+        "md5": "55b716ab50ee8ffbb53570e93f4c9652",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-hdpi\\nim_ic_message_actionbar_p2p_add.png"
+    },
+    {
+        "preSize": 773,
+        "outputPath": "\\res\\drawable-hdpi\\nim_ic_actionbar_robot_info.png",
+        "md5": "c63b1b0164b65369df9b22a38edb11f4",
+        "ratio": "79%",
+        "compressedSize": 612,
+        "path": "\\res\\drawable-hdpi\\nim_ic_actionbar_robot_info.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-hdpi\\nim_female.png",
+        "md5": "f32daec3c5d98de20d064d86cb239b16",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-hdpi\\nim_female.png"
+    },
+    {
+        "preSize": 1522,
+        "outputPath": "\\res\\drawable-hdpi\\nim_checkbox_not_checked.png",
+        "md5": "0ebaa4d4405e32d684d4db4e2315b61a",
+        "ratio": "94%",
+        "compressedSize": 1443,
+        "path": "\\res\\drawable-hdpi\\nim_checkbox_not_checked.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-hdpi\\nick_name_icon.png",
+        "md5": "e257df6c88e9cd8eee03c16fccb2ca32",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-hdpi\\nick_name_icon.png"
+    },
+    {
+        "preSize": 1840,
+        "outputPath": "\\res\\drawable-xhdpi\\message_plus_video_chat_pressed.png",
+        "md5": "77427842e6e8998425871b71fa16ec6f",
+        "ratio": "69%",
+        "compressedSize": 1280,
+        "path": "\\res\\drawable-xhdpi\\message_plus_video_chat_pressed.png"
+    },
+    {
+        "preSize": 2709,
+        "outputPath": "\\res\\drawable-hdpi\\message_plus_snapchat_pressed.png",
+        "md5": "ec73cd2a65e80482150cd46ce5a69c6e",
+        "ratio": "69%",
+        "compressedSize": 1878,
+        "path": "\\res\\drawable-hdpi\\message_plus_snapchat_pressed.png"
+    },
+    {
+        "preSize": 2537,
+        "outputPath": "\\res\\drawable-hdpi\\message_plus_red_packet_pressed.png",
+        "md5": "9af678e149f9a489ea511a77627c3985",
+        "ratio": "71%",
+        "compressedSize": 1811,
+        "path": "\\res\\drawable-hdpi\\message_plus_red_packet_pressed.png"
+    },
+    {
+        "preSize": 2495,
+        "outputPath": "\\res\\drawable-hdpi\\message_plus_guess_pressed.png",
+        "md5": "7457951b7aa6d2792dd0a0c42cd909b1",
+        "ratio": "89%",
+        "compressedSize": 2225,
+        "path": "\\res\\drawable-hdpi\\message_plus_guess_pressed.png"
+    },
+    {
+        "preSize": 2538,
+        "outputPath": "\\res\\drawable-hdpi\\message_plus_guess_normal.png",
+        "md5": "531f7c8c0bad063d8486f9e295ca0bb4",
+        "ratio": "86%",
+        "compressedSize": 2205,
+        "path": "\\res\\drawable-hdpi\\message_plus_guess_normal.png"
+    },
+    {
+        "preSize": 2244,
+        "outputPath": "\\res\\drawable-hdpi\\message_plus_file_pressed.png",
+        "md5": "0518f4b4f01c2842a34972f57fef9050",
+        "ratio": "85%",
+        "compressedSize": 1919,
+        "path": "\\res\\drawable-hdpi\\message_plus_file_pressed.png"
+    },
+    {
+        "preSize": 2294,
+        "outputPath": "\\res\\drawable-hdpi\\message_plus_file_normal.png",
+        "md5": "3c1f6334f2f2d6582368aded927018da",
+        "ratio": "84%",
+        "compressedSize": 1935,
+        "path": "\\res\\drawable-hdpi\\message_plus_file_normal.png"
+    },
+    {
+        "preSize": 2610,
+        "outputPath": "\\res\\drawable-hdpi\\message_plus_audio_chat_pressed.png",
+        "md5": "a42145fff6d5f539a1b01be67c3d25a1",
+        "ratio": "69%",
+        "compressedSize": 1801,
+        "path": "\\res\\drawable-hdpi\\message_plus_audio_chat_pressed.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-hdpi\\ic_stat_notify_msg.png",
+        "md5": "b78f0b1299279341412d07e32cc345b2",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-hdpi\\ic_stat_notify_msg.png"
+    },
+    {
+        "preSize": 2602,
+        "outputPath": "\\res\\drawable-hdpi\\ic_secretary.png",
+        "md5": "8f0dd74533c028501305230097f85168",
+        "ratio": "86%",
+        "compressedSize": 2251,
+        "path": "\\res\\drawable-hdpi\\ic_secretary.png"
+    },
+    {
+        "preSize": 1871,
+        "outputPath": "\\res\\drawable-hdpi\\ic_robot.png",
+        "md5": "7101462c7e6c7ce71ea1b113c47947d1",
+        "ratio": "90%",
+        "compressedSize": 1687,
+        "path": "\\res\\drawable-hdpi\\ic_robot.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-hdpi\\ic_multiport.png",
+        "md5": "d5f118fe8e84431397014a13355fe96b",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-hdpi\\ic_multiport.png"
+    },
+    {
+        "preSize": 2457,
+        "outputPath": "\\res\\drawable-hdpi\\ic_black_list.png",
+        "md5": "c5d1009d084028ad54c7ff996a2dd382",
+        "ratio": "94%",
+        "compressedSize": 2312,
+        "path": "\\res\\drawable-hdpi\\ic_black_list.png"
+    },
+    {
+        "preSize": 2664,
+        "outputPath": "\\res\\drawable-hdpi\\ic_advanced_team.png",
+        "md5": "b4c5d614915c57d845c5b4767ff34c9e",
+        "ratio": "83%",
+        "compressedSize": 2226,
+        "path": "\\res\\drawable-hdpi\\ic_advanced_team.png"
+    },
+    {
+        "preSize": 2153,
+        "outputPath": "\\res\\drawable-hdpi\\icon_verify_remind.png",
+        "md5": "22b821961904d510cc5c1927538f09e7",
+        "ratio": "86%",
+        "compressedSize": 1873,
+        "path": "\\res\\drawable-hdpi\\icon_verify_remind.png"
+    },
+    {
+        "preSize": 1852,
+        "outputPath": "\\res\\drawable-hdpi\\icon_rts_send.png",
+        "md5": "14c8c84f1998523fa0bccb28184071f4",
+        "ratio": "89%",
+        "compressedSize": 1655,
+        "path": "\\res\\drawable-hdpi\\icon_rts_send.png"
+    },
+    {
+        "preSize": 1675,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_zip.png",
+        "md5": "f88575e2298280953ca445717b0817b2",
+        "ratio": "80%",
+        "compressedSize": 1342,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_zip.png"
+    },
+    {
+        "preSize": 2596,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_word.png",
+        "md5": "f0bdcd83f277eb9c647fac9c58ae2256",
+        "ratio": "82%",
+        "compressedSize": 2135,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_word.png"
+    },
+    {
+        "preSize": 1317,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_unknow.png",
+        "md5": "ca67dfe4ac0d8296ebd4213df745747d",
+        "ratio": "89%",
+        "compressedSize": 1184,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_unknow.png"
+    },
+    {
+        "preSize": 2065,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_txt.png",
+        "md5": "6725393e447ef50469a81f376f19e37f",
+        "ratio": "80%",
+        "compressedSize": 1653,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_txt.png"
+    },
+    {
+        "preSize": 1883,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_rar.png",
+        "md5": "1fec157afb7d0b4220f9ba8d41134bce",
+        "ratio": "75%",
+        "compressedSize": 1425,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_rar.png"
+    },
+    {
+        "preSize": 1858,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_ppt.png",
+        "md5": "539735a7159c6a3ad091b44d6a79220e",
+        "ratio": "81%",
+        "compressedSize": 1522,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_ppt.png"
+    },
+    {
+        "preSize": 2483,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_png.png",
+        "md5": "a977ef4a167c937e8939944d0b00f33e",
+        "ratio": "77%",
+        "compressedSize": 1930,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_png.png"
+    },
+    {
+        "preSize": 2557,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_pdf.png",
+        "md5": "cbfe3b08e43353ee97f1be072bb317fc",
+        "ratio": "78%",
+        "compressedSize": 1999,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_pdf.png"
+    },
+    {
+        "preSize": 1943,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_mp4.png",
+        "md5": "a8d627811281b5e7eaacefc93ed28af4",
+        "ratio": "76%",
+        "compressedSize": 1489,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_mp4.png"
+    },
+    {
+        "preSize": 2280,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_mp3.png",
+        "md5": "5a2748442b27423ef69e8b8abdac2350",
+        "ratio": "78%",
+        "compressedSize": 1780,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_mp3.png"
+    },
+    {
+        "preSize": 2316,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_jpg.png",
+        "md5": "893c871bdf90c6179f06292a29174320",
+        "ratio": "78%",
+        "compressedSize": 1822,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_jpg.png"
+    },
+    {
+        "preSize": 2068,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_html.png",
+        "md5": "1b246f7d4ff59fe102de54dd72739302",
+        "ratio": "82%",
+        "compressedSize": 1715,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_html.png"
+    },
+    {
+        "preSize": 2270,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_gif.png",
+        "md5": "cc44dfdfe2333f2d57badf4c1b1b8007",
+        "ratio": "80%",
+        "compressedSize": 1838,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_gif.png"
+    },
+    {
+        "preSize": 1800,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_session_excel.png",
+        "md5": "4e50c0ad7f95aa9f3174ce9398a3d4fa",
+        "ratio": "76%",
+        "compressedSize": 1383,
+        "path": "\\res\\drawable-hdpi\\file_ic_session_excel.png"
+    },
+    {
+        "preSize": 2210,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_zip.png",
+        "md5": "3c19554325f3b8f231d829f3026e2c0a",
+        "ratio": "74%",
+        "compressedSize": 1639,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_zip.png"
+    },
+    {
+        "preSize": 1669,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_unknow.png",
+        "md5": "23cf1f67735203069cf2d10cc8902d38",
+        "ratio": "84%",
+        "compressedSize": 1411,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_unknow.png"
+    },
+    {
+        "preSize": 3003,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_txt.png",
+        "md5": "de218d22015c99f7ac5e973affd62316",
+        "ratio": "73%",
+        "compressedSize": 2212,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_txt.png"
+    },
+    {
+        "preSize": 2841,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_rar.png",
+        "md5": "6f97362e915b2f25e6a5b1bf5142630d",
+        "ratio": "67%",
+        "compressedSize": 1924,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_rar.png"
+    },
+    {
+        "preSize": 2596,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_ppt.png",
+        "md5": "ade90dfcbc9088d882a24d2fe55e86fe",
+        "ratio": "74%",
+        "compressedSize": 1940,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_ppt.png"
+    },
+    {
+        "preSize": 2862,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_mp4.png",
+        "md5": "53cd810ab84acb5146fe7d58d36d0db0",
+        "ratio": "69%",
+        "compressedSize": 1988,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_mp4.png"
+    },
+    {
+        "preSize": 3043,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_html.png",
+        "md5": "c0d4186e668f024e4db031d86a9290bc",
+        "ratio": "81%",
+        "compressedSize": 2494,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_html.png"
+    },
+    {
+        "preSize": 2610,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_excel.png",
+        "md5": "56b6a9e0b01e4b5a50952e3ef8782c0a",
+        "ratio": "67%",
+        "compressedSize": 1749,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_excel.png"
+    },
+    {
+        "preSize": 3057,
+        "outputPath": "\\res\\drawable-hdpi\\file.png",
+        "md5": "8f49079fe39d912e7292ea01e1385887",
+        "ratio": "64%",
+        "compressedSize": 1971,
+        "path": "\\res\\drawable-hdpi\\file.png"
+    },
+    {
+        "preSize": 2881,
+        "outputPath": "\\res\\drawable-hdpi\\btn_loaction_pressed.png",
+        "md5": "6edb01da399a5a5f35d45a9642f10247",
+        "ratio": "84%",
+        "compressedSize": 2440,
+        "path": "\\res\\drawable-hdpi\\btn_loaction_pressed.png"
+    },
+    {
+        "preSize": 2986,
+        "outputPath": "\\res\\drawable-hdpi\\btn_loaction_normal.png",
+        "md5": "7b185a37bf172570746cf22187b15315",
+        "ratio": "83%",
+        "compressedSize": 2502,
+        "path": "\\res\\drawable-hdpi\\btn_loaction_normal.png"
+    },
+    {
+        "preSize": 1188,
+        "outputPath": "\\res\\drawable-hdpi\\add_friend_icon.png",
+        "md5": "199342f17c1713713c8bd77afde0be75",
+        "ratio": "92%",
+        "compressedSize": 1097,
+        "path": "\\res\\drawable-hdpi\\add_friend_icon.png"
+    },
+    {
+        "preSize": 1272,
+        "outputPath": "\\res\\drawable-hdpi\\action_bar_black_more_icon.png",
+        "md5": "c8ce7e46cb9d2afda261c29edb491b0a",
+        "ratio": "98%",
+        "compressedSize": 1258,
+        "path": "\\res\\drawable-hdpi\\action_bar_black_more_icon.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-hdpi\\actionbar_white_logo_icon.png",
+        "md5": "4f2620f8efeb1a318e349850b0acf4fe",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-hdpi\\actionbar_white_logo_icon.png"
+    },
+    {
+        "preSize": -1,
+        "outputPath": "\\res\\drawable-hdpi\\actionbar_dark_back_icon.png",
+        "md5": "3a453e692d482a0620ef9bcb5d4ae701",
+        "ratio": "",
+        "compressedSize": -1,
+        "path": "\\res\\drawable-hdpi\\actionbar_dark_back_icon.png"
+    },
+    {
+        "preSize": 12714,
+        "outputPath": "\\res-rp\\drawable-xxhdpi\\red_packet_send_press.png",
+        "md5": "05284dc8d52f475b3537eb66a185637a",
+        "ratio": "36%",
+        "compressedSize": 4655,
+        "path": "\\res-rp\\drawable-xxhdpi\\red_packet_send_press.png"
+    },
+    {
+        "preSize": 13766,
+        "outputPath": "\\res-rp\\drawable-xxhdpi\\red_packet_send_normal.png",
+        "md5": "2b462fdc7b5268db2904e35b6356ac7c",
+        "ratio": "35%",
+        "compressedSize": 4876,
+        "path": "\\res-rp\\drawable-xxhdpi\\red_packet_send_normal.png"
+    },
+    {
+        "preSize": 12875,
+        "outputPath": "\\res-rp\\drawable-xxhdpi\\red_packet_rev_press.png",
+        "md5": "f53d2b4c4d614ba9af17550b57de77ae",
+        "ratio": "36%",
+        "compressedSize": 4692,
+        "path": "\\res-rp\\drawable-xxhdpi\\red_packet_rev_press.png"
+    },
+    {
+        "preSize": 13897,
+        "outputPath": "\\res-rp\\drawable-xxhdpi\\red_packet_rev_normal.png",
+        "md5": "db5a61f16a5fadd84fd29791a816de2f",
+        "ratio": "35%",
+        "compressedSize": 4903,
+        "path": "\\res-rp\\drawable-xxhdpi\\red_packet_rev_normal.png"
+    },
+    {
+        "preSize": 6587,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\red_packet_send_press.png",
+        "md5": "1379d1b40d2285b6ad34d12ab7c83e56",
+        "ratio": "36%",
+        "compressedSize": 2387,
+        "path": "\\res-rp\\drawable-xhdpi\\red_packet_send_press.png"
+    },
+    {
+        "preSize": 7103,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\red_packet_send_normal.png",
+        "md5": "e4a05a7d3d24a0c18e3ebd6f94b153c8",
+        "ratio": "35%",
+        "compressedSize": 2538,
+        "path": "\\res-rp\\drawable-xhdpi\\red_packet_send_normal.png"
+    },
+    {
+        "preSize": 6587,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\red_packet_rev_press.png",
+        "md5": "9acf477babe4f7422924b08699db135a",
+        "ratio": "36%",
+        "compressedSize": 2398,
+        "path": "\\res-rp\\drawable-xhdpi\\red_packet_rev_press.png"
+    },
+    {
+        "preSize": 7118,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\red_packet_rev_normal.png",
+        "md5": "e3ae36101ce8d5dd63ac6aae41f5baa6",
+        "ratio": "36%",
+        "compressedSize": 2576,
+        "path": "\\res-rp\\drawable-xhdpi\\red_packet_rev_normal.png"
+    },
+    {
+        "preSize": 21677,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\red_packet_background.png",
+        "md5": "99f824f2a91956212dece98d1ceb9f17",
+        "ratio": "30%",
+        "compressedSize": 6515,
+        "path": "\\res-rp\\drawable-xhdpi\\red_packet_background.png"
+    },
+    {
+        "preSize": 6847,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\kai_7.png",
+        "md5": "fec24da1ee274568e8e00e4a88697f5c",
+        "ratio": "41%",
+        "compressedSize": 2824,
+        "path": "\\res-rp\\drawable-xhdpi\\kai_7.png"
+    },
+    {
+        "preSize": 6234,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\kai_6.png",
+        "md5": "a947974f7c15e49d96f06364ee09f44b",
+        "ratio": "39%",
+        "compressedSize": 2466,
+        "path": "\\res-rp\\drawable-xhdpi\\kai_6.png"
+    },
+    {
+        "preSize": 5709,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\kai_5.png",
+        "md5": "2041444261b72f23db81eb6ea2416356",
+        "ratio": "37%",
+        "compressedSize": 2123,
+        "path": "\\res-rp\\drawable-xhdpi\\kai_5.png"
+    },
+    {
+        "preSize": 5699,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\kai_4.png",
+        "md5": "4ee46ddc8887e1590f7acbc1de6ae330",
+        "ratio": "36%",
+        "compressedSize": 2084,
+        "path": "\\res-rp\\drawable-xhdpi\\kai_4.png"
+    },
+    {
+        "preSize": 6141,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\kai_3.png",
+        "md5": "3dcc11ff78dca44ebea199931f4ac7b8",
+        "ratio": "39%",
+        "compressedSize": 2453,
+        "path": "\\res-rp\\drawable-xhdpi\\kai_3.png"
+    },
+    {
+        "preSize": 6879,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\kai_2.png",
+        "md5": "aeaf32035c5617ed03e9a3409d7cddd3",
+        "ratio": "40%",
+        "compressedSize": 2790,
+        "path": "\\res-rp\\drawable-xhdpi\\kai_2.png"
+    },
+    {
+        "preSize": 4749,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\kai_1.png",
+        "md5": "1dacdcec7b3d17167b3dffe756fade1d",
+        "ratio": "47%",
+        "compressedSize": 2242,
+        "path": "\\res-rp\\drawable-xhdpi\\kai_1.png"
+    },
+    {
+        "preSize": 9729,
+        "outputPath": "\\res-rp\\drawable-xhdpi\\kai_0.png",
+        "md5": "3a0555b6bdc256216e4a317f92ae80db",
+        "ratio": "47%",
+        "compressedSize": 4608,
+        "path": "\\res-rp\\drawable-xhdpi\\kai_0.png"
+    },
+    {
+        "preSize": 5267,
+        "outputPath": "\\res-rp\\drawable-hdpi\\red_packet_send_press.png",
+        "md5": "96169df89ab35f61338d7756fed34f52",
+        "ratio": "48%",
+        "compressedSize": 2576,
+        "path": "\\res-rp\\drawable-hdpi\\red_packet_send_press.png"
+    },
+    {
+        "preSize": 5846,
+        "outputPath": "\\res-rp\\drawable-hdpi\\red_packet_send_normal.png",
+        "md5": "f0eddb1bfed9a9827edcf263c6c21706",
+        "ratio": "47%",
+        "compressedSize": 2787,
+        "path": "\\res-rp\\drawable-hdpi\\red_packet_send_normal.png"
+    },
+    {
+        "preSize": 5270,
+        "outputPath": "\\res-rp\\drawable-hdpi\\red_packet_rev_press.png",
+        "md5": "30fbb36a07a9601805846f6d43c235a4",
+        "ratio": "49%",
+        "compressedSize": 2595,
+        "path": "\\res-rp\\drawable-hdpi\\red_packet_rev_press.png"
+    },
+    {
+        "preSize": 5826,
+        "outputPath": "\\res-rp\\drawable-hdpi\\red_packet_rev_normal.png",
+        "md5": "d753d4dab4eee30d9cc67269db5f5561",
+        "ratio": "47%",
+        "compressedSize": 2796,
+        "path": "\\res-rp\\drawable-hdpi\\red_packet_rev_normal.png"
+    },
+    {
+        "preSize": 26420,
+        "outputPath": "\\res\\mipmap-xxxhdpi\\logo.png",
+        "md5": "149ca371e9725e7b8a45532d493ddbf5",
+        "ratio": "39%",
+        "compressedSize": 10567,
+        "path": "\\res\\mipmap-xxxhdpi\\logo.png"
+    },
+    {
+        "preSize": 17336,
+        "outputPath": "\\res\\mipmap-xxhdpi\\logo.png",
+        "md5": "ff32150260d1835e91c9530b9959d930",
+        "ratio": "40%",
+        "compressedSize": 7070,
+        "path": "\\res\\mipmap-xxhdpi\\logo.png"
+    },
+    {
+        "preSize": 7414,
+        "outputPath": "\\res\\mipmap-xhdpi\\logo.png",
+        "md5": "bac2fbc502369634079491979c8e7522",
+        "ratio": "45%",
+        "compressedSize": 3410,
+        "path": "\\res\\mipmap-xhdpi\\logo.png"
+    },
+    {
+        "preSize": 14447,
+        "outputPath": "\\res\\mipmap-xhdpi\\login_logo.png",
+        "md5": "fb064444eac592c5d42291b5dd69e18c",
+        "ratio": "47%",
+        "compressedSize": 6894,
+        "path": "\\res\\mipmap-xhdpi\\login_logo.png"
+    },
+    {
+        "preSize": 4905,
+        "outputPath": "\\res\\mipmap-xhdpi\\login_btn_bg.png",
+        "md5": "78a3e2fd1ab6f3b0962b603e658c3f25",
+        "ratio": "67%",
+        "compressedSize": 3288,
+        "path": "\\res\\mipmap-xhdpi\\login_btn_bg.png"
+    },
+    {
+        "preSize": 167905,
+        "outputPath": "\\res\\mipmap-xhdpi\\login_authorize_bg.png",
+        "md5": "72f7dbad129edb1d23e21021047e52b5",
+        "ratio": "45%",
+        "compressedSize": 75616,
+        "path": "\\res\\mipmap-xhdpi\\login_authorize_bg.png"
+    },
+    {
+        "preSize": 3297,
+        "outputPath": "\\res\\mipmap-mdpi\\logo.png",
+        "md5": "d06b389bd9f398893d449d801a509c2d",
+        "ratio": "59%",
+        "compressedSize": 1978,
+        "path": "\\res\\mipmap-mdpi\\logo.png"
+    },
+    {
+        "preSize": 6382,
+        "outputPath": "\\res\\mipmap-hdpi\\logo.png",
+        "md5": "ec00cf1014ae923062c18068a1aabfd7",
+        "ratio": "48%",
+        "compressedSize": 3065,
+        "path": "\\res\\mipmap-hdpi\\logo.png"
+    },
+    {
+        "preSize": 4769,
+        "outputPath": "\\res\\drawable-xxhdpi\\message_plus_ack_pressed.png",
+        "md5": "6949ecf1b45e61ff1aab5bb617dee8c8",
+        "ratio": "57%",
+        "compressedSize": 2757,
+        "path": "\\res\\drawable-xxhdpi\\message_plus_ack_pressed.png"
+    },
+    {
+        "preSize": 4885,
+        "outputPath": "\\res\\drawable-xxhdpi\\message_plus_ack_normal.png",
+        "md5": "05212394cf264f11af28222832d4d768",
+        "ratio": "58%",
+        "compressedSize": 2856,
+        "path": "\\res\\drawable-xxhdpi\\message_plus_ack_normal.png"
+    },
+    {
+        "preSize": 7016,
+        "outputPath": "\\res\\drawable-xxhdpi\\ic_logo.png",
+        "md5": "d3853d4545e7ccc90c4d50b83b4bbef2",
+        "ratio": "63%",
+        "compressedSize": 4480,
+        "path": "\\res\\drawable-xxhdpi\\ic_logo.png"
+    },
+    {
+        "preSize": 92301,
+        "outputPath": "\\res\\drawable-xhdpi\\welcome_bg.png",
+        "md5": "63ec0a30e9478a92ad0bbf24c24cbe68",
+        "ratio": "51%",
+        "compressedSize": 47986,
+        "path": "\\res\\drawable-xhdpi\\welcome_bg.png"
+    },
+    {
+        "preSize": 3843,
+        "outputPath": "\\res\\drawable-xhdpi\\radpacket_topbg.png",
+        "md5": "64bcc262d1e4802ff1231f8d3fdb1473",
+        "ratio": "65%",
+        "compressedSize": 2522,
+        "path": "\\res\\drawable-xhdpi\\radpacket_topbg.png"
+    },
+    {
+        "preSize": 11459,
+        "outputPath": "\\res\\drawable-xhdpi\\message_view_scissors.png",
+        "md5": "cc67518f9a7d1639bc13602184e46120",
+        "ratio": "50%",
+        "compressedSize": 5805,
+        "path": "\\res\\drawable-xhdpi\\message_view_scissors.png"
+    },
+    {
+        "preSize": 10146,
+        "outputPath": "\\res\\drawable-xhdpi\\message_view_rock.png",
+        "md5": "edd39f8899ece83a1de5a28c417c1d54",
+        "ratio": "51%",
+        "compressedSize": 5214,
+        "path": "\\res\\drawable-xhdpi\\message_view_rock.png"
+    },
+    {
+        "preSize": 13124,
+        "outputPath": "\\res\\drawable-xhdpi\\message_view_paper.png",
+        "md5": "734eb76b41ef4fb50037ddb77622e905",
+        "ratio": "50%",
+        "compressedSize": 6593,
+        "path": "\\res\\drawable-xhdpi\\message_view_paper.png"
+    },
+    {
+        "preSize": 16872,
+        "outputPath": "\\res\\drawable-xhdpi\\message_view_holder_right_snapchat.png",
+        "md5": "e80fc9b45ff9ad79bb5fa5dcc86579cf",
+        "ratio": "51%",
+        "compressedSize": 8772,
+        "path": "\\res\\drawable-xhdpi\\message_view_holder_right_snapchat.png"
+    },
+    {
+        "preSize": 16444,
+        "outputPath": "\\res\\drawable-xhdpi\\message_view_holder_left_snapchat.png",
+        "md5": "73b022557610f30d02c58aeb4d24db4d",
+        "ratio": "52%",
+        "compressedSize": 8670,
+        "path": "\\res\\drawable-xhdpi\\message_view_holder_left_snapchat.png"
+    },
+    {
+        "preSize": 5664,
+        "outputPath": "\\res\\drawable-xhdpi\\message_plus_tip_pressed.png",
+        "md5": "13210e3da1f194a991cb7e4ae2a9e5df",
+        "ratio": "54%",
+        "compressedSize": 3064,
+        "path": "\\res\\drawable-xhdpi\\message_plus_tip_pressed.png"
+    },
+    {
+        "preSize": 5699,
+        "outputPath": "\\res\\drawable-xhdpi\\message_plus_tip_normal.png",
+        "md5": "0ce855c1b0c0c9e552d56a37cbefb704",
+        "ratio": "63%",
+        "compressedSize": 3645,
+        "path": "\\res\\drawable-xhdpi\\message_plus_tip_normal.png"
+    },
+    {
+        "preSize": 3167,
+        "outputPath": "\\res\\drawable-xhdpi\\message_plus_ack_pressed.png",
+        "md5": "5c00bb931014874a3f47edf880afb7bd",
+        "ratio": "64%",
+        "compressedSize": 2051,
+        "path": "\\res\\drawable-xhdpi\\message_plus_ack_pressed.png"
+    },
+    {
+        "preSize": 3202,
+        "outputPath": "\\res\\drawable-xhdpi\\message_plus_ack_normal.png",
+        "md5": "9c9a0b6cc322d3f3a953b6aa82143453",
+        "ratio": "65%",
+        "compressedSize": 2089,
+        "path": "\\res\\drawable-xhdpi\\message_plus_ack_normal.png"
+    },
+    {
+        "preSize": 4824,
+        "outputPath": "\\res\\drawable-xhdpi\\logo.png",
+        "md5": "f00911b67c2a84b40f4bed330ba83b78",
+        "ratio": "80%",
+        "compressedSize": 3892,
+        "path": "\\res\\drawable-xhdpi\\logo.png"
+    },
+    {
+        "preSize": 375196,
+        "outputPath": "\\res\\drawable-xhdpi\\local_background_two.png",
+        "md5": "7c044e1cb08cda7ca27112ceba1ed102",
+        "ratio": "61%",
+        "compressedSize": 229108,
+        "path": "\\res\\drawable-xhdpi\\local_background_two.png"
+    },
+    {
+        "preSize": 315072,
+        "outputPath": "\\res\\drawable-xhdpi\\local_background_three.png",
+        "md5": "99713827841cd47023023ccee7ed889e",
+        "ratio": "59%",
+        "compressedSize": 186468,
+        "path": "\\res\\drawable-xhdpi\\local_background_three.png"
+    },
+    {
+        "preSize": 509623,
+        "outputPath": "\\res\\drawable-xhdpi\\local_background_six.png",
+        "md5": "ac8738d0098d4d0f1addf9c205a32a31",
+        "ratio": "61%",
+        "compressedSize": 315169,
+        "path": "\\res\\drawable-xhdpi\\local_background_six.png"
+    },
+    {
+        "preSize": 398952,
+        "outputPath": "\\res\\drawable-xhdpi\\local_background_one.png",
+        "md5": "84d5f546c17ef3a314076336577e88ba",
+        "ratio": "58%",
+        "compressedSize": 233026,
+        "path": "\\res\\drawable-xhdpi\\local_background_one.png"
+    },
+    {
+        "preSize": 396549,
+        "outputPath": "\\res\\drawable-xhdpi\\local_background_four.png",
+        "md5": "4662f97847d8aa190edab6ce17517a4a",
+        "ratio": "61%",
+        "compressedSize": 243926,
+        "path": "\\res\\drawable-xhdpi\\local_background_four.png"
+    },
+    {
+        "preSize": 314174,
+        "outputPath": "\\res\\drawable-xhdpi\\local_background_five.png",
+        "md5": "96e581ab10a9af41584df56327c216a4",
+        "ratio": "74%",
+        "compressedSize": 232881,
+        "path": "\\res\\drawable-xhdpi\\local_background_five.png"
+    },
+    {
+        "preSize": 8494,
+        "outputPath": "\\res\\drawable-xhdpi\\ic_multiport_detail.png",
+        "md5": "8f3ffdd4c6918857f40fe5f3d04a8e91",
+        "ratio": "66%",
+        "compressedSize": 5642,
+        "path": "\\res\\drawable-xhdpi\\ic_multiport_detail.png"
+    },
+    {
+        "preSize": 4651,
+        "outputPath": "\\res\\drawable-xhdpi\\ic_logo.png",
+        "md5": "bc23840307365abc5500fc8895717b7a",
+        "ratio": "74%",
+        "compressedSize": 3450,
+        "path": "\\res\\drawable-xhdpi\\ic_logo.png"
+    },
+    {
+        "preSize": 3677,
+        "outputPath": "\\res\\drawable-xhdpi\\btn_loaction_pressed.png",
+        "md5": "87caadf9df1ac3560844523fecac1bc0",
+        "ratio": "83%",
+        "compressedSize": 3075,
+        "path": "\\res\\drawable-xhdpi\\btn_loaction_pressed.png"
+    },
+    {
+        "preSize": 3765,
+        "outputPath": "\\res\\drawable-xhdpi\\btn_loaction_normal.png",
+        "md5": "65d4b5583f8fb75b813a77d3e7a17480",
+        "ratio": "82%",
+        "compressedSize": 3088,
+        "path": "\\res\\drawable-xhdpi\\btn_loaction_normal.png"
+    },
+    {
+        "preSize": 9241,
+        "outputPath": "\\res\\drawable-xhdpi\\bind_alipay_icon.png",
+        "md5": "1860cd112a91e355d86ed658974cb93b",
+        "ratio": "43%",
+        "compressedSize": 3976,
+        "path": "\\res\\drawable-xhdpi\\bind_alipay_icon.png"
+    },
+    {
+        "preSize": 5057,
+        "outputPath": "\\res\\drawable-xhdpi\\about_logo.png",
+        "md5": "3b0defb08b8d2a3e942bc178a3af01cf",
+        "ratio": "70%",
+        "compressedSize": 3575,
+        "path": "\\res\\drawable-xhdpi\\about_logo.png"
+    },
+    {
+        "preSize": 93886,
+        "outputPath": "\\res\\drawable-hdpi\\welcome_bg.png",
+        "md5": "8e8f64deeeb8c726e60188540f34daa4",
+        "ratio": "66%",
+        "compressedSize": 62198,
+        "path": "\\res\\drawable-hdpi\\welcome_bg.png"
+    },
+    {
+        "preSize": 5549,
+        "outputPath": "\\res\\drawable-hdpi\\pin.png",
+        "md5": "7c3c026af15a15a3c65128370791b20a",
+        "ratio": "41%",
+        "compressedSize": 2316,
+        "path": "\\res\\drawable-hdpi\\pin.png"
+    },
+    {
+        "preSize": 16782,
+        "outputPath": "\\res\\drawable-hdpi\\message_view_holder_right_snapchat.png",
+        "md5": "e666db2283f10f25e28e57f6862df9f6",
+        "ratio": "48%",
+        "compressedSize": 8066,
+        "path": "\\res\\drawable-hdpi\\message_view_holder_right_snapchat.png"
+    },
+    {
+        "preSize": 12110,
+        "outputPath": "\\res\\drawable-hdpi\\message_view_holder_left_snapchat.png",
+        "md5": "6022361ebc9eed412f602fa8bbaa19bd",
+        "ratio": "55%",
+        "compressedSize": 6702,
+        "path": "\\res\\drawable-hdpi\\message_view_holder_left_snapchat.png"
+    },
+    {
+        "preSize": 4799,
+        "outputPath": "\\res\\drawable-hdpi\\message_plus_tip_pressed.png",
+        "md5": "8979b26e97ef16c03ecb0035a3aeeaca",
+        "ratio": "58%",
+        "compressedSize": 2829,
+        "path": "\\res\\drawable-hdpi\\message_plus_tip_pressed.png"
+    },
+    {
+        "preSize": 4837,
+        "outputPath": "\\res\\drawable-hdpi\\message_plus_tip_normal.png",
+        "md5": "5f2e8c04831179ca74484cf324ebfc8b",
+        "ratio": "70%",
+        "compressedSize": 3392,
+        "path": "\\res\\drawable-hdpi\\message_plus_tip_normal.png"
+    },
+    {
+        "preSize": 3728,
+        "outputPath": "\\res\\drawable-hdpi\\logo.png",
+        "md5": "187f68a250289eab0ea456d7dc50a99f",
+        "ratio": "84%",
+        "compressedSize": 3148,
+        "path": "\\res\\drawable-hdpi\\logo.png"
+    },
+    {
+        "preSize": 8543,
+        "outputPath": "\\res\\drawable-hdpi\\ic_multiport_detail.png",
+        "md5": "92717a67bef35addd01d7932027879a4",
+        "ratio": "61%",
+        "compressedSize": 5276,
+        "path": "\\res\\drawable-hdpi\\ic_multiport_detail.png"
+    },
+    {
+        "preSize": 3519,
+        "outputPath": "\\res\\drawable-hdpi\\ic_logo.png",
+        "md5": "9c8f3663c5c99f2ea1cdb679b62fe381",
+        "ratio": "78%",
+        "compressedSize": 2763,
+        "path": "\\res\\drawable-hdpi\\ic_logo.png"
+    },
+    {
+        "preSize": 4082,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_word.png",
+        "md5": "ff4c27c07e62b43017a70802ba519163",
+        "ratio": "75%",
+        "compressedSize": 3072,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_word.png"
+    },
+    {
+        "preSize": 3797,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_png.png",
+        "md5": "44b6e851772d4bbf680e4701f7ceb1bf",
+        "ratio": "70%",
+        "compressedSize": 2694,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_png.png"
+    },
+    {
+        "preSize": 4168,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_pdf.png",
+        "md5": "1b042c32a15a2c3333abb148355fedd0",
+        "ratio": "72%",
+        "compressedSize": 3005,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_pdf.png"
+    },
+    {
+        "preSize": 3578,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_mp3.png",
+        "md5": "318d36d437a29079d81215bcf8bdf2f6",
+        "ratio": "74%",
+        "compressedSize": 2666,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_mp3.png"
+    },
+    {
+        "preSize": 3515,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_jpg.png",
+        "md5": "3bbefbb2780c9c22b6ba26b3bc4d3e62",
+        "ratio": "70%",
+        "compressedSize": 2486,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_jpg.png"
+    },
+    {
+        "preSize": 3264,
+        "outputPath": "\\res\\drawable-hdpi\\file_ic_detail_gif.png",
+        "md5": "66260b02d4f5ae5e823fd9d0320a1f63",
+        "ratio": "72%",
+        "compressedSize": 2381,
+        "path": "\\res\\drawable-hdpi\\file_ic_detail_gif.png"
+    },
+    {
+        "preSize": 4453,
+        "outputPath": "\\res\\drawable-hdpi\\directory.png",
+        "md5": "7c081f1fc90b3ab370b925cffe6636c4",
+        "ratio": "51%",
+        "compressedSize": 2275,
+        "path": "\\res\\drawable-hdpi\\directory.png"
+    },
+    {
+        "preSize": 4064,
+        "outputPath": "\\res\\drawable-hdpi\\about_logo.png",
+        "md5": "09b96ceb228e54a99c9a50d3a688013f",
+        "ratio": "78%",
+        "compressedSize": 3204,
+        "path": "\\res\\drawable-hdpi\\about_logo.png"
+    }
+]

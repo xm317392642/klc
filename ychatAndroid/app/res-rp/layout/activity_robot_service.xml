@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_bar_height"
+        android:background="@color/color_be6913"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="3dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxWidth="210dp"
+                android:maxLines="1"
+                android:text="第三方机器人服务"
+                android:textColor="@android:color/white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/toolbar_action"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="end|center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="centerInside"
+                android:src="@drawable/more_action_icon" />
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:id="@+id/disclaimer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_e5e5e5"
+        android:gravity="center"
+        android:padding="14dp"
+        android:text="搭子麻将机器人"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_17"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout" />
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="150dp"
+        android:layout_height="124dp"
+        android:layout_marginTop="49dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/disclaimer"
+        app:srcCompat="@drawable/nim_messages_list_empty_bg" />
+
+    <com.xr.ychat.common.ui.XEditText
+        android:id="@+id/relative"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="63dp"
+        android:background="@null"
+        android:drawableStart="@drawable/nim_actionbar_search_dark_icon"
+        android:drawablePadding="15dp"
+        android:gravity="start|center_vertical"
+        android:hint="亲友ID"
+        android:inputType="number"
+        android:lines="1"
+        android:maxLength="20"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/color_grey_888888"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/background"
+        app:x_clearDrawable="@drawable/x_et_svg_ic_clear_24dp" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/color_d2d2d2"
+        app:layout_constraintEnd_toEndOf="@+id/relative"
+        app:layout_constraintStart_toStartOf="@+id/relative"
+        app:layout_constraintTop_toBottomOf="@+id/relative" />
+
+    <com.xr.ychat.common.ui.XEditText
+        android:id="@+id/relative_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="63dp"
+        android:background="@null"
+        android:drawableStart="@drawable/nim_actionbar_search_dark_icon"
+        android:drawablePadding="15dp"
+        android:gravity="start|center_vertical"
+        android:hint="亲友圈ID"
+        android:inputType="number"
+        android:lines="1"
+        android:maxLength="20"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/color_grey_888888"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relative"
+        app:x_clearDrawable="@drawable/x_et_svg_ic_clear_24dp" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/color_d2d2d2"
+        app:layout_constraintEnd_toEndOf="@+id/relative_id"
+        app:layout_constraintStart_toStartOf="@+id/relative_id"
+        app:layout_constraintTop_toBottomOf="@+id/relative_id" />
+
+    <Button
+        android:id="@+id/robot_detail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="63dp"
+        android:background="@drawable/general_button_bg"
+        android:padding="14dp"
+        android:text="绑定"
+        android:textColor="@color/color_fefefe"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relative_id" />
+
+</android.support.constraint.ConstraintLayout>

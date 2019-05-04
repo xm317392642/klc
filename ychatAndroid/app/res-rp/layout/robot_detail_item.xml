@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/robot_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:text="已开通以下机器人服务"
+        android:textColor="@color/color_010101"
+        android:textSize="@dimen/text_size_17"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/robot_remove"
+        android:layout_width="48dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/btn_red_stroke_4"
+        android:gravity="center"
+        android:text="删除"
+        android:textColor="@color/color_f25542"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/robot_title" />
+
+    <TextView
+        android:id="@+id/robot_switch"
+        android:layout_width="48dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="11dp"
+        android:background="@drawable/btn_black_stroke_4"
+        android:gravity="center"
+        android:text="更换"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_title"
+        app:layout_constraintEnd_toStartOf="@+id/robot_remove"
+        app:layout_constraintTop_toTopOf="@+id/robot_title" />
+
+    <View
+        android:id="@+id/robot_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="13dp"
+        android:background="@color/color_d2d2d2"
+        app:layout_constraintTop_toBottomOf="@+id/robot_remove" />
+
+    <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+        android:id="@+id/robot_avatar"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/nim_avatar_group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/robot_line"
+        app:riv_corner_radius="@dimen/dp_4" />
+
+    <TextView
+        android:id="@+id/robot_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="搭子麻将机器人"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_17"
+        app:layout_constraintEnd_toEndOf="@+id/robot_avatar"
+        app:layout_constraintStart_toStartOf="@+id/robot_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/robot_avatar" />
+
+    <TextView
+        android:id="@+id/robot_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="机器人ID：0000"
+        android:textColor="@color/color_grey_888888"
+        android:textSize="@dimen/text_size_14"
+        app:layout_constraintEnd_toEndOf="@+id/robot_avatar"
+        app:layout_constraintStart_toStartOf="@+id/robot_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/robot_name" />
+
+    <Button
+        android:id="@+id/robot_detail"
+        android:layout_width="180dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/general_button_bg"
+        android:text="进入服务号"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/robot_id" />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="218dp"
+    android:layout_height="99dp"
+    android:paddingTop="6dp"
+   >
+
+
+    <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+        android:id="@+id/img_shareLinkImage"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginRight="14dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tx_shareLinkTitle"
+        android:src="@drawable/nim_avatar_group"
+        android:scaleType="centerCrop"
+         />
+
+    <TextView
+        android:id="@+id/tx_shareLinkTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="血战到底 计分 1分 8局3番(小旭茶社)血战到底 计分 1分 8局3番(小旭茶社)"
+        android:textColor="@color/color_010101"
+        android:textSize="15sp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginRight="12dp"
+         />
+
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/img_shareLinkImage"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="12dp"
+        android:background="@color/color_gray_d2d2d2" />
+
+
+
+    <TextView
+        android:id="@+id/tx_shareLinkDes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="自摸加底、金构钓、海底捞、点杠花(点炮)"
+        android:layout_below="@+id/tx_shareLinkTitle"
+        android:layout_toLeftOf="@+id/img_shareLinkImage"
+        android:layout_above="@+id/line"
+        android:layout_marginLeft="10dp"
+        android:textSize="11sp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/color_888888"
+         />
+    <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+        android:id="@+id/img_shareLinkSourceImage"
+        android:layout_width="9dp"
+        android:layout_height="9dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="4dp"
+        android:scaleType="centerCrop"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/nim_avatar_group"
+         />
+    <TextView
+        android:id="@+id/tx_shareLinkSourceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="链接名称"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="3dp"
+        android:layout_toRightOf="@+id/img_shareLinkSourceImage"
+        android:textColor="@color/color_999999"
+        android:layout_alignParentBottom="true"
+        android:textSize="8sp"
+        />
+</RelativeLayout>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+        android:id="@+id/robot_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/nim_avatar_group"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_corner_radius="@dimen/dp_4" />
+
+    <TextView
+        android:id="@+id/robot_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginEnd="13dp"
+        android:singleLine="true"
+        android:text="搭子麻将机器人"
+        android:textColor="@color/color_010101"
+        android:textSize="@dimen/text_size_17"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_avatar"
+        app:layout_constraintEnd_toStartOf="@+id/robot_append"
+        app:layout_constraintStart_toEndOf="@+id/robot_avatar"
+        app:layout_constraintTop_toTopOf="@+id/robot_avatar" />
+
+    <com.netease.nim.uikit.common.ui.widget.RoundRectTextView
+        android:id="@+id/robot_append"
+        android:layout_width="48dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="15dp"
+        android:text="添加"
+        android:textColor="@android:color/white"
+        android:textSize="13sp"
+        android:gravity="center"
+        app:bgColor="#10BB5D"
+        app:pressBgColor="#9910BB5D"
+        app:rrtRadius="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/robot_avatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/robot_avatar" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_f2f2f2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/robot_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/robot_avatar" />
+
+</android.support.constraint.ConstraintLayout>

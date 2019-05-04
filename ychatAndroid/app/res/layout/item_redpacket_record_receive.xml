@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+        android:id="@+id/redpacket_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/nim_avatar_default"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_corner_radius="4dp" />
+
+    <LinearLayout
+        android:id="@+id/redpacket_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/redpacket_avatar"
+        app:layout_constraintStart_toEndOf="@+id/redpacket_avatar"
+        app:layout_constraintTop_toTopOf="@+id/redpacket_avatar">
+
+        <TextView
+            android:id="@+id/redpacket_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A.乖乖鱼"
+            android:textColor="@color/color_010101"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/redpacket_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="2019-01-22 12:30:45"
+            android:textColor="@color/color_888888"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/redpacket_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:text="0.26元"
+        android:textColor="@color/color_010101"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/redpacket_avatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/redpacket_avatar" />
+
+    <!--<View-->
+    <!--android:id="@+id/recipient_bottom_line"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0.5dp"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:background="@color/color_d2d2d2"-->
+    <!--android:visibility="gone"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/redpacket_avatar" />-->
+
+</android.support.constraint.ConstraintLayout>

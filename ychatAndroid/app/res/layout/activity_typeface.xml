@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background">
+
+    <include layout="@layout/nim_action_bar_textview" />
+
+    <LinearLayout
+        android:id="@+id/l"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_bar_layout"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/tx_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/nim_message_right_blue_bg"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:text="预览字体大小"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_15" />
+
+        <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_advanced_team" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/l"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginBottom="21dp">
+
+        <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"
+            android:src="@mipmap/logo" />
+
+        <TextView
+            android:id="@+id/tx_left1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/nim_message_left_white_bg"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:text="拖动下面的滑块，可设置字体大小"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_15" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll"
+        android:layout_marginLeft="15dp">
+
+        <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"
+            android:src="@mipmap/logo" />
+
+        <TextView
+            android:id="@+id/tx_left2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/nim_message_left_white_bg"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:text="设置后，会改变聊天和菜单中的字体大小。如果在使用过程中存在问题或意见，可反馈给空了吹团队。"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_15" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+        <com.xr.ychat.common.ui.FontSizeView
+            android:id="@+id/fsv_font_size"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:paddingStart="5dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="5dp"
+            app:circleRadius="11dp"
+            app:lineColor="@color/color_d2d2d2"
+            app:standerSize="16"
+            app:totalCount="4" />
+    </FrameLayout>
+
+</RelativeLayout>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_bar_height"
+        android:background="@color/color_be6913"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:maxWidth="210dp"
+                android:maxLines="1"
+                android:text="绑定支付宝"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <ImageView
+        android:id="@+id/bind_alipay_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
+        app:srcCompat="@drawable/bind_alipay_icon" />
+
+    <TextView
+        android:id="@+id/bind_alipay_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="50dp"
+        android:text="您还没绑定支付宝账户，请先绑定支付宝账户"
+        android:textColor="@color/color_1e1e1e"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bind_alipay_image" />
+
+    <TextView
+        android:id="@+id/bind_alipay_content_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="绑定成功后："
+        android:textColor="@color/color_grey_999999"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="@+id/bind_alipay_title"
+        app:layout_constraintTop_toBottomOf="@+id/bind_alipay_title" />
+
+    <TextView
+        android:id="@+id/bind_alipay_content_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="-可以使用支付宝发红包"
+        android:textColor="@color/color_grey_999999"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="@+id/bind_alipay_title"
+        app:layout_constraintTop_toBottomOf="@+id/bind_alipay_content_1" />
+
+    <TextView
+        android:id="@+id/bind_alipay_content_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="-收到的红包会自动转入支付宝账户"
+        android:textColor="@color/color_grey_999999"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="@+id/bind_alipay_title"
+        app:layout_constraintTop_toBottomOf="@+id/bind_alipay_content_2" />
+
+    <Button
+        android:id="@+id/bind_alipay_commit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginEnd="63dp"
+        android:background="@drawable/general_button_bg"
+        android:text="立即绑定支付宝"
+        android:textAllCaps="false"
+        android:textColor="@color/color_fefefe"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bind_alipay_content_3" />
+
+</android.support.constraint.ConstraintLayout>

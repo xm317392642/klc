@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 带开关的  消息免打扰-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="15dp"
+        >
+
+        <TextView
+            android:id="@+id/item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="17dip"
+            android:singleLine="true"
+            android:layout_centerVertical="true"
+            android:text="TITLE"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/text_size_15" />
+
+        <com.netease.nim.uikit.common.ui.widget.SwitchButton
+            android:id="@+id/setting_item_toggle"
+            android:layout_width="58dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_height="36.67dip"
+            />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/content_layout"
+        android:background="@color/color_split_line_d9d9d9" />
+
+</LinearLayout>

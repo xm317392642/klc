@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/redpacket_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="普通红包"
+        android:textColor="@color/color_1e1e1e"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/redpacket_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="2019-01-22 12:30:45"
+        android:textColor="@color/color_888888"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/redpacket_type"
+        app:layout_constraintTop_toBottomOf="@+id/redpacket_type" />
+
+    <TextView
+        android:id="@+id/redpacket_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:text="0.26元"
+        android:textColor="@color/color_1e1e1e"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/redpacket_type"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/redpacket_type" />
+
+    <TextView
+        android:id="@+id/redpacket_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:text="0.26元"
+        android:textColor="@color/color_888888"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/redpacket_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/redpacket_time" />
+
+    <!--<View-->
+        <!--android:id="@+id/recipient_bottom_line"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0.5dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:background="@color/color_d2d2d2"-->
+        <!--android:visibility="gone"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/redpacket_time" />-->
+
+</android.support.constraint.ConstraintLayout>
