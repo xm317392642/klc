@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager.LayoutParams;
@@ -23,17 +22,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.common.CommonUtil;
-import com.netease.nim.uikit.common.swipebacklayout.lib.Utils;
+import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.util.string.StringUtil;
 import com.netease.nim.uikit.common.util.sys.ScreenUtil;
-import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nimlib.sdk.team.model.Team;
-
-import java.io.File;
 
 /**
  * 简单的带有输入框的对话框
@@ -266,7 +261,6 @@ public class EasyEditDialog2 extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(mResourceId);
-
         try {
             LinearLayout root = (LinearLayout) findViewById(R.id.easy_edit_dialog_root);
             txShareName = findViewById(R.id.share_name);
