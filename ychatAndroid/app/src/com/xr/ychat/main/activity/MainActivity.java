@@ -146,7 +146,9 @@ import java.util.ArrayList;
  *
  *                     @Override
  *                     protected void warn(BaseDownloadTask task) {
- *                         Tool.printLog("warn");
+ *                         Tool.printLog("下载警告1");
+ *                         Tool.printLog("下载警告2");
+ *                         Tool.printLog("下载警告3");
  *                     }
  *                 }).start();
  *     }
