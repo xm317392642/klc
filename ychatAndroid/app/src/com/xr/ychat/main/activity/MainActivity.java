@@ -74,6 +74,7 @@ import java.util.ArrayList;
 /**
  * 主界面 add tag
  * Created by huangjun on 2015/3/25.
+      新增了一个断点续传的方法
  *    private void breakPointDownload(String url) {
  *         //https://github.com/lingochamp/FileDownloader/blob/master/README-zh.md compile 'com.liulishuo.filedownloader:library:1.7.6'
  *         FileDownloader.setup(getContext());
