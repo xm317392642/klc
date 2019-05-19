@@ -72,7 +72,7 @@ import com.xr.ychat.team.TeamCreateHelper;
 import java.util.ArrayList;
 
 /**
- * 主界面 add tag
+ * 主界面 测试冲突
  * Created by huangjun on 2015/3/25.
       新增了一个断点续传的方法
  *    private void breakPointDownload(String url) {
