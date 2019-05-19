@@ -89,6 +89,7 @@ import java.util.ArrayList;
  *         final Dialog mDownloadDialog = builder.create();
  *         mDownloadDialog.setCancelable(false );
  *         mDownloadDialog.show();
+            xxliudadan
  *         String localPath = Tool.getCacheDirPath(context) + File.separator + "tutengdai.apk";
  *         //FileDownloader.isReusedOldFile
  *         Tool.printLog("localPath=" + localPath);
@@ -140,6 +141,7 @@ import java.util.ArrayList;
  *                     protected void error(BaseDownloadTask task, Throwable e) {
  *                         Tool.printLog("error=" + e.getMessage());
  *                         mDownloadDialog.dismiss();//下载失败，下回会重新断点续传
+ *                         Toast.makeText(getContext(), "download fail.", 1).show();
  *                     }
  *
  *                     @Override
