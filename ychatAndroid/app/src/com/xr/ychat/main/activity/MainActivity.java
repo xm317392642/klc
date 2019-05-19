@@ -100,12 +100,10 @@ import java.util.ArrayList;
  *                     protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
  *                         Tool.printLog("pending");
  *                     }
- *
  *                     @Override
  *                     protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
  *                         Tool.printLog("connected");
  *                     }
- *
  *                     @Override
  *                     protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
  *                         Tool.printLog("soFarBytes=" + soFarBytes + "  totalBytes=" + totalBytes);
