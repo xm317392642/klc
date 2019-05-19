@@ -1,4 +1,4 @@
-package com.xr.ychat.main.activity;
+﻿package com.xr.ychat.main.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -72,7 +72,7 @@ import com.xr.ychat.team.TeamCreateHelper;
 import java.util.ArrayList;
 
 /**
- * 主界面
+ * 主界面 add tag
  * Created by huangjun on 2015/3/25.
  *    private void breakPointDownload(String url) {
  *         //https://github.com/lingochamp/FileDownloader/blob/master/README-zh.md compile 'com.liulishuo.filedownloader:library:1.7.6'
