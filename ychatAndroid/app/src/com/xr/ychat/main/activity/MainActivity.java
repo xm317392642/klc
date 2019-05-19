@@ -74,6 +74,81 @@ import java.util.ArrayList;
 /**
  * 主界面
  * Created by huangjun on 2015/3/25.
+ *    private void breakPointDownload(String url) {
+ *         //https://github.com/lingochamp/FileDownloader/blob/master/README-zh.md compile 'com.liulishuo.filedownloader:library:1.7.6'
+ *         FileDownloader.setup(getContext());
+ *         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+ *         builder.setTitle("正在更新");
+ *         // 给下载对话框增加进度条
+ *         final LayoutInflater inflater = LayoutInflater.from(getContext());
+ *         View v = inflater.inflate(R.layout.softupdate_progress, null);
+ *         final ProgressBar mProgress = (ProgressBar) v.findViewById(R.id.update_progress);
+ *         final TextView txProgress = (TextView) v.findViewById(R.id.txProgress);
+ *         builder.setView(v);
+ *         final Dialog mDownloadDialog = builder.create();
+ *         mDownloadDialog.setCancelable(false );
+ *         mDownloadDialog.show();
+ *         String localPath = Tool.getCacheDirPath(context) + File.separator + "tutengdai.apk";
+ *         //FileDownloader.isReusedOldFile
+ *         Tool.printLog("localPath=" + localPath);
+ *         FileDownloader.getImpl().create(url)
+ *                 .setPath(localPath)//下载文件的存储绝对路径
+ *                 .setForceReDownload(true)//强制重新下载，将会忽略检测文件是否健在
+ *                 .setListener(new FileDownloadListener() {
+ *                     @Override
+ *                     protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+ *                         Tool.printLog("pending");
+ *                     }
+ *
+ *                     @Override
+ *                     protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
+ *                         Tool.printLog("connected");
+ *                     }
+ *
+ *                     @Override
+ *                     protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+ *                         Tool.printLog("soFarBytes=" + soFarBytes + "  totalBytes=" + totalBytes);
+ *                         int progress = (int) (((float) soFarBytes / totalBytes) * 100);
+ *                         // 设置进度条位置
+ *                         mProgress.setProgress(progress);
+ *                         txProgress.setText(progress + "%");
+ *                     }
+ *
+ *                     @Override
+ *                     protected void blockComplete(BaseDownloadTask task) {
+ *                         Tool.printLog("blockComplete");
+ *                     }
+ *
+ *                     @Override
+ *                     protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
+ *                         Tool.printLog("retry");
+ *                     }
+ *
+ *                     @Override
+ *                     protected void completed(BaseDownloadTask task) {
+ *                         // 安装文件
+ *                         new UpdateManager(getContext()).installApk(Tool.getCacheDirPath(context));
+ *                         mDownloadDialog.dismiss();
+ *                         Toast.makeText(getContext(), "download success", 1).show();
+ *                     }
+ *
+ *                     @Override
+ *                     protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+ *                         Tool.printLog("paused");
+ *                     }
+ *
+ *                     @Override
+ *                     protected void error(BaseDownloadTask task, Throwable e) {
+ *                         Tool.printLog("error=" + e.getMessage());
+ *                         mDownloadDialog.dismiss();//下载失败，下回会重新断点续传
+ *                     }
+ *
+ *                     @Override
+ *                     protected void warn(BaseDownloadTask task) {
+ *                         Tool.printLog("warn");
+ *                     }
+ *                 }).start();
+ *     }
  */
 public class MainActivity extends UI implements ReminderManager.UnreadNumChangedCallback, MainMenuFragment.ClickableChildView {
     private static final String TAG_FRAGMENT_SESSION = "tag_fragment_session";
