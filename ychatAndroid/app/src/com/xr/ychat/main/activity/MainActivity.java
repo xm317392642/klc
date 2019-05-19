@@ -146,7 +146,9 @@ import java.util.ArrayList;
  *
  *                     @Override
  *                     protected void warn(BaseDownloadTask task) {
- *                         Tool.printLog("warn");
+ *1111222222222222
+	 Tool.printLog("warn");
+ 44444444444444444444
  *                     }
  *                 }).start();
  *     }
