@@ -32,7 +32,7 @@ import org.json.JSONObject;
 /**
  * 授权登录（目前只有微信登录）
  */
-public class LoginAuthorizeActivity extends UI {
+public class  LoginAuthorizeActivity extends UI {
     private static final String KICK_OUT = "KICK_OUT";
 
     public static void start(Context context) {

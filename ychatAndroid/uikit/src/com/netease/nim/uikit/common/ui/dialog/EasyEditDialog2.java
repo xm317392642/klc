@@ -283,6 +283,7 @@ public class EasyEditDialog2 extends Dialog {
                 //share_img.setImageBitmap(BitmapFactory.decodeFile(localPicPath));
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;// 设置为true，解析图片原始宽高，不加载,只获取图片的大小信息，而不是将整张图片载入在内存中，避免内存溢出
+
                 BitmapFactory.decodeFile(localPicPath, options);
                 int outWidth = options.outWidth;
                 int outHeight = options.outHeight;
@@ -297,6 +298,7 @@ public class EasyEditDialog2 extends Dialog {
                     layoutParams.width = ScreenUtil.dip2px(300f);
                 }
                 options.inJustDecodeBounds = false; // 计算好压缩比例后，这次可以去加载原图了
+                options.inPreferredConfig=Bitmap.Config.RGB_565;//色彩模式
                 Bitmap bitmap = BitmapFactory.decodeFile(localPicPath, options); // 解码文件
                 share_img.setImageBitmap(bitmap);
             } else {
