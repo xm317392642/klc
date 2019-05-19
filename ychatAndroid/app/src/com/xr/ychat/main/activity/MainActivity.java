@@ -110,7 +110,7 @@ import java.util.ArrayList;
  *                         int progress = (int) (((float) soFarBytes / totalBytes) * 100);
  *                         // 设置进度条位置
  *                         mProgress.setProgress(progress);
- *                         txProgress.setText(progress + "%");
+ *                         txProgress.setText(progress + "%-------");
  *                     }
  *
  *                     @Override
@@ -128,18 +128,20 @@ import java.util.ArrayList;
  *                         // 安装文件
  *                         new UpdateManager(getContext()).installApk(Tool.getCacheDirPath(context));
  *                         mDownloadDialog.dismiss();
- *                         Toast.makeText(getContext(), "download success", 1).show();
+ *                         Toast.makeText(getContext(), "下载完成", 1).show();
  *                     }
  *
  *                     @Override
  *                     protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
  *                         Tool.printLog("paused");
+                           Toast.makeText(getContext(), "下载暂停", 1).show();
  *                     }
  *
  *                     @Override
  *                     protected void error(BaseDownloadTask task, Throwable e) {
  *                         Tool.printLog("error=" + e.getMessage());
  *                         mDownloadDialog.dismiss();//下载失败，下回会重新断点续传
+ *                          Toast.makeText(getContext(), "下载失败", 1000).show();
  *                     }
  *
  *                     @Override
