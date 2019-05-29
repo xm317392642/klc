@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.xr.ychat.R;
 import com.netease.nim.uikit.business.session.emoji.MoonUtil;
 import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
@@ -18,6 +17,7 @@ import com.netease.nim.uikit.common.util.sys.ScreenUtil;
 import com.netease.nim.uikit.common.util.sys.TimeUtil;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.xr.ychat.R;
 
 import java.util.List;
 

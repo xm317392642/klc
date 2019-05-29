@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
+import com.netease.nim.uikit.business.session.activity.TeamMessageActivity;
+import com.netease.nim.uikit.business.session.fragment.MessageFragment;
 import com.netease.nim.uikit.business.team.helper.AnnouncementHelper;
 import com.netease.nim.uikit.business.team.model.Announcement;
 import com.netease.nim.uikit.business.team.viewholder.TeamAnnounceHolder;
@@ -18,6 +22,13 @@ import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.adapter.TAdapterDelegate;
 import com.netease.nim.uikit.common.adapter.TViewHolder;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.msg.MessageBuilder;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.constant.TeamMemberType;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
@@ -53,9 +64,9 @@ public class AdvancedTeamAnnounceActivity extends SwipeBackUI implements TAdapte
     //private ListView announceListView;
     //private TAdapter mAdapter;
     // List<Announcement> items;
-
+    private TextView toolbarView;
     private boolean isMember = false;
-
+    private List<Announcement> list;
     public static void start(Activity activity, String teamId, boolean canEditor) {
         start(activity, teamId, null, canEditor);
     }
@@ -75,7 +86,7 @@ public class AdvancedTeamAnnounceActivity extends SwipeBackUI implements TAdapte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_advanced_team_announce);
+        setActivityView(R.layout.nim_advanced_team_announce);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView)findViewById(R.id.toolbar_title);
@@ -130,13 +141,13 @@ public class AdvancedTeamAnnounceActivity extends SwipeBackUI implements TAdapte
     }
 
     private void initActionbar() {
-        TextView toolbarView = findView(R.id.action_bar_right_clickable_textview);
+         toolbarView = findView(R.id.action_bar_right_clickable_textview);
         toolbarView.setVisibility(canEditor ? View.VISIBLE : View.GONE);
-        toolbarView.setText("新建");
-        toolbarView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AdvancedTeamCreateAnnounceActivity.startActivityForResult(AdvancedTeamAnnounceActivity.this, teamId, RES_ANNOUNCE_CREATE_CODE);
+        toolbarView.setOnClickListener(v->{
+            if (list == null || list.isEmpty()) {
+                AdvancedTeamCreateAnnounceActivity.startActivityForResult(AdvancedTeamAnnounceActivity.this, teamId,"", RES_ANNOUNCE_CREATE_CODE);
+            }else{
+                AdvancedTeamCreateAnnounceActivity.startActivityForResult(AdvancedTeamAnnounceActivity.this,teamId,list.get(0).getContent(), RES_ANNOUNCE_CREATE_CODE);
             }
         });
     }
@@ -236,9 +247,13 @@ public class AdvancedTeamAnnounceActivity extends SwipeBackUI implements TAdapte
 //            announceTips.setVisibility(View.GONE);
 //        }
 //
-        List<Announcement> list = AnnouncementHelper.getAnnouncements(teamId, announce, isMember ? 5 : Integer.MAX_VALUE);
+         list = AnnouncementHelper.getAnnouncements(teamId, announce, isMember ? 5 : Integer.MAX_VALUE);
         if (list == null || list.isEmpty()) {
-            return;
+            toolbarView.setText("新建");
+            announceContent.setText("");
+        }else{
+            toolbarView.setText("编辑");
+            announceContent.setText(list.get(0).getContent());
         }
 //
 //        items.clear();
@@ -248,7 +263,7 @@ public class AdvancedTeamAnnounceActivity extends SwipeBackUI implements TAdapte
 //        jumpToIndex(list);
 
 
-        announceContent.setText(list.get(0).getContent());
+
     }
 
     /**
@@ -288,6 +303,7 @@ public class AdvancedTeamAnnounceActivity extends SwipeBackUI implements TAdapte
                     announceId = null;
                     //items.clear();
                     requestTeamData();
+                    sendAtAllMsg();
                     break;
                 default:
                     break;
@@ -295,6 +311,40 @@ public class AdvancedTeamAnnounceActivity extends SwipeBackUI implements TAdapte
         }
     }
 
+    /**
+     * 群主或管理员更改群公告后，发送@所有人的消息
+     */
+    public void sendAtAllMsg(){
+        IMMessage iMessage = MessageBuilder.createTextMessage(teamId,SessionTypeEnum.Team,"@所有人 "+System.getProperty("line.separator")+announceContent.getText());
+        CustomMessageConfig config = new CustomMessageConfig();
+        config.enablePush = true; // 推送
+        iMessage.setConfig(config);
+        NIMClient.getService(MsgService.class).sendMessage(iMessage,false).setCallback(new RequestCallback<Void>() {
+            @Override
+            public void onSuccess(Void param) {
+                List<Activity> activityList=ActivityUtils.getActivityList();
+                for(Activity activity:activityList){
+                    if(TextUtils.equals("TeamMessageActivity",activity.getClass().getSimpleName())){
+                        TeamMessageActivity teamMessageActivity= (TeamMessageActivity) activity;
+                        MessageFragment messageFragment = (MessageFragment) teamMessageActivity.getSupportFragmentManager().getFragments().get(0);
+                        messageFragment.messageListPanel.onMsgSend(iMessage);
+                        break;
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailed(int code) {
+
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+
+            }
+        });
+    }
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();

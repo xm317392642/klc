@@ -75,6 +75,10 @@ public abstract class BaseAction implements Serializable {
         getContainer().proxy.sendMessage(message);
     }
 
+    protected void saveMessageToLocal(IMMessage message) {
+        getContainer().proxy.saveMessageToLocal(message);
+    }
+
     protected int makeRequestCode(int requestCode) {
         if ((requestCode & 0xffffff00) != 0) {
             throw new IllegalArgumentException("Can only use lower 8 bits for requestCode");

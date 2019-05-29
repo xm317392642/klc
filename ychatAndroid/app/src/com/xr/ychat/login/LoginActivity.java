@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.microquation.linkedme.android.LinkedME;
@@ -29,7 +30,8 @@ import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
-import com.netease.nim.uikit.common.activity.SwipeBackUI;
+import com.netease.nim.uikit.common.UnsentRedPacketCache;
+import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialogHelper;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
@@ -55,6 +57,8 @@ import com.netease.nimlib.sdk.team.TeamService;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.tendcloud.tenddata.TCAgent;
+import com.tendcloud.tenddata.TDAccount;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
 import com.xr.ychat.common.ui.XEditText;
@@ -68,7 +72,7 @@ import com.xr.ychat.main.activity.MainShareActivity;
  * <p/>
  * Created by huangjun on 2015/2/1.
  */
-public class LoginActivity extends SwipeBackUI implements OnKeyListener {
+public class LoginActivity extends UI implements OnKeyListener {
 
     private static final String KICK_OUT = "KICK_OUT";
     private final int BASIC_PERMISSION_REQUEST_CODE = 110;
@@ -120,7 +124,7 @@ public class LoginActivity extends SwipeBackUI implements OnKeyListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        setContentView(R.layout.activity_login);
+        setActivityView(R.layout.activity_login);
 
         requestBasicPermission();
 
@@ -299,7 +303,7 @@ public class LoginActivity extends SwipeBackUI implements OnKeyListener {
         }
 
         if (!NetworkUtil.isNetAvailable(LoginActivity.this)) {
-            YchatToastUtils.showShort( R.string.network_is_not_available);
+            YchatToastUtils.showShort(R.string.network_is_not_available);
             return;
         }
 
@@ -318,8 +322,12 @@ public class LoginActivity extends SwipeBackUI implements OnKeyListener {
                     @Override
                     public void onResult(int code, Object result, Throwable exception) {
                         if (code == ResponseCode.RES_SUCCESS) {
+                            TCAgent.onLogin(aVoid.getAccid(), TDAccount.AccountType.WEIXIN, aVoid.getUid());
                             loginRequest = null;
                             NimUIKit.loginSuccess(aVoid.getAccid());
+                            SPUtils.getInstance().remove(CommonUtil.ALIPAYUID);
+                            SPUtils.getInstance().remove(CommonUtil.YCHAT_ACCOUNT);
+                            SPUtils.getInstance().remove(UnsentRedPacketCache.TAG);
                             DemoCache.setAccount(aVoid.getAccid());
                             Preferences.saveWeiranToken(LoginActivity.this, aVoid.getMytoken());
                             Preferences.saveWeiranUid(LoginActivity.this, aVoid.getUid());
@@ -348,7 +356,7 @@ public class LoginActivity extends SwipeBackUI implements OnKeyListener {
                     DownloadTipsActivity.start(LoginActivity.this);
                 } else if (code == 100036) {
                     YchatToastUtils.showToastLong("该手机号未注册,微信登录绑定手机号即可");
-                }  else if (code == 100030) {
+                } else if (code == 100030) {
                     YchatToastUtils.showToastLong("网络繁忙，请重试");
                 } else {
                     YchatToastUtils.showShort("注册失败");
@@ -450,8 +458,12 @@ public class LoginActivity extends SwipeBackUI implements OnKeyListener {
                     @Override
                     public void onResult(int code, Object result, Throwable exception) {
                         if (code == ResponseCode.RES_SUCCESS) {
+                            TCAgent.onLogin(aVoid.getAccid(), TDAccount.AccountType.WEIXIN, aVoid.getUid());
                             loginRequest = null;
                             NimUIKit.loginSuccess(aVoid.getAccid());
+                            SPUtils.getInstance().remove(CommonUtil.ALIPAYUID);
+                            SPUtils.getInstance().remove(CommonUtil.YCHAT_ACCOUNT);
+                            SPUtils.getInstance().remove(UnsentRedPacketCache.TAG);
                             DemoCache.setAccount(aVoid.getAccid());
                             Preferences.saveWeiranToken(LoginActivity.this, aVoid.getMytoken());
                             Preferences.saveWeiranUid(LoginActivity.this, aVoid.getUid());
@@ -533,6 +545,9 @@ public class LoginActivity extends SwipeBackUI implements OnKeyListener {
         if (timeCount != null) {
             timeCount.cancel();
             timeCount = null;
+        }
+        if (ActivityUtils.getActivityList().size() == 0) {
+            CommonUtil.setCancelValue(false);
         }
     }
 

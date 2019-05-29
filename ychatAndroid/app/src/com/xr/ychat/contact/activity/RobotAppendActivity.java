@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -24,17 +25,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.xr.ychat.contact.activity.RobotActivity.EXTRA_ACCID;
+import static com.xr.ychat.contact.activity.RobotActivity.EXTRA_NEW_ACCID;
 
 public class RobotAppendActivity extends SwipeBackUI implements RobotAppendAdapter.AppendRobotInteface {
+    private static final String TEAM_ROBOT = "TEAM_ROBOT";
     private String uid;
     private String mytoken;
+    private String robotId;
     private RecyclerView recyclerView;
     private RobotAppendAdapter adapter;
     private List<RobotInfo> robotInfos;
     private LayoutInflater layoutInflater;
 
-    public static void start(Activity activity, int reqcode) {
+    public static void start(Activity activity, String robotId, int reqcode) {
         Intent intent = new Intent(activity, RobotAppendActivity.class);
+        intent.putExtra(TEAM_ROBOT, robotId);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         activity.startActivityForResult(intent, reqcode);
     }
@@ -42,7 +47,8 @@ public class RobotAppendActivity extends SwipeBackUI implements RobotAppendAdapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_append_robot);
+        setActivityView(R.layout.activity_append_robot);
+        robotId = getIntent().getStringExtra(TEAM_ROBOT);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
         mToolbar.setTitle("");
@@ -104,10 +110,15 @@ public class RobotAppendActivity extends SwipeBackUI implements RobotAppendAdapt
 
     @Override
     public void appendRobot(String accid) {
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_ACCID, accid);
-        setResult(Activity.RESULT_OK, intent);
-        finish();
+        if (!TextUtils.equals(accid, robotId)) {
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_NEW_ACCID, accid);
+            intent.putExtra(EXTRA_ACCID, robotId);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        } else {
+            YchatToastUtils.showShort("同一个机器人");
+        }
     }
 
 }

@@ -9,9 +9,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.api.model.SimpleCallback;
 import com.netease.nim.uikit.business.recent.RecentContactsCallback;
 import com.netease.nim.uikit.business.recent.RecentContactsFragment;
 import com.netease.nim.uikit.business.recent.adapter.RecentContactAdapter;
@@ -32,12 +32,10 @@ import com.netease.nimlib.sdk.friend.FriendService;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
-import com.netease.nimlib.sdk.team.constant.TeamMemberType;
 import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 
-import java.util.List;
 import java.util.Map;
 
 import static com.netease.nim.uikit.business.recent.RecentContactsFragment.RECENT_TAG_SELECTOR;
@@ -133,7 +131,9 @@ public abstract class RecentViewHolder extends RecyclerViewHolder<BaseQuickAdapt
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
-                        ((AnimationDrawable) imgUnreadExplosion.getDrawable()).start();
+                        if (imgUnreadExplosion != null && imgUnreadExplosion.getDrawable() != null) {
+                            ((AnimationDrawable) imgUnreadExplosion.getDrawable()).start();
+                        }
                         // 解决部分手机动画无法播放的问题（例如华为荣耀）
                         getAdapter().notifyItemChanged(getAdapter().getViewHolderPosition(position));
                     }
@@ -165,54 +165,26 @@ public abstract class RecentViewHolder extends RecyclerViewHolder<BaseQuickAdapt
     protected void loadPortrait(BaseViewHolder holder, RecentContact recent) {
         // 设置头像
         if (recent.getSessionType() == SessionTypeEnum.P2P) {
-            if (TextUtils.equals(recent.getContactId(), CommonUtil.ASSISTANT_ACCOUNT)) {
+            if (TextUtils.equals(recent.getContactId(), SPUtils.getInstance().getString(CommonUtil.ASSISTANT))) {
                 imgHead.setImageResource(R.drawable.nim_avatar_assistant);
             } else {
                 imgHead.loadBuddyAvatar(recent.getContactId());
             }
         } else if (recent.getSessionType() == SessionTypeEnum.Team) {
             String teamId = recent.getContactId();
-            NimUIKit.getTeamProvider().fetchTeamMemberList(teamId, new SimpleCallback<List<TeamMember>>() {
-                @Override
-                public void onResult(boolean success, List<TeamMember> result, int code) {
-                    imgHead.loadTeamIconByTeam(result, teamId);
-                }
-            });
+            imgHead.loadTeamIconByTeam(NimUIKit.getTeamProvider().getTeamById(teamId));
         }
-    }
-
-    private boolean needRefresh(List<TeamMember> teamMembers) {
-        if (teamMembers == null) {
-            return true;
-        }
-        if (teamMembers.size() == 0) {
-            return true;
-        }
-        if (teamMembers.size() == 1) {
-            TeamMember teamMember = teamMembers.get(0);
-            if (teamMember.getType() == TeamMemberType.Owner) {
-                return true;
-            }
-        }
-        boolean hasOwner = true;
-        for (TeamMember teamMember : teamMembers) {
-            if (teamMember.getType() == TeamMemberType.Owner) {
-                hasOwner = false;
-                break;
-            }
-        }
-        return hasOwner;
     }
 
     private void updateNewIndicator(RecentContact recent) {
         int unreadNum = recent.getUnreadCount();
-        if (isNeedMessageNotify(recent)) {
+        if (isNeedMessageNotify(recent) && recent.getTag() != 1000L) {
             tvUnread.setVisibility(unreadNum > 0 ? View.VISIBLE : View.GONE);
             tvUnread.setText(unreadCountShowRule(unreadNum));
             imgUnreadIndicator.setVisibility(View.GONE);
         } else {
             tvUnread.setVisibility(View.GONE);
-            imgUnreadIndicator.setVisibility(unreadNum > 0 ? View.VISIBLE : View.GONE);
+            imgUnreadIndicator.setVisibility((unreadNum > 0 && recent.getTag() != 1000L) ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -295,7 +267,7 @@ public abstract class RecentViewHolder extends RecyclerViewHolder<BaseQuickAdapt
         if (labelWidth > 0) {
             tvNickname.setMaxWidth(labelWidth);
         }
-        if (!TextUtils.equals(recent.getContactId(), CommonUtil.ASSISTANT_ACCOUNT)) {
+        if (!TextUtils.equals(recent.getContactId(), SPUtils.getInstance().getString(CommonUtil.ASSISTANT))) {
             tvNickname.setText(UserInfoHelper.getUserTitleName(recent.getContactId(), recent.getSessionType()));
         } else {
             tvNickname.setText("空了吹小助手");

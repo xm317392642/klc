@@ -48,7 +48,7 @@ public class UnclaimedEnvelopeActivity extends SwipeBackUI implements ModuleProx
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_team_unclaimed_envelope_activity);
+        setActivityView(R.layout.nim_team_unclaimed_envelope_activity);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);
         mToolbar.setTitle("");
@@ -84,8 +84,14 @@ public class UnclaimedEnvelopeActivity extends SwipeBackUI implements ModuleProx
     public boolean sendMessage(IMMessage msg) {
         Intent intent = new Intent("com.xr.ychat.NewMessageBroadcastReceiver");
         intent.putExtra(MessageFragment.NEW_MESSAGE, msg);
+        intent.putExtra(MessageFragment.NEW_MESSAGE_TYPE, 1);
         localBroadcastManager.sendBroadcast(intent);
         return true;
+    }
+
+    @Override
+    public void saveMessageToLocal(IMMessage msg) {
+
     }
 
     @Override

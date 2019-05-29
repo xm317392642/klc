@@ -1,7 +1,6 @@
 package com.xr.ychat.main.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.util.SPUtils;

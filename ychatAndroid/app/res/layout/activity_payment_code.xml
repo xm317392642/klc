@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_bar_height"
+        android:background="@color/color_be6913"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/action_bar_height"
+            android:fitsSystemWindows="true">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:maxWidth="210dp"
+                android:maxLines="1"
+                android:text="支付宝二维码"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/action_bar_right_clickable_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_height"
+                android:layout_gravity="end|center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:text="删除"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/binding_payment_code_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
+
+        <Button
+            android:id="@+id/payment_code_replace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/general_button_bg"
+            android:text="更换"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/payment_code_send"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/payment_code_send"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/general_button_bg"
+            android:text="发送"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/payment_code_replace" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/payment_code_image_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toTopOf="@+id/payment_code_replace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.netease.nim.uikit.common.ui.widget.AspectRatioImageView
+                android:id="@+id/payment_code_height"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:visibility="gone"
+                app:ari_aspect="auto"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.netease.nim.uikit.common.ui.widget.AspectRatioImageView
+                android:id="@+id/payment_code_width"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:visibility="visible"
+                app:ari_aspect="auto"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/no_payment_code_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
+
+        <ImageView
+            android:id="@+id/no_payment_code_icon1"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/payment_code_mobile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="21dp"
+            android:gravity="center"
+            android:text="1.打开支付宝APP"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/no_payment_code_icon1"
+            app:layout_constraintStart_toEndOf="@+id/no_payment_code_icon1"
+            app:layout_constraintTop_toTopOf="@+id/no_payment_code_icon1" />
+
+        <ImageView
+            android:id="@+id/no_payment_code_icon2"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="9dp"
+            android:src="@drawable/payment_code_collect"
+            app:layout_constraintStart_toStartOf="@+id/no_payment_code_icon1"
+            app:layout_constraintTop_toBottomOf="@+id/no_payment_code_icon1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="21dp"
+            android:gravity="center"
+            android:text="2.点击“收钱”"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/no_payment_code_icon2"
+            app:layout_constraintStart_toEndOf="@+id/no_payment_code_icon2"
+            app:layout_constraintTop_toTopOf="@+id/no_payment_code_icon2" />
+
+        <ImageView
+            android:id="@+id/no_payment_code_icon3"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="9dp"
+            android:src="@drawable/payment_code_save"
+            app:layout_constraintStart_toStartOf="@+id/no_payment_code_icon1"
+            app:layout_constraintTop_toBottomOf="@+id/no_payment_code_icon2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="21dp"
+            android:gravity="center"
+            android:text="3.保存图片"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/no_payment_code_icon3"
+            app:layout_constraintStart_toEndOf="@+id/no_payment_code_icon3"
+            app:layout_constraintTop_toTopOf="@+id/no_payment_code_icon3" />
+
+        <ImageView
+            android:id="@+id/no_payment_code_icon4"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="9dp"
+            android:src="@drawable/payment_code_upload"
+            app:layout_constraintStart_toStartOf="@+id/no_payment_code_icon1"
+            app:layout_constraintTop_toBottomOf="@+id/no_payment_code_icon3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="21dp"
+            android:gravity="center"
+            android:text="4.添加支付宝收款码"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/no_payment_code_icon4"
+            app:layout_constraintStart_toEndOf="@+id/no_payment_code_icon4"
+            app:layout_constraintTop_toTopOf="@+id/no_payment_code_icon4" />
+
+        <Button
+            android:id="@+id/no_payment_code_append"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="63dp"
+            android:layout_marginTop="46dp"
+            android:layout_marginEnd="63dp"
+            android:background="@drawable/general_button_bg"
+            android:text="立即添加"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/no_payment_code_icon4" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:text="你还没有添加支付宝收款码"
+            android:textColor="@color/color_grey_888888"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/no_payment_code_append"
+            app:layout_constraintStart_toStartOf="@+id/no_payment_code_append"
+            app:layout_constraintTop_toBottomOf="@+id/no_payment_code_append" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -91,13 +91,13 @@ public class UserProfileEditItemActivity extends SwipeBackUI implements View.OnC
         parseIntent();
         if (key == UserConstant.KEY_NICKNAME || key == UserConstant.KEY_PHONE || key == UserConstant.KEY_EMAIL
                 || key == UserConstant.KEY_SIGNATURE || key == UserConstant.KEY_ALIAS) {
-            setContentView(R.layout.user_profile_edittext_layout);
+            setActivityView(R.layout.user_profile_edittext_layout);
             findEditText();
         } else if (key == UserConstant.KEY_GENDER) {
-            setContentView(R.layout.user_profile_gender_layout);
+            setActivityView(R.layout.user_profile_gender_layout);
             findGenderViews();
         } else if (key == UserConstant.KEY_BIRTH) {
-            setContentView(R.layout.user_profile_birth_layout);
+            setActivityView(R.layout.user_profile_birth_layout);
             findBirthViews();
         }
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

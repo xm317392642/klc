@@ -26,7 +26,7 @@ import java.io.IOException;
  * 云信sdk 自定义的SDK选项设置
  */
 
-class NimSDKOptionConfig {
+public class NimSDKOptionConfig {
 
     static SDKOptions getSDKOptions(Context context) {
         SDKOptions options = new SDKOptions();
@@ -70,6 +70,8 @@ class NimSDKOptionConfig {
         // 是否启用群消息已读功能，默认关闭
         options.enableTeamMsgAck = true;
 
+        // 禁止后台进程唤醒ui进程
+        options.disableAwake = true;
 
         // 打开消息撤回未读数-1的开关
         options.shouldConsiderRevokedMessageUnreadCount = true;
@@ -101,7 +103,7 @@ class NimSDKOptionConfig {
      * 配置 APP 保存图片/语音/文件/log等数据的目录
      * 这里示例用SD卡的应用扩展存储目录
      */
-    static String getAppCacheDir(Context context) {
+    public static String getAppCacheDir(Context context) {
         String storageRootPath = null;
         try {
             // SD卡应用扩展存储区(APP卸载后，该目录下被清除，用户也可以在设置界面中手动清除)，请根据APP对数据缓存的重要性及生命周期来决定是否采用此缓存目录.
@@ -159,7 +161,7 @@ class NimSDKOptionConfig {
         StatusBarNotificationConfig config = new StatusBarNotificationConfig();
         // 点击通知需要跳转到的界面
         config.notificationEntrance = WelcomeActivity.class;
-        config.notificationSmallIconId = R.mipmap.logo;
+        config.notificationSmallIconId = DemoCache.getContext().getApplicationInfo().icon;
         config.notificationColor = DemoCache.getContext().getResources().getColor(R.color.color_blue_3a9efb);
         // 通知铃声的uri字符串
         config.notificationSound = "android.resource://com.xr.ychat/raw/msg";

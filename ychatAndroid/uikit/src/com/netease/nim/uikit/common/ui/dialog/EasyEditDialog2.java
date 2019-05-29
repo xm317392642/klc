@@ -22,8 +22,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.R;
-import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.util.string.StringUtil;
@@ -240,7 +240,7 @@ public class EasyEditDialog2 extends Dialog {
 
     /**
      * 计算最佳采样率
-     *计算合适的采样率(当然这里还可以自己定义计算规则)，reqWidth和reqHeight为期望的图片大小，单位是px
+     * 计算合适的采样率(当然这里还可以自己定义计算规则)，reqWidth和reqHeight为期望的图片大小，单位是px
      * test branch2222
      */
     private static int calculateSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -261,6 +261,7 @@ public class EasyEditDialog2 extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(mResourceId);
+
         try {
             LinearLayout root = (LinearLayout) findViewById(R.id.easy_edit_dialog_root);
             txShareName = findViewById(R.id.share_name);
@@ -271,11 +272,11 @@ public class EasyEditDialog2 extends Dialog {
             params.width = (int) ScreenUtil.getDialogWidth();
             root.setLayoutParams(params);
 
-            if (accountId != null && !CommonUtil.ASSISTANT_ACCOUNT.equals(accountId)) {
+            if (accountId != null && !SPUtils.getInstance().getString(CommonUtil.ASSISTANT).equals(accountId)) {
                 headImageView.loadBuddyAvatar(accountId);
             }
             if (team != null) {
-                headImageView.loadTeamIconByTeam(NimUIKit.getTeamProvider().getTeamMemberList(team.getId()), team);
+                headImageView.loadTeamIconByTeam(team);
             }
 
             if (!TextUtils.isEmpty(localPicPath)) {
@@ -283,22 +284,20 @@ public class EasyEditDialog2 extends Dialog {
                 //share_img.setImageBitmap(BitmapFactory.decodeFile(localPicPath));
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;// 设置为true，解析图片原始宽高，不加载,只获取图片的大小信息，而不是将整张图片载入在内存中，避免内存溢出
-
                 BitmapFactory.decodeFile(localPicPath, options);
                 int outWidth = options.outWidth;
                 int outHeight = options.outHeight;
                 ViewGroup.LayoutParams layoutParams = share_img.getLayoutParams();
                 if (outHeight > outWidth) {
-                    options.inSampleSize = calculateSampleSize(options,170,240); // 设置为刚才计算的压缩比例
+                    options.inSampleSize = calculateSampleSize(options, 170, 240); // 设置为刚才计算的压缩比例
                     layoutParams.height = ScreenUtil.dip2px(240f);
                     layoutParams.width = ScreenUtil.dip2px(170f);
                 } else {
-                    options.inSampleSize = calculateSampleSize(options,300,150); // 设置为刚才计算的压缩比例
+                    options.inSampleSize = calculateSampleSize(options, 300, 150); // 设置为刚才计算的压缩比例
                     layoutParams.height = ScreenUtil.dip2px(150f);
                     layoutParams.width = ScreenUtil.dip2px(300f);
                 }
                 options.inJustDecodeBounds = false; // 计算好压缩比例后，这次可以去加载原图了
-                options.inPreferredConfig=Bitmap.Config.RGB_565;//色彩模式
                 Bitmap bitmap = BitmapFactory.decodeFile(localPicPath, options); // 解码文件
                 share_img.setImageBitmap(bitmap);
             } else {

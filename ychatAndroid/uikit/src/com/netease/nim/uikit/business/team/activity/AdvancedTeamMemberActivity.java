@@ -16,7 +16,6 @@ import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
 import com.netease.nim.uikit.api.model.team.TeamMemberDataChangedObserver;
-import com.netease.nim.uikit.api.model.team.TeamProvider;
 import com.netease.nim.uikit.api.model.user.UserInfoObserver;
 import com.netease.nim.uikit.business.contact.core.item.ContactIdFilter;
 import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
@@ -30,7 +29,6 @@ import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.adapter.TAdapterDelegate;
 import com.netease.nim.uikit.common.adapter.TViewHolder;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.netease.nim.uikit.impl.cache.TeamDataCache;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
@@ -90,7 +88,7 @@ public class AdvancedTeamMemberActivity extends SwipeBackUI implements TAdapterD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_team_member_grid_layout);
+        setActivityView(R.layout.nim_team_member_grid_layout);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
@@ -295,7 +293,6 @@ public class AdvancedTeamMemberActivity extends SwipeBackUI implements TAdapterD
     @Override
     public void onAddMember() {
         ContactSelectActivity.Option option = TeamHelper.getContactSelectOption(memberAccounts);
-        option.title = "邀请成员";
         NimUIKit.startContactSelector(this, option, REQUEST_CODE_CONTACT_SELECT);
     }
 
@@ -306,11 +303,11 @@ public class AdvancedTeamMemberActivity extends SwipeBackUI implements TAdapterD
      */
     @Override
     public void onRemoveMember(String account) {
-        ContactSelectActivity.Option option = TeamHelper.getContactSelectOption(memberAccounts);
+        //ContactSelectActivity.Option option = TeamHelper.getContactSelectOption(memberAccounts);
+        ContactSelectActivity.Option option = new ContactSelectActivity.Option();
+        option.type= ContactSelectActivity.ContactSelectType.TEAM_MEMBER;
         option.title = "删除成员";
         option.teamId = teamId;
-        option.multi = true;
-        option.itemDisableFilter = null;
         //需要过滤（不显示）的联系人项
         ArrayList<String> includeAccounts = new ArrayList<>();
         memberAccounts.remove(NimUIKit.getAccount());

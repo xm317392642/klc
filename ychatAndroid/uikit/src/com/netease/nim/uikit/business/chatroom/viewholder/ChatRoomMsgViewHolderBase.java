@@ -1,7 +1,6 @@
 package com.netease.nim.uikit.business.chatroom.viewholder;
 
 import android.app.Activity;
-import android.content.Context;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;

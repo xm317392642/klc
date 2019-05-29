@@ -6,13 +6,9 @@ import android.os.Handler;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.AppUtils;
-import com.netease.nim.avchatkit.activity.AVChatActivity;
-import com.netease.nim.avchatkit.constant.AVChatExtras;
 import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.common.UpdateInfo;
+import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.activity.UI;
-import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialog;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.mixpush.MixPushService;
@@ -22,9 +18,6 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
 import com.xr.ychat.common.util.sys.SysInfoUtil;
-import com.netease.nim.uikit.common.Preferences;
-import com.netease.nim.uikit.common.ContactHttpClient;
-import com.xr.ychat.login.DownloadUtils;
 import com.xr.ychat.login.LoginAuthorizeActivity;
 import com.xr.ychat.mixpush.DemoMixPushMessageHandler;
 
@@ -43,7 +36,7 @@ public class WelcomeActivity extends UI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
+        setActivityView(R.layout.activity_welcome);
         //处理首次安装点击打开切到后台,点击桌面图标再回来重启的问题及通过应用宝唤起在特定条件下重走逻辑的问题
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             // Activity was brought to front and not created,
@@ -94,7 +87,8 @@ public class WelcomeActivity extends UI {
                         return;
                     }
                     customSplash = false;
-                    queryAppVersion();
+                    //queryAppVersion();
+                    nextStep();
                 }
             };
             if (customSplash) {
@@ -136,9 +130,10 @@ public class WelcomeActivity extends UI {
                     return;
                 } else if (NIMClient.getService(MixPushService.class).isFCMIntent(intent)) {
                     parseFCMNotifyIntent(NIMClient.getService(MixPushService.class).parseFCMPayload(intent));
-                } else if (intent.hasExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION) || intent.hasExtra(AVChatActivity.INTENT_ACTION_AVCHAT)) {
-                    parseNormalIntent(intent);
                 }
+//                else if (intent.hasExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION) || intent.hasExtra(AVChatActivity.INTENT_ACTION_AVCHAT)) {
+//                    parseNormalIntent(intent);
+//                }
             }
 
             if (!firstEnter && intent == null) {
@@ -195,35 +190,45 @@ public class WelcomeActivity extends UI {
         finish();
     }
 
+
     /**
      * 版本检测，判断是否更新
      * isForce(1：强制更新0：不需要强制更新)
      */
-    private void queryAppVersion() {
+ /*   private void queryAppVersion() {
         ContactHttpClient.getInstance().queryAppVersion(new ContactHttpClient.ContactHttpCallback<UpdateInfo>() {
             @Override
             public void onSuccess(UpdateInfo updateInfo) {
                 if (updateInfo.getUpdate() == 1) {
                     //需要更新
                     int isForce = updateInfo.getIsForce();
-                    //强制更新只有一个确定按钮（非强制更新则有确定和取消）
-                    final EasyAlertDialog alertDialog = new EasyAlertDialog(WelcomeActivity.this);
-                    alertDialog.setMessage("有最新版本了,是否更新?");
-                    alertDialog.setCancelable(false);
-                    alertDialog.addPositiveButton("确定", EasyAlertDialog.NO_TEXT_COLOR, EasyAlertDialog.NO_TEXT_SIZE,
-                            v -> {
-                                alertDialog.dismiss();
-                                new DownloadUtils(WelcomeActivity.this, AppUtils.getAppName(), updateInfo.getDownUrl(), "konglechui" + updateInfo.getVersion() + ".apk");
-                                nextStep();
-                            });
-                    if (isForce == 0) {
-                        alertDialog.addNegativeButton("取消", EasyAlertDialog.NO_TEXT_COLOR, EasyAlertDialog.NO_TEXT_SIZE,
+                    String localApkPath= SPUtils.getInstance().getString("localApkPath");
+                    if(!TextUtils.isEmpty(localApkPath)&&localApkPath.contains(updateInfo.getVersion())){
+                        CommonUtil.checkInstall(WelcomeActivity.this);
+                    }else{
+                        //强制更新只有一个确定按钮（非强制更新则有确定和取消）
+                        final EasyAlertDialog alertDialog = new EasyAlertDialog(WelcomeActivity.this);
+                        alertDialog.setMessage("有最新版本了,是否更新?");
+                        alertDialog.setCancelable(false);
+                        alertDialog.addPositiveButton("确定", EasyAlertDialog.NO_TEXT_COLOR, EasyAlertDialog.NO_TEXT_SIZE,
                                 v -> {
                                     alertDialog.dismiss();
-                                    nextStep();
+                                    //new DownloadUtils(WelcomeActivity.this, AppUtils.getAppName(), updateInfo.getDownUrl(), "konglechui" + updateInfo.getVersion() + ".apk");
+                                    DownloadUtils downloadUtils = new DownloadUtils(WelcomeActivity.this);
+                                    downloadUtils.showDownloadDialog(updateInfo.getDownUrl(), updateInfo.getVersion(),(boolean success, Object result, int code)->{
+                                        nextStep();
+                                    });
                                 });
+                        if (isForce == 0) {
+                            alertDialog.addNegativeButton("取消", EasyAlertDialog.NO_TEXT_COLOR, EasyAlertDialog.NO_TEXT_SIZE,
+                                    v -> {
+                                        alertDialog.dismiss();
+                                        nextStep();
+                                    });
+                        }
+                        alertDialog.show();
                     }
-                    alertDialog.show();
+
                 } else {
                     nextStep();//不需要更新
                 }
@@ -235,7 +240,7 @@ public class WelcomeActivity extends UI {
                 nextStep();
             }
         });
-    }
+    }*/
 
     private void nextStep() {
         if (canAutoLogin()) {

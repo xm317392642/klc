@@ -2,14 +2,13 @@ package com.xr.ychat.contact.helper;
 
 
 import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.xr.ychat.DemoCache;
-import com.xr.ychat.R;
 import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
+import com.xr.ychat.R;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,15 +1,14 @@
 package com.xr.ychat.session.viewholder;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.business.chatroom.adapter.ChatRoomMsgAdapter;
+import com.netease.nim.uikit.business.session.extension.RedPacketAttachment;
 import com.netease.nim.uikit.business.session.module.ModuleProxy;
 import com.netease.nim.uikit.business.session.module.list.MsgAdapter;
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderBase;
@@ -18,7 +17,6 @@ import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.xr.ychat.R;
 import com.xr.ychat.redpacket.NIMOpenRpCallback;
 import com.xr.ychat.redpacket.NIMRedPacketClient;
-import com.xr.ychat.session.extension.RedPacketAttachment;
 
 public class MsgViewHolderRedPacket extends MsgViewHolderBase {
     private long mLastClickTime = 0;
@@ -53,9 +51,10 @@ public class MsgViewHolderRedPacket extends MsgViewHolderBase {
         if (!isReceivedMessage()) {// 消息方向，自己发送的
             sendView.setVisibility(View.VISIBLE);
             int type = attachment.getRpType();
-            sendView.setEnabled(type == 0);
+            progressBar.setVisibility(View.GONE);
+            sendView.setEnabled(type == 0 || type == 5);
             String reType;
-            if (type == 0) {
+            if (type == 0 || type == 5) {
                 reType = "查看红包";
             } else if (type == 2) {
                 reType = "已过期";
@@ -71,6 +70,7 @@ public class MsgViewHolderRedPacket extends MsgViewHolderBase {
             sendView.setVisibility(View.GONE);
             revView.setVisibility(View.VISIBLE);
             int type = attachment.getRpType();
+            progressBar.setVisibility(View.GONE);
             revView.setEnabled(type == 0);
             String reType;
             if (type == 0) {

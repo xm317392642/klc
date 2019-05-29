@@ -2,13 +2,12 @@ package com.xr.ychat.contact;
 
 import android.content.Context;
 
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.api.model.contact.ContactEventListener;
 import com.netease.nim.uikit.common.CommonUtil;
-import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nim.uikit.impl.preference.UserPreferences;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.xr.ychat.contact.activity.UserProfileActivity;
-import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.api.model.contact.ContactEventListener;
 
 /**
  * UIKit联系人列表定制展示类

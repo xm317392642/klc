@@ -1,15 +1,14 @@
 package com.netease.nim.uikit.business.session.activity;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,27 +20,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.URLUtil;
-import android.widget.ImageView;
 
+import com.blankj.utilcode.util.EncodeUtils;
 import com.blankj.utilcode.util.ImageUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.business.team.activity.ScanCodeErrorActivity;
 import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nim.uikit.business.team.helper.UpdateMemberChangeService;
+import com.netease.nim.uikit.business.team.model.TeamExtras;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
+import com.netease.nim.uikit.common.TeamExtension;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog;
 import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog.onSeparateItemClickListener;
 import com.netease.nim.uikit.common.ui.dialog.EasyEditDialog;
-import com.netease.nim.uikit.common.ui.imageview.BaseZoomableImageView;
-import com.netease.nim.uikit.common.ui.imageview.ImageGestureListener;
-import com.netease.nim.uikit.common.ui.imageview.MultiTouchZoomableImageView;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.netease.nim.uikit.common.util.file.AttachmentStore;
 import com.netease.nim.uikit.common.util.media.BitmapDecoder;
 import com.netease.nim.uikit.common.util.media.ImageUtil;
 import com.netease.nim.uikit.common.util.storage.StorageUtil;
@@ -63,7 +67,6 @@ import com.netease.nimlib.sdk.team.constant.VerifyTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -83,10 +86,6 @@ import io.reactivex.schedulers.Schedulers;
 public class WatchMessagePictureActivity extends SwipeBackUI {
     // 支付宝包名
     private static final String ALIPAY_PACKAGE_NAME = "com.eg.android.AlipayGphone";
-    // 旧版支付宝二维码通用 Intent Scheme Url 格式
-    private static final String INTENT_URL_FORMAT = "intent://platformapi/startapp?saId=10000007&" +
-            "clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2F{urlCode}%3F_s" +
-            "%3Dweb-other&_t=1472443966571#Intent;" + "scheme=alipayqr;package=com.eg.android.AlipayGphone;end";
     private static final String YCHAT_USER = "http://share.yaoliaoim.com?accid=";
     private static final String YCHAT_GROUP = "http://share.yaoliaoim.com?groupid=";
     private static final String ALIPAY_QRCODE = "qr.alipay.com";
@@ -98,15 +97,14 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
 
     private Handler handler;
     private IMMessage message;
-    private boolean isShowMenu;
     private List<IMMessage> imageMsgList = new ArrayList<>();
     private int firstDisplayImageIndex = 0;
 
     private boolean newPageSelected = false;
 
     private View loadingLayout;
-    private MultiTouchZoomableImageView image;
-    private ImageView simpleImageView;
+    private PhotoView image;
+    private PhotoView simpleImageView;
     private int mode;
     protected CustomAlertDialog alertDialog;
     private ViewPager imageViewPager;
@@ -131,7 +129,7 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_watch_picture_activity);
+        setActivityView(R.layout.nim_watch_picture_activity);
 
         handleIntent();
 
@@ -146,7 +144,6 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
     private void handleIntent() {
         this.message = (IMMessage) getIntent().getSerializableExtra(INTENT_EXTRA_IMAGE);
         mode = ImageUtil.isGif(((ImageAttachment) message.getAttachment()).getExtension()) ? MODE_GIF : MODE_NOMARL;
-        isShowMenu = getIntent().getBooleanExtra(INTENT_EXTRA_MENU, true);
     }
 
     @Override
@@ -165,7 +162,7 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
         loadingLayout = findViewById(R.id.loading_layout);
 
         imageViewPager = (ViewPager) findViewById(R.id.view_pager_image);
-        simpleImageView = (ImageView) findViewById(R.id.simple_image_view);
+        simpleImageView = (PhotoView) findViewById(R.id.simple_image_view);
 
         if (mode == MODE_GIF) {
             simpleImageView.setVisibility(View.VISIBLE);
@@ -268,8 +265,6 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
             @Override
             public void destroyItem(ViewGroup container, int position, Object object) {
                 View layout = (View) object;
-                BaseZoomableImageView iv = (BaseZoomableImageView) layout.findViewById(R.id.watch_image_view);
-                iv.clear();
                 container.removeView(layout);
             }
 
@@ -406,11 +401,13 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
 
         Bitmap bitmap = BitmapDecoder.decodeSampledForDisplay(path, false);
         bitmap = ImageUtil.rotateBitmapInNeeded(path, bitmap);
-        if (bitmap == null) {
-            YchatToastUtils.showShort(R.string.picker_image_error);
-            image.setImageBitmap(ImageUtil.getBitmapFromDrawableRes(getImageResOnFailed()));
-        } else {
-            image.setImageBitmap(bitmap);
+        if (image != null) {
+            if (bitmap == null) {
+                YchatToastUtils.showShort(R.string.picker_image_error);
+                image.setImageBitmap(ImageUtil.getBitmapFromDrawableRes(getImageResOnFailed()));
+            } else {
+                image.setImageBitmap(bitmap);
+            }
         }
     }
 
@@ -425,7 +422,6 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
     /**
      * ********************************* 下载 ****************************************
      */
-
     private void registerObservers(boolean register) {
         NIMClient.getService(MsgServiceObserve.class).observeMsgStatus(statusObserver, register);
     }
@@ -474,9 +470,13 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
     private void onDownloadFailed() {
         loadingLayout.setVisibility(View.GONE);
         if (mode == MODE_NOMARL) {
-            image.setImageBitmap(ImageUtil.getBitmapFromDrawableRes(getImageResOnFailed()));
+            if (image != null) {
+                image.setImageBitmap(ImageUtil.getBitmapFromDrawableRes(getImageResOnFailed()));
+            }
         } else if (mode == MODE_GIF) {
-            simpleImageView.setImageBitmap(ImageUtil.getBitmapFromDrawableRes(getImageResOnFailed()));
+            if (simpleImageView != null) {
+                simpleImageView.setImageBitmap(ImageUtil.getBitmapFromDrawableRes(getImageResOnFailed()));
+            }
         }
         YchatToastUtils.showShort(R.string.download_picture_fail);
     }
@@ -486,23 +486,11 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
      */
 
     // 设置图片点击事件
-    protected void onImageViewFound(BaseZoomableImageView imageView) {
-        imageView.setImageGestureListener(new ImageGestureListener() {
-
-            @Override
-            public void onImageGestureSingleTapConfirmed() {
-                onImageViewTouched();
-            }
-
-            @Override
-            public void onImageGestureLongPress() {
-                showWatchPictureAction();
-            }
-
-            @Override
-            public void onImageGestureFlingDown() {
-                finish();
-            }
+    protected void onImageViewFound(PhotoView imageView) {
+        imageView.setOnPhotoTapListener(((view, x, y) -> finish()));
+        imageView.setOnLongClickListener(v -> {
+            showWatchPictureAction();
+            return true;
         });
     }
 
@@ -529,7 +517,7 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
                 }
             });
         }
-        Bitmap obmp = image.getImageBitmap();
+        Bitmap obmp = ((BitmapDrawable) image.getDrawable()).getBitmap();
         Observable.create((ObservableEmitter<String> emitter) -> {
             String result = QRCodeDecoder.syncDecodeQRCode(obmp);
             emitter.onNext(TextUtils.isEmpty(result) ? "" : result);
@@ -571,55 +559,63 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
                                                         NimUIKitImpl.startTeamSession(WatchMessagePictureActivity.this, groupid);
                                                         finish();
                                                     } else {
-                                                        if (result.getVerifyType() != VerifyTypeEnum.Free) {
-                                                            String url = "scheme://ychat/jointeam?EXTRA_ID=" + groupid;
-                                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                                                            startActivity(intent);
+                                                        Gson gson = new Gson();
+                                                        TeamExtension extension = gson.fromJson(result.getExtension(), new TypeToken<TeamExtension>() {
+                                                        }.getType());
+                                                        if (extension != null && TeamExtras.OPEN.equals(extension.getInviteVerity())) {
+                                                            //该群已开启进群验证，只可通过邀请进群
+                                                            startActivity(new Intent(WatchMessagePictureActivity.this, ScanCodeErrorActivity.class));
                                                         } else {
-                                                            final EasyEditDialog requestDialog = new EasyEditDialog(WatchMessagePictureActivity.this);
-                                                            requestDialog.setTitle("申请加入群组");
-                                                            requestDialog.setEditText("我是" + UserInfoHelper.getUserDisplayName(NimUIKit.getAccount()));
-                                                            requestDialog.addNegativeButtonListener(R.string.cancel, new View.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(View v) {
-                                                                    requestDialog.dismiss();
-                                                                }
-                                                            });
-                                                            requestDialog.addPositiveButtonListener(R.string.send, com.netease.nim.uikit.R.color.color_activity_blue_bg, new View.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(View v) {
-                                                                    requestDialog.dismiss();
-                                                                    String msg = requestDialog.getEditMessage();
-                                                                    if (TextUtils.isEmpty(msg)) {
-                                                                        msg = String.format("我是%1$s", UserInfoHelper.getUserName(NimUIKit.getAccount()));
+                                                            if (result.getVerifyType() != VerifyTypeEnum.Free) {
+                                                                String url = "scheme://ychat/jointeam?EXTRA_ID=" + groupid;
+                                                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                                                startActivity(intent);
+                                                            } else {
+                                                                final EasyEditDialog requestDialog = new EasyEditDialog(WatchMessagePictureActivity.this);
+                                                                requestDialog.setTitle("申请加入群组");
+                                                                requestDialog.setEditText("我是" + UserInfoHelper.getUserDisplayName(NimUIKit.getAccount()));
+                                                                requestDialog.addNegativeButtonListener(R.string.cancel, new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View v) {
+                                                                        requestDialog.dismiss();
                                                                     }
-                                                                    NIMClient.getService(TeamService.class).applyJoinTeam(result.getId(), msg).setCallback(new RequestCallback<Team>() {
-                                                                        @Override
-                                                                        public void onSuccess(Team team) {
-                                                                            UpdateMemberChangeService.start(WatchMessagePictureActivity.this, NimUIKit.getAccount(), result.getId(), 1, "qr");
-                                                                            NimUIKitImpl.startTeamSession(WatchMessagePictureActivity.this, result.getId());
-                                                                            finish();
+                                                                });
+                                                                requestDialog.addPositiveButtonListener(R.string.send, com.netease.nim.uikit.R.color.color_activity_blue_bg, new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View v) {
+                                                                        requestDialog.dismiss();
+                                                                        String msg = requestDialog.getEditMessage();
+                                                                        if (TextUtils.isEmpty(msg)) {
+                                                                            msg = String.format("我是%1$s", UserInfoHelper.getUserName(NimUIKit.getAccount()));
                                                                         }
+                                                                        NIMClient.getService(TeamService.class).applyJoinTeam(result.getId(), msg).setCallback(new RequestCallback<Team>() {
+                                                                            @Override
+                                                                            public void onSuccess(Team team) {
+                                                                                UpdateMemberChangeService.start(WatchMessagePictureActivity.this, NimUIKit.getAccount(), result.getId(), 1, "qr");
+                                                                                NimUIKitImpl.startTeamSession(WatchMessagePictureActivity.this, result.getId());
+                                                                                finish();
+                                                                            }
 
-                                                                        @Override
-                                                                        public void onFailed(int code) {
-                                                                            YchatToastUtils.showShort("failed, error code =" + code);
-                                                                        }
+                                                                            @Override
+                                                                            public void onFailed(int code) {
+                                                                                YchatToastUtils.showShort("failed, error code =" + code);
+                                                                            }
 
-                                                                        @Override
-                                                                        public void onException(Throwable exception) {
+                                                                            @Override
+                                                                            public void onException(Throwable exception) {
 
-                                                                        }
-                                                                    });
-                                                                }
-                                                            });
-                                                            requestDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                                                @Override
-                                                                public void onCancel(DialogInterface dialog) {
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                                requestDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                                                    @Override
+                                                                    public void onCancel(DialogInterface dialog) {
 
-                                                                }
-                                                            });
-                                                            requestDialog.show();
+                                                                    }
+                                                                });
+                                                                requestDialog.show();
+                                                            }
                                                         }
                                                     }
                                                 } else {
@@ -638,11 +634,8 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
                                             }
                                         });
                                     } else if (s.toLowerCase().contains(ALIPAY_QRCODE)) {
-                                        Uri uri = Uri.parse(s);
-                                        List<String> pathSegments = uri.getPathSegments();
-                                        String path = pathSegments.get(0);
                                         if (hasInstalledAlipayClient(WatchMessagePictureActivity.this)) {
-                                            startAlipayClient(WatchMessagePictureActivity.this, path);
+                                            startAlipayClient(WatchMessagePictureActivity.this, s);
                                         } else {
                                             YchatToastUtils.showShort("未安装支付宝");
                                         }
@@ -652,6 +645,8 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
                                             intent.setData(Uri.parse(s));
                                             intent.setAction(Intent.ACTION_VIEW);
                                             startActivity(intent);
+                                        } else {
+                                            YchatToastUtils.showShort("未发现二维码");
                                         }
                                     }
                                 }
@@ -666,6 +661,7 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
     public void savePicture() {
         ImageAttachment attachment = (ImageAttachment) message.getAttachment();
         String path = attachment.getPath();
+        LogUtils.e("savePicture:" + path);
         if (TextUtils.isEmpty(path)) {
             return;
         }
@@ -677,43 +673,30 @@ public class WatchMessagePictureActivity extends SwipeBackUI {
 
         String picPath = StorageUtil.getSystemImagePath();
         String dstPath = picPath + srcFilename;
-        if (AttachmentStore.copy(path, dstPath) != -1) {
-            try {
-                Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(bitmap);
-                image.draw(canvas);
-                File file = new File(dstPath);
-                ImageUtils.save(bitmap, file, Bitmap.CompressFormat.JPEG);
-                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                Uri contentUri = Uri.fromFile(file);
-                mediaScanIntent.setData(contentUri);
-                sendBroadcast(mediaScanIntent);
-                YchatToastUtils.showShort("图片保存成功");
-            } catch (Exception e) {
-                YchatToastUtils.showShort(getString(R.string.picture_save_fail));
-            }
-        } else {
-            YchatToastUtils.showShort(getString(R.string.picture_save_fail));
-        }
+        File file = new File(dstPath);
+        Glide.with(WatchMessagePictureActivity.this)
+                .asBitmap()
+                .load(path)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        ImageUtils.save(resource, file, Bitmap.CompressFormat.PNG);
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        Uri contentUri = Uri.fromFile(file);
+                        mediaScanIntent.setData(contentUri);
+                        sendBroadcast(mediaScanIntent);
+                        YchatToastUtils.showShort("图片保存成功");
+                    }
+                });
     }
 
     public static boolean startAlipayClient(Activity activity, String urlCode) {
-        return startIntentUrl(activity, INTENT_URL_FORMAT.replace("{urlCode}", urlCode));
-    }
-
-    /**
-     * 打开 Intent Scheme Url
-     *
-     * @param intentFullUrl 跳转地址
-     */
-    public static boolean startIntentUrl(Activity activity, String intentFullUrl) {
         try {
-            Intent intent = Intent.parseUri(intentFullUrl, Intent.URI_INTENT_SCHEME);
+            String intentFullUrl = "alipayqr://platformapi/startapp?saId=10000007&qrcode=" + EncodeUtils.urlEncode(urlCode);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(intentFullUrl));
             activity.startActivity(intent);
             return true;
-        } catch (URISyntaxException e) {
-            return false;
-        } catch (ActivityNotFoundException e) {
+        } catch (Exception e) {
             return false;
         }
     }

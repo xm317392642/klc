@@ -1,5 +1,6 @@
 package com.xr.ychat.redpacket;
 
+import com.netease.nim.uikit.business.session.extension.RedPacketOpenedAttachment;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgService;
@@ -7,7 +8,6 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.xr.ychat.DemoCache;
-import com.xr.ychat.session.extension.RedPacketOpenedAttachment;
 
 import java.util.HashMap;
 import java.util.Iterator;

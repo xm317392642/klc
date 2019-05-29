@@ -41,9 +41,13 @@ public class MsgViewHolderMahjong extends MsgViewHolderBase {
         tid = (TextView) view.findViewById(R.id.room_tid);
         time = (TextView) view.findViewById(R.id.room_time);
         one = (RelativeLayout) view.findViewById(R.id.user_one_layout);
+        one.setVisibility(View.GONE);
         two = (RelativeLayout) view.findViewById(R.id.user_two_layout);
+        two.setVisibility(View.GONE);
         three = (RelativeLayout) view.findViewById(R.id.user_three_layout);
+        three.setVisibility(View.GONE);
         four = (RelativeLayout) view.findViewById(R.id.user_four_layout);
+        four.setVisibility(View.GONE);
     }
 
     @Override
@@ -53,33 +57,37 @@ public class MsgViewHolderMahjong extends MsgViewHolderBase {
         }
         MahjongAttachment mahjongAttachment = (MahjongAttachment) message.getAttachment();
         Mahjong mahjong = mahjongAttachment.getMahjong();
+        if (mahjong == null) {
+            return;
+        }
         name.setText(mahjong.getGame_name());
         tid.setText("" + mahjong.getTid());
         String text = TimeUtils.millis2String(mahjong.getTime() * 1000L);
         time.setText(text);
         ArrayList<MahjongBean> beans = mahjong.getPlayer();
-        int size = beans.size();
-        if (size >= 4) {
-            disItem(four, beans.get(3));
-        }
-        if (size >= 3) {
-            disItem(three, beans.get(2));
-        }
-        if (size >= 2) {
-            disItem(two, beans.get(1));
-        }
-        if (size >= 1) {
-            disItem(one, beans.get(0));
+        if (beans != null && beans.size() > 0) {
+            int size = beans.size();
+            if (size >= 4) {
+                disItem(four, beans.get(3));
+            }
+            if (size >= 3) {
+                disItem(three, beans.get(2));
+            }
+            if (size >= 2) {
+                disItem(two, beans.get(1));
+            }
+            if (size >= 1) {
+                disItem(one, beans.get(0));
+            }
         }
     }
 
-    private void disItem(RelativeLayout layout, MahjongBean bean) {
-        if (bean != null) {
-            layout.setVisibility(View.VISIBLE);
-            HeadImageView headImageView = layout.findViewById(R.id.user_avatar);
-            TextView userName = layout.findViewById(R.id.user_nickname);
-            TextView userScore = layout.findViewById(R.id.user_score);
-            TextView UserId = layout.findViewById(R.id.user_id);
+    private void disItem(RelativeLayout relativeLayout, MahjongBean bean) {
+        if (relativeLayout != null && bean != null) {
+            HeadImageView headImageView = relativeLayout.findViewById(R.id.user_avatar);
+            TextView userName = relativeLayout.findViewById(R.id.user_nickname);
+            TextView userScore = relativeLayout.findViewById(R.id.user_score);
+            TextView UserId = relativeLayout.findViewById(R.id.user_id);
             String icon = bean.getIcon();
             if (!TextUtils.isEmpty(icon)) {
                 if (!icon.startsWith("http://")) {
@@ -88,7 +96,13 @@ public class MsgViewHolderMahjong extends MsgViewHolderBase {
                 headImageView.loadAvatar(icon);
             }
             userName.setText(bean.getName());
-            UserId.setText("ID: " + bean.getUid());
+            int uid = bean.getUid();
+            if (uid > 0) {
+                UserId.setText("ID: " + bean.getUid());
+                UserId.setVisibility(View.VISIBLE);
+            } else {
+                UserId.setVisibility(View.INVISIBLE);
+            }
             int result = bean.getResult();
             if (result >= 0) {
                 userScore.setTextColor(ContextCompat.getColor(context, R.color.color_f25542));
@@ -96,6 +110,7 @@ public class MsgViewHolderMahjong extends MsgViewHolderBase {
                 userScore.setTextColor(ContextCompat.getColor(context, R.color.color_1485ef));
             }
             userScore.setText("分数: " + result);
+            relativeLayout.setVisibility(View.VISIBLE);
         }
     }
 

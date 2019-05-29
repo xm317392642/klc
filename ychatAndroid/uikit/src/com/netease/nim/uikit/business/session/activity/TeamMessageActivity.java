@@ -165,7 +165,7 @@ public class TeamMessageActivity extends BaseMessageActivity {
     }
 
     private void onRequestTeamInfoFailed() {
-        YchatToastUtils.showShort( "获取群组信息失败!");
+        YchatToastUtils.showShort("获取群组信息失败!");
         finish();
     }
 
@@ -192,6 +192,10 @@ public class TeamMessageActivity extends BaseMessageActivity {
         }
         invalidTeamTipText.setText(team.getType() == TeamTypeEnum.Normal ? R.string.normal_team_invalid_tip : R.string.team_invalid_tip);
         invalidTeamTipView.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
+        if (!team.isMyTeam()) {
+            YchatToastUtils.showShort(R.string.team_invalid_tip);
+            finish();
+        }
     }
 
     private String getRobotId(Team team) {

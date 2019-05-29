@@ -63,7 +63,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/find_chat_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -128,7 +127,6 @@
                 app:layout_constraintTop_toTopOf="@+id/user_notification_title" />
 
             <View
-                android:id="@+id/setting_top_line"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
@@ -180,7 +178,6 @@
         </android.support.constraint.ConstraintLayout>
 
         <LinearLayout
-            android:id="@+id/remove_chat_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -208,5 +205,35 @@
         </LinearLayout>
 
     </LinearLayout>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/complaint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
 
+        <TextView
+            android:id="@+id/tx_complaint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="投诉"
+            android:textColor="@color/color_1e1e1e"
+            android:textSize="@dimen/text_size_17"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/nim_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@+id/tx_complaint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tx_complaint" />
+
+    </android.support.constraint.ConstraintLayout>
 </LinearLayout>

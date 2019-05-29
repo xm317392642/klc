@@ -6,7 +6,6 @@ import com.netease.nim.uikit.business.contact.core.item.ContactItem;
 import com.netease.nim.uikit.business.contact.core.item.ItemTypes;
 import com.netease.nim.uikit.business.contact.core.query.TextQuery;
 import com.netease.nim.uikit.business.contact.core.util.ContactHelper;
-import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nim.uikit.impl.cache.UIKitLogTag;
 import com.netease.nimlib.sdk.NIMClient;

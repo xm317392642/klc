@@ -1,8 +1,6 @@
 package com.xr.ychat.contact.activity;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.common.RobotInfo;

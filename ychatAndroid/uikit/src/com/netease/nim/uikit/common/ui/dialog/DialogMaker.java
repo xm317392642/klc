@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface.OnCancelListener;
 import android.text.TextUtils;
 
-import com.netease.nim.uikit.common.util.log.LogUtil;
-
 import java.lang.ref.WeakReference;
 
 public class DialogMaker {

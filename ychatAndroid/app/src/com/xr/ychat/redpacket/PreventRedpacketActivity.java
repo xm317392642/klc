@@ -17,24 +17,19 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.api.model.team.TeamProvider;
 import com.netease.nim.uikit.business.ait.selector.AitContactDecoration;
 import com.netease.nim.uikit.business.ait.selector.model.ItemType;
 import com.netease.nim.uikit.business.contact.core.item.ContactIdFilter;
-import com.netease.nim.uikit.business.contact.core.provider.TeamDataProvider;
 import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
-import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RedpacketInfo;
 import com.netease.nim.uikit.common.RequestInfo;
 import com.netease.nim.uikit.common.TeamExtension;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nim.uikit.common.util.sys.NetworkUtil;
-import com.netease.nimlib.sdk.NIMSDK;
 import com.netease.nimlib.sdk.team.constant.TeamMemberType;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
@@ -61,7 +56,7 @@ public class PreventRedpacketActivity extends SwipeBackUI implements PreventRedp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prevent_redpacket);
+        setActivityView(R.layout.activity_prevent_redpacket);
         initActionbar();
         initAdapter();
         Uri data = getIntent().getData();

@@ -92,7 +92,7 @@ public class AccountSecretActivity extends SwipeBackUI implements SettingsAdapte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
+        setActivityView(R.layout.settings_activity);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);

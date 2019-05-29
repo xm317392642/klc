@@ -52,7 +52,7 @@ public class TeamIconSetActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.team_icon_set);
+        setActivityView(R.layout.team_icon_set);
         team = (Team) getIntent().getSerializableExtra("team");
         teamId = getIntent().getStringExtra("teamId");
         teamHeadImage = (HeadImageView) findViewById(R.id.team_head_image);

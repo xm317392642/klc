@@ -7,23 +7,17 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
+import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nim.uikit.common.util.sys.NetworkUtil;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.uinfo.UserService;
-import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 import com.xr.ychat.R;
 import com.xr.ychat.common.ui.XEditText;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class SettingYchatActivity extends SwipeBackUI {
     private Toolbar mToolbar;
@@ -36,7 +30,7 @@ public class SettingYchatActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting_ychat);
+        setActivityView(R.layout.activity_setting_ychat);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
@@ -73,6 +67,7 @@ public class SettingYchatActivity extends SwipeBackUI {
                 @Override
                 public void onSuccess(RequestInfo aVoid) {
                     DialogMaker.dismissProgressDialog();
+                    SPUtils.getInstance().put(CommonUtil.YCHAT_ACCOUNT, aVoid.getYchatNo());
                     YchatToastUtils.showShort("空了吹号修改成功");
                 }
 

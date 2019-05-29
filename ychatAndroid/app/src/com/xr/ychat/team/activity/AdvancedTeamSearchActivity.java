@@ -37,7 +37,7 @@ public class AdvancedTeamSearchActivity extends UI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_advanced_team_search_activity);
+        setActivityView(R.layout.nim_advanced_team_search_activity);
         setTitle(R.string.search_join_team);
 
         ToolBarOptions options = new NimToolBarOptions();

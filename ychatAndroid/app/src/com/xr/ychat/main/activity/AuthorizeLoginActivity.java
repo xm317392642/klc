@@ -1,28 +1,18 @@
 package com.xr.ychat.main.activity;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.blankj.utilcode.util.AppUtils;
 import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
-import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -36,7 +26,7 @@ public class AuthorizeLoginActivity extends UI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_auth_login_activity);
+        setActivityView(R.layout.nim_auth_login_activity);
         scheme = getIntent().getStringExtra("scheme");
         findView(R.id.cancel).setOnClickListener(v-> authorizeResulst("",CommonUtil.SHARE_CANCEL));
         findView(R.id.login).setOnClickListener(v->verificationCodeRequest(Preferences.getWeiranUid(getApplicationContext()),Preferences.getWeiranToken(getApplicationContext()), DemoCache.getAccount()));

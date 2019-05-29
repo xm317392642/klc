@@ -540,7 +540,11 @@ public class XEditText extends AppCompatEditText {
         if (TextUtils.isEmpty(text) || hasNoSeparator) {
             setText(text);
             if (text != null && text.length() > 0) {
-                setSelection(text.length());
+                try {
+                    setSelection(text.length());
+                } catch (IndexOutOfBoundsException e) {
+
+                }
             }
         } else {
             setTextToSeparate(text, true);

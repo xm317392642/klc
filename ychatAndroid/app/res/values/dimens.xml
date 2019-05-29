@@ -6,7 +6,6 @@
     <dimen name="isetting_item_padding_right">15dip</dimen>
     <dimen name="action_bar_height">48dip</dimen>
     <dimen name="pager_sliding_tab_strip_height">40dip</dimen>
-    <dimen name="text_size_9">9sp</dimen>
     <dimen name="text_size_11">11sp</dimen>
     <dimen name="text_size_13">13sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
@@ -15,8 +14,6 @@
     <dimen name="text_size_17">17sp</dimen>
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
-    <dimen name="text_size_22">22sp</dimen>
-    <dimen name="text_size_24">24sp</dimen>
     <dimen name="split_one_pixels">1px</dimen>
     <dimen name="text_small_size_ten_sp">10sp</dimen>
 
@@ -31,13 +28,9 @@
     <dimen name="dark_line_size">3px</dimen>
 
     <!-- bubble -->
-    <dimen name="max_bubble_width">240dip</dimen>
-    <dimen name="max_text_bubble_width">222dip</dimen>
-    <dimen name="bottom_component_margin_horizontal">6dip</dimen>
-    <dimen name="bottom_component_margin_vertical">8dip</dimen>
+    <dimen name="max_text_bubble_width">254dip</dimen>
     <dimen name="bubble_time_layout_margin_top">18dip</dimen>
     <dimen name="bubble_time_layout_margin_bottom">8dip</dimen>
-    <dimen name="bubble_name_layout_margin_bottom">5dip</dimen>
     <dimen name="bubble_layout_margin_side">10dip</dimen>
     <dimen name="bubble_head_margin_horizontal">8dip</dimen>
     <dimen name="bubble_padding_top">10dip</dimen>
@@ -47,8 +40,6 @@
 
     <!-- message -->
     <dimen name="message_bottom_function_viewpager_height">220dp</dimen>
-    <dimen name="input_panel_image_margin_bottom">3dip</dimen>
-    <dimen name="input_panel_image_margin_top">20dip</dimen>
 
     <!-- map -->
     <dimen name="friend_map_btn_height">42dp</dimen>
@@ -59,19 +50,12 @@
 
     <!--字体大小 及倍数-->
     <!--0.875=14/16 -->
-    <dimen name="sp_small">14sp</dimen>
     <!--1  标准-->
     <dimen name="sp_stander">16sp</dimen>
     <!--1.125=18/16-->
-    <dimen name="sp_big1">18sp</dimen>
     <!--1.25=20/16-->
-    <dimen name="sp_big2">20sp</dimen>
     <!--1.375=22/16-->
-    <dimen name="sp_big3">22sp</dimen>
     <!--1.5=24/16-->
-    <dimen name="sp_big4">24sp</dimen>
     <!--1.625=26/16-->
-    <dimen name="sp_big5">26sp</dimen>
     <!--1.75=28/16-->
-    <dimen name="sp_big6">28sp</dimen>
 </resources>

@@ -9,20 +9,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.R;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.api.model.SimpleCallback;
 import com.netease.nim.uikit.business.contact.core.item.MsgItem;
 import com.netease.nim.uikit.business.contact.core.model.ContactDataAdapter;
 import com.netease.nim.uikit.business.contact.core.model.IContact;
-import com.netease.nim.uikit.common.ui.combinebitmap.helper.BitmapLoader;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.util.sys.ScreenUtil;
 import com.netease.nim.uikit.common.util.sys.TimeUtil;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.search.model.MsgIndexRecord;
 import com.netease.nimlib.sdk.search.model.RecordHitInfo;
-import com.netease.nimlib.sdk.team.TeamService;
 import com.netease.nimlib.sdk.team.constant.TeamMemberType;
+import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 
 import java.util.List;
@@ -71,25 +70,7 @@ public class MsgHolder extends AbsContactViewHolder<MsgItem> {
             head.loadBuddyAvatar(contact.getContactId());
         } else {
             String teamId = contact.getContactId();
-            NIMClient.getService(TeamService.class).queryMemberList(teamId).setCallback(new RequestCallback<List<TeamMember>>() {
-                @Override
-                public void onSuccess(List<TeamMember> param) {
-                    if (param != null && param.size() > 0) {
-                        BitmapLoader.getInstance(context).removeBitmapToMemoryCache("ychat://com.xr.ychat?groupId=" + teamId);
-                        head.loadTeamIconByTeam(param, teamId);
-                    }
-                }
-
-                @Override
-                public void onFailed(int code) {
-
-                }
-
-                @Override
-                public void onException(Throwable exception) {
-
-                }
-            });
+            head.loadTeamIconByTeam(NimUIKit.getTeamProvider().getTeamById(teamId));
         }
         name.setText(contact.getDisplayName());
 

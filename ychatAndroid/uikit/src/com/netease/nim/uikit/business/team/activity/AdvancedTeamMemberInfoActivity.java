@@ -7,7 +7,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -116,7 +119,7 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_advanced_team_member_info_layout);
+        setActivityView(R.layout.nim_advanced_team_member_info_layout);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
@@ -317,7 +320,7 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
         public void OnChanged(View v, final boolean checkState) {
             final String key = (String) v.getTag();
             if (!NetworkUtil.isNetAvailable(AdvancedTeamMemberInfoActivity.this)) {
-                YchatToastUtils.showShort( R.string.network_is_not_available);
+                YchatToastUtils.showShort(R.string.network_is_not_available);
                 if (key.equals(KEY_MUTE_MSG)) {
                     muteSwitch.setCheck(!checkState);
                 }
@@ -331,7 +334,7 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
                     @Override
                     public void onSuccess(Void param) {
                         if (checkState) {
-                            YchatToastUtils.showShort( "群禁言成功");
+                            YchatToastUtils.showShort("群禁言成功");
                         } else {
                             YchatToastUtils.showShort("取消群禁言成功");
                         }
@@ -340,9 +343,9 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
                     @Override
                     public void onFailed(int code) {
                         if (code == 408) {
-                            YchatToastUtils.showShort( R.string.network_is_not_available);
+                            YchatToastUtils.showShort(R.string.network_is_not_available);
                         } else {
-                            YchatToastUtils.showShort( "on failed:" + code);
+                            YchatToastUtils.showShort("on failed:" + code);
                         }
                         updateStateMap(!checkState, key);
                         muteSwitch.setCheck(!checkState);
@@ -435,7 +438,13 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
                         if (TextUtils.equals(account, note)) {
                             invite_type_detail.setText("创建者");
                         } else {
-                            invite_type_detail.setText(UserInfoHelper.getUserDisplayName(note) + " 邀请进群");
+                            SpannableStringBuilder sb = new SpannableStringBuilder();
+                            String displayName = UserInfoHelper.getUserDisplayName(note);
+                            sb.append(displayName);
+                            String content = " 邀请进群";
+                            sb.append(content);
+                            sb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(AdvancedTeamMemberInfoActivity.this, R.color.color_be6913)), 0, displayName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            invite_type_detail.setText(sb);
                         }
                     }
                 }
@@ -443,7 +452,7 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
 
             @Override
             public void onFailed(int code, String errorMsg) {
-                invite_type_detail.setText("暂无");
+
             }
         });
     }
@@ -522,13 +531,13 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
             public void onSuccess(Void param) {
                 DialogMaker.dismissProgressDialog();
                 nickName.setText(name != null ? name : getString(R.string.team_nickname_none));
-                YchatToastUtils.showShort( R.string.update_success);
+                YchatToastUtils.showShort(R.string.update_success);
             }
 
             @Override
             public void onFailed(int code) {
                 DialogMaker.dismissProgressDialog();
-                YchatToastUtils.showShort( String.format(getString(R.string.update_failed), code));
+                YchatToastUtils.showShort(String.format(getString(R.string.update_failed), code));
             }
 
             @Override
@@ -597,14 +606,14 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
                     });
                     requestDialog.show();
                 } else {
-                    YchatToastUtils.showShort("用户不允许在群聊中添加好友");
+                    YchatToastUtils.showShort("由于对方的隐私设置，您无法通过群聊将其添加至通讯录");
                 }
             }
 
             @Override
             public void onFailed(int code, String errorMsg) {
                 DialogMaker.dismissProgressDialog();
-                YchatToastUtils.showShort("用户不允许在群聊中添加好友");
+                YchatToastUtils.showShort("由于对方的隐私设置，您无法通过群聊将其添加至通讯录");
             }
         });
     }
@@ -615,7 +624,12 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
             return;
         }
         if (!TextUtils.isEmpty(account) && account.equals(NimUIKit.getAccount())) {
-            YchatToastUtils.showShort( "不能加自己为好友");
+            YchatToastUtils.showShort("不能加自己为好友");
+            return;
+        }
+        boolean black = NIMClient.getService(FriendService.class).isInBlackList(account);
+        if (black) {
+            YchatToastUtils.showShort("该用户在您的黑名单中，请先移除再添加");
             return;
         }
         final VerifyType verifyType = addDirectly ? VerifyType.DIRECT_ADD : VerifyType.VERIFY_REQUEST;
@@ -628,17 +642,17 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
                         if (VerifyType.DIRECT_ADD == verifyType) {
                             contactBtn.setText("发消息");
                             Map<String, Object> content = new HashMap<>(1);
-                            content.put("content", "你们已经是好友，现在可以开始聊天了");
+                            content.put("content", "我们已经是好友，现在可以开始聊天了");
                             IMMessage msg = MessageBuilder.createTipMessage(account, SessionTypeEnum.P2P);
                             msg.setRemoteExtension(content);
                             CustomMessageConfig config = new CustomMessageConfig();
                             config.enableUnreadCount = false;
                             msg.setConfig(config);
                             msg.setStatus(MsgStatusEnum.success);
-                            NIMClient.getService(MsgService.class).saveMessageToLocal(msg, true);
-                            YchatToastUtils.showShort( "添加好友成功");
+                            NIMClient.getService(MsgService.class).sendMessage(msg, false);
+                            YchatToastUtils.showShort("添加好友成功");
                         } else {
-                            YchatToastUtils.showShort( "添加好友请求发送成功");
+                            YchatToastUtils.showShort("添加好友请求发送成功");
                         }
                     }
 
@@ -646,9 +660,9 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
                     public void onFailed(int code) {
                         DialogMaker.dismissProgressDialog();
                         if (code == 408) {
-                            YchatToastUtils.showShort( R.string.network_is_not_available);
+                            YchatToastUtils.showShort(R.string.network_is_not_available);
                         } else {
-                            YchatToastUtils.showShort( "on failed:" + code);
+                            YchatToastUtils.showShort("on failed:" + code);
                         }
                     }
 
@@ -677,7 +691,7 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
         } else if (isSelfManager && identity.getText().toString().equals(getString(R.string.team_member))) {
             AdvancedTeamNicknameActivity.start(AdvancedTeamMemberInfoActivity.this, nickName.getText().toString(), UserInfoHelper.getUserDisplayName(account));
         } else {
-            YchatToastUtils.showShort( R.string.no_permission);
+            YchatToastUtils.showShort(R.string.no_permission);
         }
     }
 
@@ -746,7 +760,7 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
             public void onSuccess(List<TeamMember> managers) {
                 DialogMaker.dismissProgressDialog();
                 identity.setText(R.string.team_admin);
-                YchatToastUtils.showShort( R.string.update_success);
+                YchatToastUtils.showShort(R.string.update_success);
 
                 viewMember = managers.get(0);
                 updateMemberInfo();
@@ -755,7 +769,7 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
             @Override
             public void onFailed(int code) {
                 DialogMaker.dismissProgressDialog();
-                YchatToastUtils.showShort( String.format(getString(R.string.update_failed), code));
+                YchatToastUtils.showShort(String.format(getString(R.string.update_failed), code));
             }
 
             @Override
@@ -777,7 +791,7 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
             public void onSuccess(List<TeamMember> members) {
                 DialogMaker.dismissProgressDialog();
                 identity.setText(R.string.team_member);
-                YchatToastUtils.showShort( R.string.update_success);
+                YchatToastUtils.showShort(R.string.update_success);
 
                 viewMember = members.get(0);
                 updateMemberInfo();
@@ -786,7 +800,7 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
             @Override
             public void onFailed(int code) {
                 DialogMaker.dismissProgressDialog();
-                YchatToastUtils.showShort( String.format(getString(R.string.update_failed), code));
+                YchatToastUtils.showShort(String.format(getString(R.string.update_failed), code));
             }
 
             @Override
@@ -852,7 +866,7 @@ public class AdvancedTeamMemberInfoActivity extends SwipeBackUI implements View.
                 if (code == ResponseCode.RES_TEAM_ENACCESS) {
                     YchatToastUtils.showShort("踢人失败");
                 } else {
-                    YchatToastUtils.showShort( String.format(getString(R.string.update_failed), code));
+                    YchatToastUtils.showShort(String.format(getString(R.string.update_failed), code));
                 }
             }
 

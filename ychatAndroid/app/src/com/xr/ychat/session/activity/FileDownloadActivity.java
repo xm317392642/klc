@@ -8,10 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.xr.ychat.R;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
+import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgService;
@@ -19,6 +18,7 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.xr.ychat.R;
 
 /**
  * Created by hzxuwen on 2016/12/14.
@@ -42,7 +42,7 @@ public class FileDownloadActivity extends UI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.file_download_activity);
+        setActivityView(R.layout.file_download_activity);
 
         onParseIntent();
         findViews();

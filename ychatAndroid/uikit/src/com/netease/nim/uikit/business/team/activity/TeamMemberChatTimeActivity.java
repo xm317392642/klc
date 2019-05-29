@@ -54,7 +54,7 @@ public class TeamMemberChatTimeActivity extends SwipeBackUI implements TeamMembe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_team_member_chat_time_activity);
+        setActivityView(R.layout.nim_team_member_chat_time_activity);
         initToolbar();
         initViewPager();
         initBottomLayout();

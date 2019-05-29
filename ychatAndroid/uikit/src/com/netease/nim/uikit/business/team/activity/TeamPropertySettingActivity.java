@@ -76,13 +76,14 @@ public class TeamPropertySettingActivity extends SwipeBackUI implements View.OnC
         intent.putExtra(EXTRA_TID, teamId);
         intent.putExtra(EXTRA_DATA, initialValue);
         intent.putExtra(EXTRA_FIELD, field);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(intent);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_team_name_activity);
+        setActivityView(R.layout.nim_team_name_activity);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
@@ -114,7 +115,7 @@ public class TeamPropertySettingActivity extends SwipeBackUI implements View.OnC
             case Name:
                 toolbarTitle.setText(R.string.team_settings_name);
                 editText.setHint(R.string.team_settings_set_name);
-                limit = 10;
+                limit = 16;
                 break;
             case Introduce:
                 toolbarTitle.setText(R.string.team_introduce);
@@ -185,13 +186,13 @@ public class TeamPropertySettingActivity extends SwipeBackUI implements View.OnC
     private void complete() {
         if (filed == TeamFieldEnum.Name) {
             if (TextUtils.isEmpty(editText.getText().toString())) {
-                YchatToastUtils.showShort( R.string.not_allow_empty);
+                YchatToastUtils.showShort(R.string.not_allow_empty);
             } else {
                 char[] s = editText.getText().toString().toCharArray();
                 int i;
                 for (i = 0; i < s.length; i++) {
                     if (String.valueOf(s[i]).equals(" ")) {
-                        YchatToastUtils.showShort( R.string.now_allow_space);
+                        YchatToastUtils.showShort(R.string.now_allow_space);
                         break;
                     }
                 }
@@ -242,7 +243,7 @@ public class TeamPropertySettingActivity extends SwipeBackUI implements View.OnC
                         YchatToastUtils.showShort(R.string.no_permission);
 
                     } else {
-                        YchatToastUtils.showShort( String.format(getString(R.string.update_failed), code));
+                        YchatToastUtils.showShort(String.format(getString(R.string.update_failed), code));
                     }
                 }
 

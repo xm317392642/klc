@@ -60,7 +60,7 @@ public class TeamListActivity extends SwipeBackUI implements AdapterView.OnItemC
 
         itemType = getIntent().getIntExtra(EXTRA_DATA_ITEM_TYPES, ItemTypes.TEAMS.ADVANCED_TEAM);
 
-        setContentView(R.layout.group_list_activity);
+        setActivityView(R.layout.group_list_activity);
 
         mToolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);

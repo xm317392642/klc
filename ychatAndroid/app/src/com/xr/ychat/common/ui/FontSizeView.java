@@ -8,11 +8,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.netease.nim.uikit.common.util.sys.ScreenUtil;
 import com.xr.ychat.R;
 

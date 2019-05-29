@@ -38,6 +38,7 @@ public class RobotActivity extends SwipeBackUI implements RobotDetailAdapter.Rob
     private static final String TEAM_CREATOR = "teamCreator";
     private static final String TEAM_EXTENTION = "teamExtention";
     public static final String EXTRA_ACCID = "extra_accid";
+    public static final String EXTRA_NEW_ACCID = "extra_new_accid";
     public static final int APPEND_ROBOT = 0x01;
     private String teamId;
     private String teamCreator;
@@ -53,7 +54,7 @@ public class RobotActivity extends SwipeBackUI implements RobotDetailAdapter.Rob
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_append_robot);
+        setActivityView(R.layout.activity_append_robot);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
         mToolbar.setTitle("");
@@ -114,7 +115,7 @@ public class RobotActivity extends SwipeBackUI implements RobotDetailAdapter.Rob
         View emptyView = layoutInflater.inflate(R.layout.robot_empty, null);
         Button append = emptyView.findViewById(R.id.append);
         append.setOnClickListener(v -> {
-            RobotAppendActivity.start(RobotActivity.this, APPEND_ROBOT);
+            RobotAppendActivity.start(RobotActivity.this, null, APPEND_ROBOT);
         });
         adapter.setEmptyView(emptyView);
     }
@@ -125,8 +126,13 @@ public class RobotActivity extends SwipeBackUI implements RobotDetailAdapter.Rob
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case APPEND_ROBOT:
+                    String newaccid = data.getStringExtra(EXTRA_NEW_ACCID);
                     String accid = data.getStringExtra(EXTRA_ACCID);
-                    addTeamRobot(accid);
+                    if (TextUtils.isEmpty(accid)) {
+                        addTeamRobot(newaccid);
+                    } else {
+                        removeTeamRobot(accid, newaccid);
+                    }
                     break;
                 default:
                     break;
@@ -136,12 +142,12 @@ public class RobotActivity extends SwipeBackUI implements RobotDetailAdapter.Rob
 
     @Override
     public void switchRobot(String accid) {
-        removeTeamRobot(accid, true);
+        RobotAppendActivity.start(RobotActivity.this, accid, APPEND_ROBOT);
     }
 
     @Override
     public void removeRobot(String accid) {
-        removeTeamRobot(accid, false);
+        removeTeamRobot(accid, "");
     }
 
     private void addTeamRobot(String accid) {
@@ -166,7 +172,7 @@ public class RobotActivity extends SwipeBackUI implements RobotDetailAdapter.Rob
         });
     }
 
-    private void removeTeamRobot(String accid, boolean needAppend) {
+    private void removeTeamRobot(String accid, String newaccid) {
         if (!NetworkUtil.isNetAvailable(this)) {
             YchatToastUtils.showShort(R.string.network_is_not_available);
             return;
@@ -181,8 +187,8 @@ public class RobotActivity extends SwipeBackUI implements RobotDetailAdapter.Rob
                 adapter.setNewData(robotInfos);
                 adapter.notifyDataSetChanged();
                 handlerError();
-                if (needAppend) {
-                    RobotAppendActivity.start(RobotActivity.this, APPEND_ROBOT);
+                if (!TextUtils.isEmpty(newaccid)) {
+                    addTeamRobot(newaccid);
                 }
             }
 

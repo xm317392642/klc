@@ -9,11 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 
 import com.netease.nim.uikit.R;
-import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.business.session.adapter.MediaAdapter;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.activity.ToolBarOptions;
-import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.util.sys.TimeUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -51,7 +48,7 @@ public class WatchPicAndVideoMenuActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_watch_pic_video_menu_activity);
+        setActivityView(R.layout.nim_watch_pic_video_menu_activity);
 
         Toolbar mToolbar = (Toolbar)findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);

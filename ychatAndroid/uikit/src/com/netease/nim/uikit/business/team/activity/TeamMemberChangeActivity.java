@@ -49,7 +49,7 @@ public class TeamMemberChangeActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_team_member_change_activity);
+        setActivityView(R.layout.nim_team_member_change_activity);
         initToolbar();
         initAdapter();
         uid = Preferences.getWeiranUid(this);

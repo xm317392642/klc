@@ -5,6 +5,17 @@
     android:layout_height="match_parent"
     android:background="@color/color_1e1e1e">
 
+    <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+        android:id="@+id/head_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_corner_radius="0dp" />
+
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/photo_view"
         android:layout_width="match_parent"

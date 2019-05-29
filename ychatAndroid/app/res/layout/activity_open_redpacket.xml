@@ -89,7 +89,6 @@
             tool:text="1.00" />
 
         <TextView
-            android:id="@+id/open_redpacket_money_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"

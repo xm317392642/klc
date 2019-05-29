@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Inner image picker, no longer use third-part application
  */
-public class PickerAlbumActivity extends SwipeBackUI implements OnAlbumItemClickListener,
+public class PickerAlbumActivity extends UI implements OnAlbumItemClickListener,
         PickerImageFragment.OnPhotoSelectClickListener, OnClickListener {
 
     private FrameLayout pickerAlbumLayout;
@@ -62,12 +62,12 @@ public class PickerAlbumActivity extends SwipeBackUI implements OnAlbumItemClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_picker_album_activity);
+        setActivityView(R.layout.nim_picker_album_activity);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);
         mToolbar.setTitle("");
-        mToolbar.setNavigationOnClickListener(v -> finish());
+        mToolbar.setNavigationOnClickListener(v -> onNavigateUpClicked());
 
         proceedExtra();
         initUI();

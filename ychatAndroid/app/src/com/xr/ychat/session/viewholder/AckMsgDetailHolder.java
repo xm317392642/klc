@@ -2,11 +2,11 @@ package com.xr.ychat.session.viewholder;
 
 import android.widget.TextView;
 
-import com.xr.ychat.R;
-import com.xr.ychat.session.adapter.AckMsgDetailAdapter;
 import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nim.uikit.common.adapter.TViewHolder;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
+import com.xr.ychat.R;
+import com.xr.ychat.session.adapter.AckMsgDetailAdapter;
 
 public class AckMsgDetailHolder extends TViewHolder {
 

@@ -3,6 +3,7 @@ package com.netease.nim.uikit.business.contact.core.viewholder;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.contact.core.item.SearchItem;
@@ -14,7 +15,7 @@ public class SearchHolder extends AbsContactViewHolder<SearchItem> {
 
     public void refresh(ContactDataAdapter contactAdapter, int position, SearchItem item) {
         assistantLayout.setOnClickListener(v -> {
-            NimUIKit.startP2PSession(context, CommonUtil.ASSISTANT_ACCOUNT);
+            NimUIKit.startP2PSession(context, SPUtils.getInstance().getString(CommonUtil.ASSISTANT));
         });
     }
 

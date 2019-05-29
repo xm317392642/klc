@@ -1,6 +1,7 @@
 package com.netease.nim.uikit.business.recent.holder;
 
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseQuickAdapter;
+import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -49,7 +50,6 @@ public class CommonRecentViewHolder extends RecentViewHolder {
             if (digest == null) {
                 digest = NimUIKitImpl.getRecentCustomization().getDefaultDigest(recent);
             }
-
             return digest;
         }
 

@@ -22,9 +22,9 @@ public class PickerPreviewPagerAdapter extends PagerAdapter {
     private List<PhotoInfo> mList;
     private LayoutInflater mInflater;
     private int viewPagerWidth, viewPagerHeight;
-    private UI mActivity;
+    private PickerAlbumPreviewActivity mActivity;
 
-    public PickerPreviewPagerAdapter(Context cx, List<PhotoInfo> list, LayoutInflater inflater, int width, int height, UI activity) {
+    public PickerPreviewPagerAdapter(Context cx, List<PhotoInfo> list, LayoutInflater inflater, int width, int height, PickerAlbumPreviewActivity activity) {
         mContext = cx;
         mList = list;
         mInflater = inflater;
@@ -79,6 +79,6 @@ public class PickerPreviewPagerAdapter extends PagerAdapter {
 
     @Override
     public void setPrimaryItem(View container, int position, Object object) {
-        ((PickerAlbumPreviewActivity) mActivity).updateCurrentImageView(position);
+        mActivity.updateCurrentImageView(position);
     }
 }

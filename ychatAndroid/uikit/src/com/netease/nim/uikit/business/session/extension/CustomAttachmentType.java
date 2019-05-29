@@ -15,4 +15,6 @@ public interface CustomAttachmentType {
     int GameShare = 8;//游戏分享
     int CustomMessageTypeCustomTip = 9;//自定义tip消息(某某在聊天中截屏了)
     int Mahjong = 10;
+    int TEAM_AUTHENTICATION = 11;//开启群认证后，普通成员拉人的自定义消息
+    int TeamInvite = 12;//邀请他人进群
 }

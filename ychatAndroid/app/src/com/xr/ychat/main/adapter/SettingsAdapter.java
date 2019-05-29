@@ -14,14 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
+import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
+import com.netease.nim.uikit.common.ui.widget.SwitchButton;
 import com.netease.nim.uikit.common.util.sys.ScreenUtil;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
 import com.xr.ychat.main.model.SettingTemplate;
 import com.xr.ychat.main.model.SettingType;
-import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
-import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
-import com.netease.nim.uikit.common.ui.widget.SwitchButton;
 
 import java.util.List;
 

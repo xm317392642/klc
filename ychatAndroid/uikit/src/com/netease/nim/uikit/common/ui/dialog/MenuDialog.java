@@ -1,24 +1,18 @@
 package com.netease.nim.uikit.common.ui.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.R;
-import com.netease.nim.uikit.common.util.sys.ScreenUtil;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,11 +87,10 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
 
         rootView = (ViewGroup) View.inflate(context, R.layout.nim_menu_dialog, null);
-        itemsRootView = (LinearLayout) rootView.findViewById(R.id.menu_dialog_items_root);
+        itemsRootView = rootView.findViewById(R.id.menu_dialog_items_root);
         if (selectMode) {
             itemViews = new ArrayList<>();
         }
-
         View itemView;
         for (int i = 0; i < btnNames.size(); i++) {
             String value = btnNames.get(i);
@@ -114,6 +107,11 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
             if (value.equals(context.getString(R.string.cancel))) {
                 setMenuTextColor(tx, R.color.black);//当为取消按钮的时候，设置为黑色
             }
+            if (value.contains("微信好友")) {
+                tx.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.wechat), null, null, null);
+            } else if (value.contains("朋友圈")) {
+                tx.setCompoundDrawablesWithIntrinsicBounds( ContextCompat.getDrawable(context, R.drawable.wechat_circle), null,null, null);
+            }
             itemView.setTag(i);
             itemView.setOnClickListener(this);
             if (selectMode) {
@@ -129,26 +127,26 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
         Window window = getWindow();
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);//设置横向全屏
         window.setWindowAnimations(R.style.dialog_default_anim);  //添加动画
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        window.getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                        //布局位于状态栏下方
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                        //全屏
-                        View.SYSTEM_UI_FLAG_FULLSCREEN |
-                        //隐藏导航栏
-                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-                if (Build.VERSION.SDK_INT >= 19) {
-                    uiOptions |= 0x00001000;
-                } else {
-                    uiOptions |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
-                }
-                window.getDecorView().setSystemUiVisibility(uiOptions);
-            }
-        });
+        //window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+//        window.getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+//            @Override
+//            public void onSystemUiVisibilityChange(int visibility) {
+//                int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+//                        //布局位于状态栏下方
+//                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+//                        //全屏
+//                        View.SYSTEM_UI_FLAG_FULLSCREEN |
+//                        //隐藏导航栏
+//                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+//                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+//                if (Build.VERSION.SDK_INT >= 19) {
+//                    uiOptions |= 0x00001000;
+//                } else {
+//                    uiOptions |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
+//                }
+//                window.getDecorView().setSystemUiVisibility(uiOptions);
+//            }
+//        });
     }
 
     // 撤销最后一次选择，恢复上一次选择

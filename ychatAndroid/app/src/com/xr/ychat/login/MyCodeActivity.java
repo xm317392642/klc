@@ -9,14 +9,20 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.TypedValue;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ImageUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
+import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
@@ -26,18 +32,13 @@ import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.ui.widget.AspectRatioImageView;
 import com.netease.nim.uikit.common.util.QrCodeUtils;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.uinfo.UserService;
-import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MyCodeActivity extends SwipeBackUI {
     public static final String USER_FORMAT = "http://share.yaoliaoim.com?accid=";
@@ -52,13 +53,15 @@ public class MyCodeActivity extends SwipeBackUI {
     private AspectRatioImageView codeImage;
     private ConstraintLayout constraintLayout;
     private String userAccount;
-    private MenuDialog dialog;
     private NimUserInfo userInfo;
+    private BottomSheetBehavior behavior;
+    private ConstraintLayout actionLayout;
+    private MenuDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_qrcode);
+        setActivityView(R.layout.activity_user_qrcode);
         userAccount = DemoCache.getAccount();
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
@@ -69,6 +72,8 @@ public class MyCodeActivity extends SwipeBackUI {
         moreAction = (ImageView) findViewById(R.id.toolbar_more);
         moreAction.setOnClickListener(v -> {
             showRegularTeamMenu();
+//            actionLayout.setVisibility(View.VISIBLE);
+//            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
         userAvatar = (HeadImageView) findViewById(R.id.user_card_avatar);
         userName = (TextView) findViewById(R.id.user_card_name);
@@ -76,6 +81,9 @@ public class MyCodeActivity extends SwipeBackUI {
         constraintLayout = (ConstraintLayout) findViewById(R.id.group_card_info);
         slogan = (TextView) findViewById(com.netease.nim.uikit.R.id.group_card_slogan);
         slogan.setText("扫一扫上面的二维码图案，加我空了吹");
+        showBottomSheet();
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        actionLayout.setVisibility(View.GONE);
         getUserInfo();
     }
 
@@ -100,37 +108,35 @@ public class MyCodeActivity extends SwipeBackUI {
 
     private void updateUI() {
         userName.setText(userInfo.getName());
-        ContactHttpClient.getInstance().getYchatAccount(Preferences.getWeiranUid(this), Preferences.getWeiranToken(this), userAccount, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
-            @Override
-            public void onSuccess(RequestInfo aVoid) {
-                codeImage.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int width = codeImage.getWidth();
-                        int height = codeImage.getHeight();
-                        if (width > 0 && height > 0) {
-                            String name = USER_FORMAT + aVoid.getYchatNo();
-                            Bitmap bitmap = QrCodeUtils.createQRCodeBitmap(name, width, height);
-                            codeImage.setImageBitmap(bitmap);
-                        }
-                    }
-                });
-            }
+        String ychatNo = SPUtils.getInstance().getString(CommonUtil.YCHAT_ACCOUNT);
+        if (TextUtils.isEmpty(ychatNo)) {
+            ContactHttpClient.getInstance().getYchatAccount(Preferences.getWeiranUid(this), Preferences.getWeiranToken(this), userAccount, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
+                @Override
+                public void onSuccess(RequestInfo aVoid) {
+                    createCodeImage(aVoid.getYchatNo());
+                }
 
+                @Override
+                public void onFailed(int code, String errorMsg) {
+                    codeImage.setImageBitmap(null);
+                }
+            });
+        } else {
+            createCodeImage(ychatNo);
+        }
+    }
+
+    private void createCodeImage(String account) {
+        codeImage.post(new Runnable() {
             @Override
-            public void onFailed(int code, String errorMsg) {
-                codeImage.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int width = codeImage.getWidth();
-                        int height = codeImage.getHeight();
-                        if (width > 0 && height > 0) {
-                            String name = USER_FORMAT + userInfo.getAccount();
-                            Bitmap bitmap = QrCodeUtils.createQRCodeBitmap(name, width, height);
-                            codeImage.setImageBitmap(bitmap);
-                        }
-                    }
-                });
+            public void run() {
+                int width = codeImage.getWidth();
+                int height = codeImage.getHeight();
+                if (width > 0 && height > 0) {
+                    String name = USER_FORMAT + account;
+                    Bitmap bitmap = QrCodeUtils.createQRCodeBitmap(name, width, height);
+                    codeImage.setImageBitmap(bitmap);
+                }
             }
         });
     }
@@ -147,6 +153,56 @@ public class MyCodeActivity extends SwipeBackUI {
     /**
      * 显示菜单
      */
+    private void showBottomSheet() {
+        actionLayout = (ConstraintLayout) findViewById(R.id.action_layout);
+        actionLayout.setOnClickListener(v -> {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            actionLayout.setVisibility(View.GONE);
+        });
+        behavior = BottomSheetBehavior.from(actionLayout);
+        RelativeLayout save = actionLayout.findViewById(R.id.action_save);
+        TextView saveText = save.findViewById(com.netease.nim.uikit.R.id.menu_button);
+        saveText.setText("保存图片");
+        saveText.setTextColor(getResources().getColor(R.color.black));
+        saveText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
+        save.setOnClickListener(v -> {
+            saveCard();
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            actionLayout.setVisibility(View.GONE);
+        });
+        RelativeLayout share = actionLayout.findViewById(R.id.action_share);
+        TextView shareText = share.findViewById(com.netease.nim.uikit.R.id.menu_button);
+        shareText.setText("分享");
+        shareText.setTextColor(getResources().getColor(R.color.black));
+        shareText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
+        share.setOnClickListener(v -> {
+            Bitmap bitmap = Bitmap.createBitmap(constraintLayout.getWidth(), constraintLayout.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            constraintLayout.draw(canvas);
+            String uriString = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null);
+            if (!TextUtils.isEmpty(uriString)) {
+                Uri uri = Uri.parse(uriString);
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("image/*");//设置分享内容的类型
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+                intent = Intent.createChooser(intent, "分享到");
+                startActivity(intent);
+            }
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            actionLayout.setVisibility(View.GONE);
+        });
+        RelativeLayout dismiss = actionLayout.findViewById(R.id.action_dismiss);
+        TextView dismissText = dismiss.findViewById(com.netease.nim.uikit.R.id.menu_button);
+        dismissText.setText("取消");
+        dismissText.setTextColor(getResources().getColor(R.color.black));
+        dismissText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
+        dismiss.setOnClickListener(v -> {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            actionLayout.setVisibility(View.GONE);
+        });
+    }
+
     private void showRegularTeamMenu() {
         if (dialog == null) {
             List<String> btnNames = new ArrayList<>();

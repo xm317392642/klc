@@ -39,7 +39,7 @@ public abstract class ListActivityBase<T> extends UI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_list_activity_layout);
+        setActivityView(R.layout.nim_list_activity_layout);
 
         // toolbar
         ToolBarOptions options = new NimToolBarOptions();

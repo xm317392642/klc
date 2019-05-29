@@ -70,7 +70,7 @@ public class NoDisturbActivity extends SwipeBackUI implements SettingsAdapter.Sw
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.no_disturb_activity);
+        setActivityView(R.layout.no_disturb_activity);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);

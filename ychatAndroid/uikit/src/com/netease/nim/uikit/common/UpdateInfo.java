@@ -8,13 +8,15 @@ public class UpdateInfo {
      * update : 1
      * downUrl : http://xxxxxxxx.com/erer
      */
-
     private int cmd;
     private int code;
-    private int update;
-    private int isForce;
+    private String update;
+    private String isForce;
     private String downUrl;
     private String version;
+    private String release_log;
+    private String emergencyUrl;
+    private String emergency;
     public int getCmd() {
         return cmd;
     }
@@ -31,11 +33,11 @@ public class UpdateInfo {
         this.code = code;
     }
 
-    public int getUpdate() {
+    public String getUpdate() {
         return update;
     }
 
-    public void setUpdate(int update) {
+    public void setUpdate(String update) {
         this.update = update;
     }
 
@@ -47,11 +49,11 @@ public class UpdateInfo {
         this.downUrl = downUrl;
     }
 
-    public int getIsForce() {
+    public String getIsForce() {
         return isForce;
     }
 
-    public void setIsForce(int isForce) {
+    public void setIsForce(String isForce) {
         this.isForce = isForce;
     }
 
@@ -62,6 +64,7 @@ public class UpdateInfo {
                 ", code=" + code +
                 ", version=" + version +
                 ", update=" + update +
+                ", release_log=" + release_log +
                 ", isForce=" + isForce +
                 ", downUrl='" + downUrl + '\'' +
                 '}';
@@ -73,6 +76,30 @@ public class UpdateInfo {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getRelease_log() {
+        return release_log;
+    }
+
+    public void setRelease_log(String release_log) {
+        this.release_log = release_log;
+    }
+
+    public String getEmergencyUrl() {
+        return emergencyUrl;
+    }
+
+    public void setEmergencyUrl(String emergencyUrl) {
+        this.emergencyUrl = emergencyUrl;
+    }
+
+    public String getEmergency() {
+        return emergency;
+    }
+
+    public void setEmergency(String emergency) {
+        this.emergency = emergency;
     }
 }
 

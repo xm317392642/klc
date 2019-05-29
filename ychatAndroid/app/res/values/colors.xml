@@ -17,32 +17,25 @@
     <color name="color_grey_666666">#666666</color>
     <color name="color_activity_blue_bg">#f7389fff</color>
     <color name="split_line_grey_color_d9d9d9">#D9D9D9</color>
-    <color name="green_4DC0A4">#4DC0A4</color>
     <color name="gray7">#c5c4c4</color>
     <color name="GreyWhite">#F7F7F7</color>
     <color name="im_list_select_hover">#dbdbdb</color>
     <color name="color_aaaaaa_content_text">#ffaaaaaa</color>
     <color name="color_b3b3b3">#b3b3b3</color>
-    <color name="color_green_disable">#a2efe0</color>
     <color name="color_green_00d3a9">#ff00D3A9</color>
     <color name="color_red_ccfa3c55">#ccfa3c55</color>
     <color name="color_black_b3000000">#b3000000</color>
-    <color name="color_white_66ffffff">#66ffffff</color>
     <color name="color_grey_eaeaea">#eaeaea</color>
     <color name="color_yellow_fcf3cd">#fcf3cd</color>
     <color name="color_blue_3a9efb">#3a9efb</color>
     <color name="color_green_89fbff">#89fbff</color>
-    <color name="color_d4909a">#D4909A</color>
     <color name="main_menu_line">#1EFFFFFF</color>
 
     <!-- main bg color -->
     <color name="g_child_page_bg_color">#FFFFFF</color>
-    <color name="main_bg_color">#FFFFFF</color>
 
     <!-- session -->
     <color name="color_message_default_bg">#e9ecf0</color>
-    <color name="input_panel_text_color_757572">#757572</color>
-    <color name="help_color">#ff999999</color>
 
     <!-- image picker -->
     <color name="color_split_line_d9d9d9">#d9d9d9</color>
@@ -72,16 +65,13 @@
     <color name="color_1e1e1e">#1E1E1E</color>
     <color name="color_c0c0c0">#C0C0C0</color>
     <color name="color_010101">#010101</color>
-    <color name="color_f0f0f0">#F0F0F0</color>
     <color name="color_fefefe">#FEFEFE</color>
     <color name="color_ffd6aa">#FFD6AA</color>
     <color name="color_f25542">#F25542</color>
     <color name="color_1485ef">#1485EF</color>
     <color name="color_99f25542">#40F25542</color>
-    <color name="color_313131">#313131</color>
     <color name="color_201e1e">#201E1E</color>
     <color name="color_888888">#888888</color>
     <color name="button_disable_color">#B6B6B6</color>
     <color name="color_white_10">#1AFFFFFF</color>
-    <color name="color_10bb5d">#10BB5D</color>
 </resources>

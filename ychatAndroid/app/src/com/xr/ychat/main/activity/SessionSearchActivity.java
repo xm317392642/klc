@@ -28,7 +28,6 @@ import com.netease.nim.uikit.business.contact.core.query.IContactDataProvider;
 import com.netease.nim.uikit.business.contact.core.query.TextQuery;
 import com.netease.nim.uikit.business.contact.core.viewholder.LabelHolder;
 import com.netease.nim.uikit.business.contact.core.viewholder.MsgHolder;
-import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.util.string.StringUtil;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -115,7 +114,7 @@ public class SessionSearchActivity extends UI implements OnItemClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.global_search_result);
+        setActivityView(R.layout.global_search_result);
 
         Toolbar mToolbar = findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);

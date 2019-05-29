@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/color_background">
 
     <android.support.design.widget.AppBarLayout
@@ -19,8 +21,8 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:background="@color/color_be6913"
             android:layout_height="@dimen/action_bar_height"
+            android:background="@color/color_be6913"
             android:fitsSystemWindows="true">
 
             <TextView
@@ -35,19 +37,12 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
             android:layout_gravity="center_horizontal"
             android:background="@mipmap/logo" />
 
@@ -57,9 +52,29 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
+            tools:text="空了吹1.0.6"
+            android:layout_marginBottom="50dp"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
-    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/color_d2d2d2" />
+    <TextView
+        android:id="@+id/check_new_version"
+        style="@style/MineItemStyle"
+        android:background=" ?attr/selectableItemBackground"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="检查新版本" />
 
-</android.support.constraint.ConstraintLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/color_d2d2d2" />
+</LinearLayout>

@@ -2,6 +2,7 @@ package com.xr.ychat.session.action;
 
 import android.content.Intent;
 
+import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
 import com.netease.nim.uikit.business.session.actions.BaseAction;
@@ -13,7 +14,6 @@ import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
-import com.netease.nim.uikit.R;
 import com.xr.ychat.session.extension.BussinessCardAttachment;
 
 import java.util.ArrayList;

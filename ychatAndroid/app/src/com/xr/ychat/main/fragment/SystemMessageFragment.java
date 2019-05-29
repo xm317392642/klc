@@ -51,10 +51,8 @@ import com.xr.ychat.main.helper.MessageHelper;
 import com.xr.ychat.main.viewholder.SystemMessageViewHolder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class SystemMessageFragment extends Fragment implements TAdapterDelegate,
@@ -78,6 +76,7 @@ public class SystemMessageFragment extends Fragment implements TAdapterDelegate,
     private LocalBroadcastManager localBroadcastManager;
     private ClearNotificationReceiver receiver;
     private DisposeSystemMessageReceiver disposeSystemMessageReceiver;
+    private List<SystemMessageType> systemMessageTypes;
 
     @Override
     public int getViewTypeCount() {
@@ -151,6 +150,11 @@ public class SystemMessageFragment extends Fragment implements TAdapterDelegate,
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        systemMessageTypes = new ArrayList<>();
+        systemMessageTypes.add(SystemMessageType.ApplyJoinTeam);
+        systemMessageTypes.add(SystemMessageType.RejectTeamApply);
+        systemMessageTypes.add(SystemMessageType.DeclineTeamInvite);
+        systemMessageTypes.add(SystemMessageType.AddFriend);
         localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
         receiver = new ClearNotificationReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -206,7 +210,7 @@ public class SystemMessageFragment extends Fragment implements TAdapterDelegate,
         List<String> messageFromAccounts = new ArrayList<>(LOAD_MESSAGE_COUNT);
 
         while (true) {
-            List<SystemMessage> temps = NIMClient.getService(SystemMessageService.class).querySystemMessagesBlock(loadOffset, LOAD_MESSAGE_COUNT);
+            List<SystemMessage> temps = NIMClient.getService(SystemMessageService.class).querySystemMessageByTypeBlock(systemMessageTypes, loadOffset, LOAD_MESSAGE_COUNT);
             loadOffset += temps.size();
             loadCompleted = temps.size() < LOAD_MESSAGE_COUNT;
             int tempValidCount = 0;
@@ -422,9 +426,9 @@ public class SystemMessageFragment extends Fragment implements TAdapterDelegate,
 
     private void onProcessFailed(final int code, SystemMessage message) {
         if (code == 509) {
-            YchatToastUtils.showShort( "请求已经失效");
+            YchatToastUtils.showShort("请求已经失效");
         } else {
-            YchatToastUtils.showShort( "请求失败");
+            YchatToastUtils.showShort("请求失败");
         }
         if (code == 408) {
             return;
@@ -437,12 +441,14 @@ public class SystemMessageFragment extends Fragment implements TAdapterDelegate,
     }
 
     private void refresh() {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        });
+        if (activity != null && adapter != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     private void refreshViewHolder(final SystemMessage message) {
@@ -526,6 +532,6 @@ public class SystemMessageFragment extends Fragment implements TAdapterDelegate,
         NIMClient.getService(SystemMessageService.class).deleteSystemMessage(message.getMessageId());
         items.remove(message);
         refresh();
-        YchatToastUtils.showShort( R.string.delete_success);
+        YchatToastUtils.showShort(R.string.delete_success);
     }
 }

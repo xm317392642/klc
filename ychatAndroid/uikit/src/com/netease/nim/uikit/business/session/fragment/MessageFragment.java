@@ -1,5 +1,6 @@
 package com.netease.nim.uikit.business.session.fragment;
 
+import android.animation.Animator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.CacheMemoryUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.R;
@@ -32,6 +34,9 @@ import com.netease.nim.uikit.business.session.actions.VideoAction;
 import com.netease.nim.uikit.business.session.activity.P2PMessageActivity;
 import com.netease.nim.uikit.business.session.activity.TeamMessageActivity;
 import com.netease.nim.uikit.business.session.constant.Extras;
+import com.netease.nim.uikit.business.session.extension.CustomAttachment;
+import com.netease.nim.uikit.business.session.extension.CustomAttachmentType;
+import com.netease.nim.uikit.business.session.extension.RedPacketAttachment;
 import com.netease.nim.uikit.business.session.helper.ScreenShotListenManager;
 import com.netease.nim.uikit.business.session.module.Container;
 import com.netease.nim.uikit.business.session.module.ModuleProxy;
@@ -41,6 +46,9 @@ import com.netease.nim.uikit.business.team.model.TeamExtras;
 import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.TeamExtension;
 import com.netease.nim.uikit.common.UnclaimedEnvelope;
+import com.netease.nim.uikit.common.UnsentRedPacket;
+import com.netease.nim.uikit.common.UnsentRedPacketCache;
+import com.netease.nim.uikit.common.UnsentRedPacketService;
 import com.netease.nim.uikit.common.fragment.TFragment;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.NIMClient;
@@ -81,6 +89,7 @@ public class MessageFragment extends TFragment implements ModuleProxy {
     private SessionCustomization customization;
 
     public static final String NEW_MESSAGE = "NewMessage";
+    public static final String NEW_MESSAGE_TYPE = "NewMessageType";
 
     // p2p对方Account或者群id
     protected String sessionId;
@@ -89,7 +98,7 @@ public class MessageFragment extends TFragment implements ModuleProxy {
 
     // modules
     public InputPanel inputPanel;
-    protected MessageListPanelEx messageListPanel;
+    public MessageListPanelEx messageListPanel;
 
     protected AitManager aitManager;
     public TextView txAit;
@@ -98,13 +107,21 @@ public class MessageFragment extends TFragment implements ModuleProxy {
 
     private LocalBroadcastManager localBroadcastManager;
     private NewMessageBroadcastReceiver receiver;
+    private List<String> sendMessage;
 
     private class NewMessageBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra(NEW_MESSAGE)) {
                 IMMessage message = (IMMessage) intent.getSerializableExtra(NEW_MESSAGE);
-                sendMessage(message);
+                if ((TextUtils.equals(message.getSessionId(), NimUIKit.getAccount()) || TextUtils.equals(message.getFromAccount(), NimUIKit.getAccount()))) {
+                    int type = intent.getIntExtra(NEW_MESSAGE_TYPE, 0);
+                    if (type == 1) {
+                        sendMessage(message);
+                    } else if (type == 2) {
+                        saveMessageToLocal(message);
+                    }
+                }
             }
         }
     }
@@ -113,6 +130,7 @@ public class MessageFragment extends TFragment implements ModuleProxy {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         parseIntent();
+        this.sendMessage = new ArrayList<>();
         manager = ScreenShotListenManager.newInstance(getActivity());
         manager.setListener(imagePath -> {
             Team team = NimUIKit.getTeamProvider().getTeamById(sessionId);
@@ -192,7 +210,6 @@ public class MessageFragment extends TFragment implements ModuleProxy {
     @Override
     public void onPause() {
         super.onPause();
-
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
         inputPanel.onPause();
         messageListPanel.onPause();
@@ -203,7 +220,10 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         super.onResume();
         messageListPanel.onResume();
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
-
+        List<UnsentRedPacket> datalist = UnsentRedPacketCache.getDataList(sessionId);
+        if (datalist != null && datalist.size() > 0) {
+            UnsentRedPacketService.start(getActivity(), sessionId);
+        }
     }
 
     @Override
@@ -211,6 +231,7 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         super.onDestroy();
         if (sessionType == SessionTypeEnum.Team) {
             localBroadcastManager.unregisterReceiver(receiver);
+            CacheMemoryUtils.getInstance().put(sessionId, "");//把@缓存数据清空
         }
         messageListPanel.onDestroy();
         registerObservers(false);
@@ -234,9 +255,9 @@ public class MessageFragment extends TFragment implements ModuleProxy {
 
     /**
      * 从右到左的动画（出现：从屏幕外滑动进来）
-     *
      */
     public void rightToLeftAnim() {
+        txAit.setVisibility(View.VISIBLE);
         ViewPropertyAnimator viewPropertyAnimator = txAit.animate();
         viewPropertyAnimator.setInterpolator(new AccelerateInterpolator());
         viewPropertyAnimator.setDuration(600);
@@ -245,17 +266,40 @@ public class MessageFragment extends TFragment implements ModuleProxy {
 
     /**
      * 从左到右的动画(消失：滑出屏幕外面)
-     *
      */
     public void leftToRightAnim() {
-
+        if (txAit.getVisibility() == View.GONE) {
+            return;
+        }
         ViewPropertyAnimator viewPropertyAnimator = txAit.animate();
         viewPropertyAnimator.setDuration(600);
         viewPropertyAnimator.translationX(txAit.getMeasuredWidth());
+        viewPropertyAnimator.setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                txAit.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
 
 
     }
-    private void displayUnreadView(){
+
+    private void displayUnreadView() {
         if (unReadCount >= 10) {
             rightToLeftAnim();
             if (unReadCount > 99) {
@@ -265,6 +309,7 @@ public class MessageFragment extends TFragment implements ModuleProxy {
             }
         }
     }
+
     private void parseIntent() {
         Bundle arguments = getArguments();
         sessionId = arguments.getString(Extras.EXTRA_ACCOUNT);
@@ -292,7 +337,6 @@ public class MessageFragment extends TFragment implements ModuleProxy {
                 unReadCount = recentContact2.getUnreadCount();
                 //在首页缓存的@我的消息
                 String cachedAccountIdWithContent = CacheMemoryUtils.getInstance().get(recentContact2.getContactId());//取出缓存有@我的消息块，key:teamId  value:发送者账号+消息内容
-                // Log.e("xx","cached atme="+cachedAccountIdWithContent);//cached atme=10000049@一路向北 吃饭了
                 if (!TextUtils.isEmpty(cachedAccountIdWithContent)) {
                     if (unReadCount <= 20) {
                         NimUIKitImpl.getOptions().messageCountLoadOnce = 20;
@@ -305,17 +349,18 @@ public class MessageFragment extends TFragment implements ModuleProxy {
                     NIMClient.getService(MsgService.class).queryMessageList(sessionId, sessionType, 0, unReadCount).setCallback(new RequestCallback<List<IMMessage>>() {
                         @Override
                         public void onSuccess(List<IMMessage> curentMsgList) {
-
-                            for (IMMessage imMessage : curentMsgList) {
-                                atMeIndex++;
-                                String dbContent = imMessage.getFromAccount() + imMessage.getContent();
-                                if (cachedAccountIdWithContent.equals(dbContent)) {
-                                    break;
+                            if (isAdded()) {
+                                for (IMMessage imMessage : curentMsgList) {
+                                    atMeIndex++;
+                                    String dbContent = imMessage.getFromAccount() + imMessage.getContent();
+                                    if (cachedAccountIdWithContent.equals(dbContent)) {
+                                        break;
+                                    }
                                 }
-                            }
-                            if (atMeIndex != -1) {
-                                txAit.setText(getString(R.string.at_you));//有人@你了
-                                rightToLeftAnim();//有人@你了滑出来
+                                if (atMeIndex != -1) {
+                                    txAit.setText(getString(R.string.at_you));//有人@你了
+                                    rightToLeftAnim();//有人@你了滑出来
+                                }
                             }
                         }
 
@@ -329,13 +374,12 @@ public class MessageFragment extends TFragment implements ModuleProxy {
 
                         }
                     });
-
                 } else {
-                   displayUnreadView();
+                    displayUnreadView();
                 }
             }
 
-        }else{
+        } else {
             //A给B发送多条消息,显示x条新消息
             displayUnreadView();
         }
@@ -439,6 +483,11 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         if (CommonUtil.isEmpty(messages)) {
             return;
         }
+        String content = messages.get(messages.size() - 1).getContent();
+        if (!TextUtils.isEmpty(content) && content.contains("撤回了一条消息")) {
+            leftToRightAnim();
+        }
+
         messageListPanel.onIncomingMessage(messages);
         // 发送已读回执
         messageListPanel.sendReceipt();
@@ -466,7 +515,15 @@ public class MessageFragment extends TFragment implements ModuleProxy {
             final IMMessage msg = message;
             appendPushConfig(message);
             // send message to server and save to db
-            NIMClient.getService(MsgService.class).sendMessage(message, false).setCallback(new RequestCallback<Void>() {
+            boolean resend = false;
+            MsgAttachment msgAttachment = message.getAttachment();
+            if (msgAttachment != null && msgAttachment instanceof CustomAttachment) {
+                CustomAttachment customAttachment = (CustomAttachment) msgAttachment;
+                if (customAttachment.getType() == CustomAttachmentType.RedPacket) {
+                    resend = true;
+                }
+            }
+            NIMClient.getService(MsgService.class).sendMessage(message, resend).setCallback(new RequestCallback<Void>() {
                 @Override
                 public void onSuccess(Void param) {
 
@@ -496,6 +553,79 @@ public class MessageFragment extends TFragment implements ModuleProxy {
             aitManager.reset();
         }
         return true;
+    }
+
+    @Override
+    public void saveMessageToLocal(IMMessage msg) {
+        MsgAttachment comeMsgAttachment = msg.getAttachment();
+        if (comeMsgAttachment != null && comeMsgAttachment instanceof RedPacketAttachment) {
+            RedPacketAttachment comeRedPacketAttachment = (RedPacketAttachment) comeMsgAttachment;
+            String redPacketId = comeRedPacketAttachment.getRpId();
+            LogUtils.file("准备发送本地红包消息: " + redPacketId + " " + msg.getContent());
+            NIMClient.getService(MsgService.class).queryMessageList(sessionId, sessionType, 0, Integer.MAX_VALUE).setCallback(new RequestCallback<List<IMMessage>>() {
+                @Override
+                public void onSuccess(List<IMMessage> curentMsgList) {
+                    if (!notNeedSaveMessageToLocal(curentMsgList, redPacketId)) {
+                        if (!sendMessage.contains(redPacketId)) {
+                            sendMessage.add(redPacketId);
+                            LogUtils.file("未发现同样的红包，开始发送本地红包消息: " + redPacketId + " " + msg.getContent());
+                            NIMClient.getService(MsgService.class).saveMessageToLocal(msg, false).setCallback(new RequestCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void param) {
+                                    LogUtils.file("本地消息发送成功，删除本地缓存，向列表中加数据: " + redPacketId + " " + msg.getContent());
+                                    UnsentRedPacketCache.removeUnsentRedPacket(redPacketId);
+                                    List<IMMessage> messages = new ArrayList<>();
+                                    messages.add(msg);
+                                    onMessageIncoming(messages);
+                                }
+
+                                @Override
+                                public void onFailed(int code) {
+
+                                }
+
+                                @Override
+                                public void onException(Throwable exception) {
+
+                                }
+                            });
+                        } else {
+                            LogUtils.file("未发现同样的红包，但有一个正在发送的本地红包: " + redPacketId + " " + msg.getContent());
+                        }
+                    } else {
+                        LogUtils.file("发现同样的红包，删除本地缓存: " + redPacketId + " " + msg.getContent());
+                        UnsentRedPacketCache.removeUnsentRedPacket(redPacketId);
+                    }
+                }
+
+                @Override
+                public void onFailed(int code) {
+
+                }
+
+                @Override
+                public void onException(Throwable exception) {
+
+                }
+            });
+        }
+    }
+
+    public boolean notNeedSaveMessageToLocal(List<IMMessage> items, String redPacketId) {
+        boolean hasSend = false;
+        for (IMMessage imMessage : items) {
+            if (TextUtils.equals(imMessage.getFromAccount(), NimUIKit.getAccount()) && imMessage.getMsgType() == MsgTypeEnum.custom) {
+                MsgAttachment msgAttachment = imMessage.getAttachment();
+                if (msgAttachment != null && msgAttachment instanceof RedPacketAttachment) {
+                    RedPacketAttachment attachment = (RedPacketAttachment) msgAttachment;
+                    if (TextUtils.equals(attachment.getRpId(), redPacketId)) {
+                        hasSend = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return hasSend;
     }
 
     // 被对方拉入黑名单后，发消息失败的交互处理

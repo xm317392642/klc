@@ -1,5 +1,6 @@
 package com.netease.nim.uikit.common;
 
+import android.app.Activity;
 import android.os.Build;
 import android.util.Log;
 
@@ -14,8 +15,16 @@ import com.netease.nim.uikit.impl.NimUIKitImpl;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * 通讯录数据获取协议的实现
@@ -83,7 +92,43 @@ public class ContactHttpClient {
     }
 
     /**
+     * 获取自动领取红包的参数
+     *
+     * @param uid
+     * @param mytoken
+     * @param qunID
+     * @param callback
+     */
+    public void autoGetRedpacketInfoRequest(String uid, String mytoken, String qunID, final ContactHttpCallback<RequestInfo> callback) {
+        StringBuilder body = new StringBuilder(DemoServers.alipayServer());
+        body.append("cmd").append("=").append(55).append("&")
+                .append("uid").append("=").append(uid).append("&")
+                .append("mytoken").append("=").append(mytoken).append("&")
+                .append("qunID").append("=").append(qunID);
+        nimHttpGetRequest(body.toString(), callback);
+    }
+
+    /**
+     * 设置自动领取红包的参数
+     *
+     * @param uid
+     * @param mytoken
+     * @param qunID
+     * @param callback
+     */
+    public void autoGetRedpacketSwitchRequest(String uid, String mytoken, String qunID, int open, final ContactHttpCallback<RequestInfo> callback) {
+        StringBuilder body = new StringBuilder(DemoServers.alipayServer());
+        body.append("cmd").append("=").append(54).append("&")
+                .append("uid").append("=").append(uid).append("&")
+                .append("mytoken").append("=").append(mytoken).append("&")
+                .append("qunID").append("=").append(qunID).append("&")
+                .append("open").append("=").append(open);
+        nimHttpGetRequest(body.toString(), callback);
+    }
+
+    /**
      * 微信登录
+     *
      * @param wxCode
      * @param callback
      */
@@ -103,6 +148,7 @@ public class ContactHttpClient {
 
     /**
      * 绑定手机号
+     *
      * @param uid
      * @param mytoken
      * @param accid
@@ -110,7 +156,7 @@ public class ContactHttpClient {
      * @param smscode
      * @param callback
      */
-    public void bindPhoe(String uid, String mytoken, String accid,String mobile,String smscode, final ContactHttpCallback<RequestInfo> callback) {
+    public void bindPhoe(String uid, String mytoken, String accid, String mobile, String smscode, final ContactHttpCallback<RequestInfo> callback) {
         StringBuilder body = new StringBuilder(DemoServers.apiServer());
         body.append("cmd").append("=").append(52).append("&")
                 .append("uid").append("=").append(uid).append("&")
@@ -126,6 +172,7 @@ public class ContactHttpClient {
                 .append("version").append("=").append(AppUtils.getAppVersionName());
         nimHttpGetRequest(body.toString(), callback);
     }
+
     /**
      * 客户端验证授权授权code
      *
@@ -144,13 +191,13 @@ public class ContactHttpClient {
                 .append("OSVer").append("=").append(String.valueOf(Build.VERSION.SDK_INT)).append("&")
                 .append("version").append("=").append(AppUtils.getAppVersionName());
         String bodyString = body.toString();
-        Log.e("xx","bodyString="+bodyString);
+        Log.e("xx", "bodyString=" + bodyString);
         Map<String, String> headers = new HashMap<>();
         headers.put(HEADER_CONTENT_TYPE, "application/x-www-form-urlencoded; charset=utf-8");
         NimHttpClient.getInstance().execute(bodyString, headers, null, false, new NimHttpClient.NimHttpCallback() {
             @Override
             public void onResponse(String response, int code, Throwable exception) {
-                Log.e("xx","response="+response+" code="+code);
+                Log.e("xx", "response=" + response + " code=" + code);
                 if (code != 200 || exception != null) {
                     String errMsg = exception != null ? exception.getMessage() : "null";
                     if (callback != null) {
@@ -173,6 +220,164 @@ public class ContactHttpClient {
         });
     }
 
+    /**
+     * 客户端群主管理员同意邀请认证
+     *
+     * @param uid
+     * @param mytoken
+     * @param owner     管理员的accid
+     * @param qunid
+     * @param fromaccid 邀请人的accid
+     * @param toaccid   被邀请人的accid
+     * @param msgid
+     * @param callback
+     */
+    public void agreeInvite(String uid, String mytoken, String owner, String qunid, String fromaccid, String toaccid, String msgid, String nickname, String qunname, final ContactHttpCallback<String> callback) {
+        StringBuilder body = new StringBuilder(DemoServers.apiServer());
+        body.append("cmd").append("=").append(58).append("&")
+                .append("uid").append("=").append(uid).append("&")
+                .append("mytoken").append("=").append(mytoken).append("&")
+                .append("owner").append("=").append(owner).append("&")
+                .append("qunid").append("=").append(qunid).append("&")
+                .append("fromaccid").append("=").append(fromaccid).append("&")
+                .append("toaccid").append("=").append(toaccid).append("&")
+                .append("msgid").append("=").append(msgid).append("&")
+                .append("nickname").append("=").append(EncodeUtils.urlEncode(nickname)).append("&")
+                .append("qunname").append("=").append(EncodeUtils.urlEncode(qunname)).append("&")
+                .append("PlatFlag").append("=").append(0).append("&")
+                .append("MachineID").append("=").append(DeviceUtils.getAndroidID()).append("&")
+                .append("MachineName").append("=").append(DeviceUtils.getModel()).append("&")
+                .append("os").append("=").append(1).append("&")
+                .append("OSVer").append("=").append(String.valueOf(Build.VERSION.SDK_INT)).append("&")
+                .append("version").append("=").append(AppUtils.getAppVersionName());
+        String bodyString = body.toString();
+        Log.e("xx", "bodyString=" + bodyString);
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HEADER_CONTENT_TYPE, "application/x-www-form-urlencoded; charset=utf-8");
+        NimHttpClient.getInstance().execute(bodyString, headers, null, false, new NimHttpClient.NimHttpCallback() {
+            @Override
+            public void onResponse(String response, int code, Throwable exception) {
+                Log.e("xx", "response=" + response + " code=" + code);
+                if (code != 200 || exception != null) {
+                    String errMsg = exception != null ? exception.getMessage() : "null";
+                    if (callback != null) {
+                        callback.onFailed(code, errMsg);
+                    }
+                    return;
+                }
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    int resCode = jsonObject.getInt("code");
+                    if (resCode == RESULT_SUCCESS) {
+                        callback.onSuccess(jsonObject.toString());
+                    } else {
+                        callback.onFailed(resCode, "同意失败");
+                    }
+                } catch (Exception e) {
+                    callback.onFailed(-1, e.getMessage());
+                }
+            }
+        });
+    }
+
+    /**
+     * 57查询被邀请人是否需要同意
+     *
+     * @param uid
+     * @param mytoken
+     * @param owner    管理员的accid
+     * @param qunid
+     * @param callback
+     */
+    public void inviteeIsAgree(String uid, String mytoken, String owner, String qunid, final ContactHttpCallback<String> callback) {
+        StringBuilder body = new StringBuilder(DemoServers.apiServer());
+        body.append("cmd").append("=").append(57).append("&")
+                .append("uid").append("=").append(uid).append("&")
+                .append("mytoken").append("=").append(mytoken).append("&")
+                .append("owner").append("=").append(owner).append("&")
+                .append("qunid").append("=").append(qunid).append("&")
+                .append("PlatFlag").append("=").append(0).append("&")
+                .append("MachineID").append("=").append(DeviceUtils.getAndroidID()).append("&")
+                .append("MachineName").append("=").append(DeviceUtils.getModel()).append("&")
+                .append("os").append("=").append(1).append("&")
+                .append("OSVer").append("=").append(String.valueOf(Build.VERSION.SDK_INT)).append("&")
+                .append("version").append("=").append(AppUtils.getAppVersionName());
+        String bodyString = body.toString();
+        Log.e("xx", "bodyString=" + bodyString);
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HEADER_CONTENT_TYPE, "application/x-www-form-urlencoded; charset=utf-8");
+        NimHttpClient.getInstance().execute(bodyString, headers, null, false, new NimHttpClient.NimHttpCallback() {
+            @Override
+            public void onResponse(String response, int code, Throwable exception) {
+                Log.e("xx", "response=" + response + " code=" + code);
+                if (code != 200 || exception != null) {
+                    String errMsg = exception != null ? exception.getMessage() : "null";
+                    if (callback != null) {
+                        callback.onFailed(code, errMsg);
+                    }
+                    return;
+                }
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    int resCode = jsonObject.getInt("code");
+                    if (resCode == RESULT_SUCCESS) {
+                        callback.onSuccess(jsonObject.getString("onoff"));//1，被邀请人需要同意，0，被邀请人不需要同意
+                    } else {
+                        callback.onFailed(resCode, "");
+                    }
+                } catch (Exception e) {
+                    callback.onFailed(-1, e.getMessage());
+                }
+            }
+        });
+    }
+
+    /**
+     * 客户端查询是否有管理员同意邀请认证
+     *
+     * @param callback
+     */
+    public void queryInviteStatus(String uid, String mytoken, String msgid, final ContactHttpCallback<String> callback) {
+        StringBuilder body = new StringBuilder(DemoServers.apiServer());
+        body.append("cmd").append("=").append(59).append("&")
+                .append("uid").append("=").append(uid).append("&")
+                .append("mytoken").append("=").append(mytoken).append("&")
+                .append("msgid").append("=").append(msgid).append("&")
+                .append("PlatFlag").append("=").append(0).append("&")
+                .append("MachineID").append("=").append(DeviceUtils.getAndroidID()).append("&")
+                .append("MachineName").append("=").append(DeviceUtils.getModel()).append("&")
+                .append("os").append("=").append(1).append("&")
+                .append("OSVer").append("=").append(String.valueOf(Build.VERSION.SDK_INT)).append("&")
+                .append("version").append("=").append(AppUtils.getAppVersionName());
+        String bodyString = body.toString();
+        Log.e("xx", "queryInviteStatus bodyString=" + bodyString);
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HEADER_CONTENT_TYPE, "application/x-www-form-urlencoded; charset=utf-8");
+        NimHttpClient.getInstance().execute(bodyString, headers, null, false, new NimHttpClient.NimHttpCallback() {
+            @Override
+            public void onResponse(String response, int code, Throwable exception) {
+                Log.e("xx", "queryInviteStatus response=" + response + " code=" + code);
+                if (code != 200 || exception != null) {
+                    String errMsg = exception != null ? exception.getMessage() : "null";
+                    if (callback != null) {
+                        callback.onFailed(-1, errMsg);
+                    }
+                    return;
+                }
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    int resCode = jsonObject.getInt("code");
+                    if (resCode == RESULT_SUCCESS) {
+                        callback.onSuccess(jsonObject.getString("agree"));
+                    } else {
+                        callback.onFailed(resCode, null);
+                    }
+                } catch (Exception e) {
+                    callback.onFailed(-1, e.getMessage());
+                }
+            }
+        });
+    }
 
     public void login(String account, String password, final ContactHttpCallback<RequestInfo> callback) {
         StringBuilder body = new StringBuilder(DemoServers.apiServer());
@@ -260,57 +465,59 @@ public class ContactHttpClient {
                 .append("uid").append("=").append(uid).append("&")
                 .append("touid").append("=").append(EncodeUtils.urlEncode(touid)).append("&")
                 .append("amount").append("=").append(amount).append("&")
-                .append("nickname").append("=").append(nickname).append("&")
+                .append("nickname").append("=").append(EncodeUtils.urlEncode(nickname)).append("&")
                 .append("type").append("=").append(type).append("&")
                 .append("content").append("=").append(EncodeUtils.urlEncode(content)).append("&")
                 .append("mytoken").append("=").append(mytoken);
         nimHttpGetRequest(body.toString(), callback);
     }
 
-    public void sendRedpacket(String uid, String mytoken, String touid, String nickname, float amount, int type, String qunID, String qunName, String content, final ContactHttpCallback<RequestInfo> callback) {
+    public void sendRedpacket(String uid, String mytoken, String touid, String nickname, float amount, int type, String qunID, String qunName, String masterUID, String content, final ContactHttpCallback<RequestInfo> callback) {
         StringBuilder body = new StringBuilder(DemoServers.alipayServer());
         body.append("cmd").append("=").append(8).append("&")
                 .append("uid").append("=").append(uid).append("&")
                 .append("touid").append("=").append(EncodeUtils.urlEncode(touid)).append("&")
                 .append("amount").append("=").append(amount).append("&")
-                .append("nickname").append("=").append(nickname).append("&")
+                .append("nickname").append("=").append(EncodeUtils.urlEncode(nickname)).append("&")
                 .append("type").append("=").append(type).append("&")
                 .append("qunID").append("=").append(qunID).append("&")
-                .append("qunName").append("=").append(qunName).append("&")
+                .append("qunName").append("=").append(EncodeUtils.urlEncode(qunName)).append("&")
+                .append("masterUID").append("=").append(masterUID).append("&")
                 .append("content").append("=").append(EncodeUtils.urlEncode(content)).append("&")
                 .append("mytoken").append("=").append(mytoken);
         nimHttpGetRequest(body.toString(), callback);
     }
 
-    public void attestationPay(String uid, String mytoken, String response, final ContactHttpCallback<RequestInfo> callback) {
+    public void attestationPay(Activity activity, String uid, String mytoken, String response, final ContactHttpCallback<RequestInfo> callback) {
         StringBuilder body = new StringBuilder(DemoServers.alipayServer());
         body.append("cmd").append("=").append(9).append("&")
                 .append("uid").append("=").append(uid).append("&")
                 .append("response").append("=").append(EncodeUtils.urlEncode(response)).append("&")
                 .append("mytoken").append("=").append(mytoken);
-        nimHttpGetRequest(body.toString(), callback);
+        okHttpGetRequest(activity, body.toString(), callback);
     }
 
     //私聊收红包
     public void receiveRedpacket(String uid, String mytoken, String orderno, String nickname, final ContactHttpCallback<RequestInfo> callback) {
         StringBuilder body = new StringBuilder(DemoServers.alipayServer());
         body.append("cmd").append("=").append(10).append("&")
-                .append("nickname").append("=").append(nickname).append("&")
+                .append("nickname").append("=").append(EncodeUtils.urlEncode(nickname)).append("&")
                 .append("uid").append("=").append(uid).append("&")
                 .append("orderno").append("=").append(orderno).append("&")
                 .append("mytoken").append("=").append(mytoken);
         nimHttpGetRequest(body.toString(), callback);
     }
 
+
     //群聊收红包
     public void receiveRedpacket(String uid, String mytoken, String orderno, String nickname, String qunID, String qunName, final ContactHttpCallback<RequestInfo> callback) {
         StringBuilder body = new StringBuilder(DemoServers.alipayServer());
         body.append("cmd").append("=").append(10).append("&")
-                .append("nickname").append("=").append(nickname).append("&")
+                .append("nickname").append("=").append(EncodeUtils.urlEncode(nickname)).append("&")
                 .append("uid").append("=").append(uid).append("&")
                 .append("orderno").append("=").append(orderno).append("&")
                 .append("qunID").append("=").append(qunID).append("&")
-                .append("qunName").append("=").append(qunName).append("&")
+                .append("qunName").append("=").append(EncodeUtils.urlEncode(qunName)).append("&")
                 .append("mytoken").append("=").append(mytoken);
         nimHttpGetRequest(body.toString(), callback);
     }
@@ -365,6 +572,7 @@ public class ContactHttpClient {
         NimHttpClient.getInstance().execute(bodyString, headers, null, false, new NimHttpClient.NimHttpCallback() {
             @Override
             public void onResponse(String response, int code, Throwable exception) {
+                Log.e("xx", "update request=" + bodyString);
                 Log.e("xx", "update response=" + response);
                 if (code != 200 || exception != null) {
                     String errMsg = exception != null ? exception.getMessage() : "null";
@@ -452,7 +660,7 @@ public class ContactHttpClient {
         body.append("cmd").append("=").append(16).append("&")
                 .append("uid").append("=").append(uid).append("&")
                 .append("mytoken").append("=").append(mytoken).append("&")
-                .append(typeString).append("=").append(content);
+                .append(typeString).append("=").append(EncodeUtils.urlEncode(content));
         nimHttpGetRequest(body.toString(), callback);
     }
 
@@ -463,7 +671,7 @@ public class ContactHttpClient {
                 .append("uid").append("=").append(uid).append("&")
                 .append("mytoken").append("=").append(mytoken).append("&")
                 .append("mode").append("=").append(mode).append("&")
-                .append("key").append("=").append(key);
+                .append("key").append("=").append(EncodeUtils.urlEncode(key));
         nimHttpGetRequest(body.toString(), callback);
     }
 
@@ -771,14 +979,41 @@ public class ContactHttpClient {
         nimHttpGetRequest(body.toString(), callback);
     }
 
+    //查询红包是否支付成功
+    public void verifyPaymentResult(String uid, String mytoken, String orderno, final ContactHttpCallback<RequestInfo> callback) {
+        StringBuilder body = new StringBuilder(DemoServers.alipayServer());
+        body.append("cmd").append("=").append(53).append("&")
+                .append("uid").append("=").append(uid).append("&")
+                .append("mytoken").append("=").append(mytoken).append("&")
+                .append("orderno").append("=").append(orderno);
+        nimHttpGetRequest(body.toString(), callback);
+    }
+
+    //更新群头像
+    public void updateGroupHead(String uid, String mytoken, String owner, String qunid, String headurl, final ContactHttpCallback<RequestInfo> callback) {
+        StringBuilder body = new StringBuilder(DemoServers.apiServer());
+        body.append("cmd").append("=").append(63).append("&")
+                .append("uid").append("=").append(uid).append("&")
+                .append("mytoken").append("=").append(mytoken).append("&")
+                .append("owner").append("=").append(owner).append("&")
+                .append("qunid").append("=").append(qunid).append("&")
+                .append("headurl").append("=").append(EncodeUtils.urlEncode(headurl));
+        nimHttpGetRequest(body.toString(), callback);
+    }
+
+    //获取小助手账号
+    public void fetchAssistantAccount(final ContactHttpCallback<RequestInfo> callback) {
+        StringBuilder body = new StringBuilder(DemoServers.apiServer());
+        body.append("cmd").append("=").append(64);
+        nimHttpGetRequest(body.toString(), callback);
+    }
+
     private void nimHttpGetRequest(String bodyString, final ContactHttpCallback<RequestInfo> callback) {
         Map<String, String> headers = new HashMap<>();
         headers.put(HEADER_CONTENT_TYPE, "application/x-www-form-urlencoded; charset=utf-8");
         NimHttpClient.getInstance().execute(bodyString, headers, null, false, new NimHttpClient.NimHttpCallback() {
             @Override
             public void onResponse(String response, int code, Throwable exception) {
-                Log.e("xx","bodyString="+bodyString);
-                Log.e("xx","response="+response);
                 if (code != 200 || exception != null) {
                     String errMsg = exception != null ? exception.getMessage() : "null";
                     if (callback != null) {
@@ -788,13 +1023,14 @@ public class ContactHttpClient {
                 }
                 try {
                     Gson gson = new Gson();
-                    RequestInfo loginInfo = gson.fromJson(response, new TypeToken<RequestInfo>() {
+                    RequestInfo info = gson.fromJson(response, new TypeToken<RequestInfo>() {
                     }.getType());
-                    int resCode = loginInfo.getCode();
-                    if (resCode == RESULT_SUCCESS) {
-                        callback.onSuccess(loginInfo);
+                    Log.e("xx", "info=" + info.toString());
+                    int resCode = info.getCode();
+                    if (resCode == RESULT_SUCCESS || resCode == 100020 || resCode == 100039) {
+                        callback.onSuccess(info);
                     } else {
-                        callback.onFailed(resCode, null);
+                        callback.onFailed(resCode, info.getErr_msg());
                     }
                 } catch (Exception e) {
                     callback.onFailed(-1, e.getMessage());
@@ -803,38 +1039,64 @@ public class ContactHttpClient {
         });
     }
 
-    /**
-     * 返回一个JSONObject
-     * @param bodyString
-     * @param callback
-     */
-    private void httpGetRequest(String bodyString, final ContactHttpCallback<JSONObject> callback) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put(HEADER_CONTENT_TYPE, "application/x-www-form-urlencoded; charset=utf-8");
-        NimHttpClient.getInstance().execute(bodyString, headers, null, false, new NimHttpClient.NimHttpCallback() {
+    private void okHttpGetRequest(Activity activity, String bodyString, final ContactHttpCallback<RequestInfo> callback) {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new RetryIntercepter(12))
+                .build();
+        Request request = new Request.Builder().get().url(bodyString).build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
             @Override
-            public void onResponse(String response, int code, Throwable exception) {
-                Log.e("xx","bodyString="+bodyString);
-                Log.e("xx","response="+response);
-                if (code != 200 || exception != null) {
-                    String errMsg = exception != null ? exception.getMessage() : "null";
-                    if (callback != null) {
-                        callback.onFailed(code, errMsg);
-                    }
-                    return;
-                }
+            public void onFailure(Call call, IOException e) {
+                activity.runOnUiThread(() -> {
+                    callback.onFailed(-1, e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    int resCode = jsonObject.getInt("code");
+                    Gson gson = new Gson();
+                    final String responseStr = response.body().string();
+                    RequestInfo loginInfo = gson.fromJson(responseStr, new TypeToken<RequestInfo>() {
+                    }.getType());
+                    int resCode = loginInfo.getCode();
                     if (resCode == RESULT_SUCCESS) {
-                        callback.onSuccess(jsonObject);
+                        activity.runOnUiThread(() -> {
+                            callback.onSuccess(loginInfo);
+                        });
                     } else {
-                        callback.onFailed(resCode, null);
+                        activity.runOnUiThread(() -> {
+                            callback.onFailed(resCode, null);
+                        });
                     }
                 } catch (Exception e) {
-                    callback.onFailed(-1, e.getMessage());
+                    activity.runOnUiThread(() -> {
+                        callback.onFailed(-1, e.getMessage());
+                    });
                 }
             }
         });
     }
+
+    public class RetryIntercepter implements Interceptor {
+        public int maxRetry;
+        private int retryNum = 0;
+
+        public RetryIntercepter(int maxRetry) {
+            this.maxRetry = maxRetry;
+        }
+
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request();
+            Response response = chain.proceed(request);
+            while (!response.isSuccessful() && retryNum < maxRetry) {
+                retryNum++;
+                response = chain.proceed(request);
+            }
+            return response;
+        }
+    }
+
 }

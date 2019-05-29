@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import com.netease.nim.uikit.common.adapter.TAdapter;
 import com.netease.nim.uikit.common.adapter.TAdapterDelegate;
 import com.xr.ychat.main.viewholder.CustomNotificationViewHolder;
-import com.xr.ychat.main.viewholder.SystemMessageViewHolder;
 
 import java.util.List;
 

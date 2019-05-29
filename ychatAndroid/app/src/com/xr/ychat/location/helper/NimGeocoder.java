@@ -11,13 +11,13 @@ import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeQuery;
-import com.xr.ychat.location.model.NimLocation;
 import com.netease.nim.uikit.common.framework.infra.DefaultTaskManager;
 import com.netease.nim.uikit.common.framework.infra.DefaultTaskWorker;
 import com.netease.nim.uikit.common.framework.infra.ManagedTask;
 import com.netease.nim.uikit.common.framework.infra.TaskExecutor;
 import com.netease.nim.uikit.common.framework.infra.TaskManager;
 import com.netease.nim.uikit.common.util.log.LogUtil;
+import com.xr.ychat.location.model.NimLocation;
 
 import java.io.IOException;
 import java.util.ArrayList;

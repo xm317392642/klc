@@ -1,7 +1,6 @@
 package com.netease.nim.uikit.business.session.module.list;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.netease.nim.uikit.R;

@@ -1,6 +1,7 @@
 package com.xr.ychat.redpacket;
 
 import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.business.session.extension.RedPacketOpenedAttachment;
 import com.netease.nim.uikit.business.session.module.ModuleProxy;
 import com.netease.nim.uikit.common.UnclaimedEnvelope;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
@@ -9,7 +10,6 @@ import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.xr.ychat.DemoCache;
-import com.xr.ychat.session.extension.RedPacketOpenedAttachment;
 
 /**
  * 发送领取了红包的消息

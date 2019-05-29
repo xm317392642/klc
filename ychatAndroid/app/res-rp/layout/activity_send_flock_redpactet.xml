@@ -93,7 +93,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
+        <com.netease.nim.uikit.common.ui.widget.MenuHidingEditText
             android:id="@+id/single_red_packet_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

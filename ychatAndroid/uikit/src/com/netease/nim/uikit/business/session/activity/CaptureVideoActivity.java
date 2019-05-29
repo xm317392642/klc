@@ -137,7 +137,7 @@ public class CaptureVideoActivity extends SwipeBackUI implements SurfaceHolder.C
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_capture_video_activity);
+        setActivityView(R.layout.nim_capture_video_activity);
         setTitle(R.string.video_record);
 
         parseIntent();

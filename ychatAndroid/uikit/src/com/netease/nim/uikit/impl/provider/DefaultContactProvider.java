@@ -3,7 +3,6 @@ package com.netease.nim.uikit.impl.provider;
 import android.text.TextUtils;
 
 import com.netease.nim.uikit.api.model.contact.ContactProvider;
-import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.impl.cache.FriendDataCache;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.friend.FriendService;

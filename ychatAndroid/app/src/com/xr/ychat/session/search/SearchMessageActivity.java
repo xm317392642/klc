@@ -13,13 +13,12 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
-import com.xr.ychat.R;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.activity.ToolBarOptions;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.listview.AutoRefreshListView;
-import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
@@ -27,6 +26,7 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.model.TeamMember;
+import com.xr.ychat.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class SearchMessageActivity extends UI {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.message_search_activity);
+        setActivityView(R.layout.message_search_activity);
 
         ToolBarOptions options = new NimToolBarOptions();
         setToolBar(R.id.toolbar, options);

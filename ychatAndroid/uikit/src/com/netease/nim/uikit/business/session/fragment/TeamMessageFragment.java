@@ -61,8 +61,8 @@ public class TeamMessageFragment extends MessageFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         //String teamID = team.getId();
         int dataSize = messageListPanel.adapter.getDataSize();
         IMMessage message = messageListPanel.getUserLastSendMessage();

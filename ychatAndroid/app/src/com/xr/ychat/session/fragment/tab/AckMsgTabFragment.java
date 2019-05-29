@@ -5,9 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.netease.nim.uikit.common.fragment.TabFragment;
 import com.xr.ychat.R;
 import com.xr.ychat.session.model.AckMsgTab;
-import com.netease.nim.uikit.common.fragment.TabFragment;
 
 
 public abstract class AckMsgTabFragment extends TabFragment {

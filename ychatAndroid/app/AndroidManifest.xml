@@ -89,12 +89,12 @@
 
         <!--
         线上：b8d10e9fd09b753c22e8e89ed8d7028a
-        本地：59e25b68cbacfda7d03225ccac77dfab
+        本地：beb13d848e728801b520c3482eaa6745 魏强 41
         正式：55d27dbe9a63a2e430a621c06835ec86
         -->
         <meta-data
             android:name="com.netease.nim.appKey"
-            android:value="55d27dbe9a63a2e430a621c06835ec86" />
+            android:value="beb13d848e728801b520c3482eaa6745" />
 
         <!-- 全面屏配置 -->
         <meta-data
@@ -161,13 +161,13 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-<!--            <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                &lt;!&ndash;通过这种方式，可以把自己的app加入系统分享中 	指定分享类型 &ndash;&gt;
-                <data android:mimeType="text/plain"/>
-                <data android:mimeType="image/*" />
-            </intent-filter>-->
+            <!--            <intent-filter>
+                            <action android:name="android.intent.action.SEND"/>
+                            <category android:name="android.intent.category.DEFAULT"/>
+                            &lt;!&ndash;通过这种方式，可以把自己的app加入系统分享中 	指定分享类型 &ndash;&gt;
+                            <data android:mimeType="text/plain"/>
+                            <data android:mimeType="image/*" />
+                        </intent-filter>-->
         </activity>
 
         <!-- 多端登录管理 -->
@@ -196,7 +196,16 @@
             android:configChanges="orientation"
             android:label="@string/login"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="web"
+                    android:host="h5"
+                    android:path="/enter"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".main.activity.AuthorizeLoginActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -280,6 +289,12 @@
 
         <activity
             android:name=".redpacket.BindAlipayActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <activity
+            android:name=".redpacket.PaymentCodeActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -452,6 +467,12 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
+            android:name=".main.activity.InviteDetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
             android:name=".main.activity.SystemNotificationActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
@@ -485,6 +506,12 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".team.activity.AdvancedTeamCopyActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".team.activity.AdvancedTeamInviteActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
@@ -626,19 +653,21 @@
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
 
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
 
         <activity
             android:name=".main.activity.UriSchemeProcessActivity"
             android:launchMode="singleTask"
             android:noHistory="true"
             android:screenOrientation="portrait">
+
+
 
             <!-- URI Scheme方式 在dashboard配置中,请保持与ios的URI Scheme相同 -->
             <intent-filter>
@@ -768,6 +797,22 @@
             android:name="com.xiaomi.mipush.sdk.MessageHandleService"
             android:enabled="true" />
 
+        <service
+            android:name="com.talkingdata.sdk.TDAntiCheatingService"
+            android:process="com.talkingdata.sdk.TDAntiCheatingService">  <!--用户质量评估Service可以配置在主进程或者单独进程-->
+            <intent-filter>
+                <action android:name="com.talkingdata.sdk.TDAntiCheatingService" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="TD_APP_ID"
+            android:value="DC163C5DE81548878E6F9E51F589AAB5" />
+
+        <meta-data
+            android:name="TD_CHANNEL_ID"
+            android:value="Android" />
+
         <receiver
             android:name="com.netease.nimlib.mixpush.mi.MiPushReceiver"
             android:exported="true">
@@ -841,6 +886,8 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+
+        <service android:name="com.netease.nim.uikit.common.UnsentRedPacketService" />
     </application>
 
 </manifest>

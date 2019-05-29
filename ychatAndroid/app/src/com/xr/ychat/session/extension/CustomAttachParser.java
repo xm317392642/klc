@@ -4,6 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.netease.nim.uikit.business.session.extension.CustomAttachment;
 import com.netease.nim.uikit.business.session.extension.CustomAttachmentType;
+import com.netease.nim.uikit.business.session.extension.RedPacketAttachment;
+import com.netease.nim.uikit.business.session.extension.RedPacketOpenedAttachment;
+import com.netease.nim.uikit.business.session.extension.TeamInviteAttachment;
+import com.netease.nim.uikit.business.session.extension.TeamAuthAttachment;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachmentParser;
 
@@ -43,11 +47,17 @@ public class CustomAttachParser implements MsgAttachmentParser {
                 case CustomAttachmentType.GameShare://游戏分享
                     attachment = new GameShareAttachment();
                     break;
+                case CustomAttachmentType.TEAM_AUTHENTICATION://开启群认证
+                    attachment = new TeamAuthAttachment();
+                    break;
                 case CustomAttachmentType.CustomMessageTypeCustomTip://截屏
                     attachment = new ScreenCaptureAttachment();
                     break;
                 case CustomAttachmentType.Mahjong://机器人
                     attachment = new MahjongAttachment();
+                    break;
+                case CustomAttachmentType.TeamInvite://邀请他人进群
+                    attachment = new TeamInviteAttachment();
                     break;
                 default:
                     attachment = new DefaultCustomAttachment();

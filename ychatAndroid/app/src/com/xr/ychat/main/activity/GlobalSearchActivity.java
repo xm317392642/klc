@@ -31,13 +31,8 @@ import com.netease.nim.uikit.business.contact.core.query.IContactDataProvider;
 import com.netease.nim.uikit.business.contact.core.viewholder.ContactHolder;
 import com.netease.nim.uikit.business.contact.core.viewholder.ContactTeamMemberHolder;
 import com.netease.nim.uikit.business.contact.core.viewholder.LabelHolder;
-import com.netease.nim.uikit.common.CommonUtil;
-import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.activity.UI;
-import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nim.uikit.common.util.string.StringUtil;
-import com.netease.nim.uikit.impl.preference.UserPreferences;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.xr.ychat.R;
 import com.xr.ychat.session.SessionHelper;
 
@@ -123,7 +118,7 @@ public class GlobalSearchActivity extends UI implements OnItemClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.global_search_result);
+        setActivityView(R.layout.global_search_result);
 
         Toolbar mToolbar = findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);

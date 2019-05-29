@@ -78,6 +78,11 @@ public class SystemMessageViewHolder extends TViewHolder {
             }
         });
         headImageView.loadBuddyAvatar(message.getFromAccount());
+        headImageView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(message);
+            }
+        });
         fromAccountText.setText(UserInfoHelper.getUserDisplayNameEx(message.getFromAccount(), "我"));
         contentText.setText(MessageHelper.getVerifyNotificationText(message));
         timeText.setText(TimeUtil.getNewChatTime(message.getTime()));

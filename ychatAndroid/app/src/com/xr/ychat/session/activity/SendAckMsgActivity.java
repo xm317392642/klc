@@ -9,10 +9,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.xr.ychat.R;
 import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.common.activity.ToolBarOptions;
 import com.netease.nim.uikit.common.activity.UI;
+import com.xr.ychat.R;
 
 /**
  * 发送已读回执消息界面
@@ -37,7 +37,7 @@ public class SendAckMsgActivity extends UI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.send_ack_msg_layout);
+        setActivityView(R.layout.send_ack_msg_layout);
 
         ToolBarOptions options = new NimToolBarOptions();
         options.titleId = R.string.send_ack_msg;

@@ -50,7 +50,7 @@ public class AdvancedTeamNicknameActivity extends SwipeBackUI implements TextWat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_advanced_team_nickname_activity);
+        setActivityView(R.layout.nim_advanced_team_nickname_activity);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);

@@ -5,17 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
-import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.xr.ychat.R;
-import com.xr.ychat.session.extension.StickerAttachment;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.session.SessionCustomization;
 import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
 import com.netease.nim.uikit.business.team.model.TeamExtras;
 import com.netease.nim.uikit.business.team.model.TeamRequestCode;
+import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
+import com.xr.ychat.R;
+import com.xr.ychat.session.extension.StickerAttachment;
 
 import java.io.Serializable;
 import java.util.ArrayList;

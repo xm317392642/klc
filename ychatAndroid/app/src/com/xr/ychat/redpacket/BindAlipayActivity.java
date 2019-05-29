@@ -11,11 +11,12 @@ import android.text.TextUtils;
 import android.widget.Button;
 
 import com.alipay.sdk.app.AuthTask;
+import com.blankj.utilcode.util.SPUtils;
+import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.xr.ychat.R;
@@ -141,6 +142,7 @@ public class BindAlipayActivity extends SwipeBackUI {
             public void onSuccess(RequestInfo aVoid) {
                 DialogMaker.dismissProgressDialog();
                 commit.setEnabled(true);
+                SPUtils.getInstance().put(CommonUtil.ALIPAYUID, aliuid);
                 YchatToastUtils.showShort("支付宝绑定成功");
                 finish();
             }

@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.api.model.SimpleCallback;
 import com.netease.nim.uikit.api.model.contact.ContactChangedObserver;
 import com.netease.nim.uikit.api.model.main.OnlineStateChangeObserver;
 import com.netease.nim.uikit.api.model.team.TeamDataChangedObserver;
@@ -26,7 +25,6 @@ import com.netease.nim.uikit.business.team.model.TeamExtras;
 import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.badger.Badger;
 import com.netease.nim.uikit.common.fragment.TFragment;
-import com.netease.nim.uikit.common.ui.combinebitmap.helper.BitmapLoader;
 import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog;
 import com.netease.nim.uikit.common.ui.drop.DropCover;
 import com.netease.nim.uikit.common.ui.drop.DropManager;
@@ -234,6 +232,13 @@ public class RecentContactsFragment extends TFragment {
         public void onItemClick(RecentContactAdapter adapter, View view, int position) {
             if (callback != null) {
                 RecentContact recent = adapter.getItem(position);
+                boolean black = NIMClient.getService(FriendService.class).isInBlackList(recent.getContactId());
+                if (recent.getSessionType() == SessionTypeEnum.P2P && black) {
+                    List<RecentContact> recentContacts = new ArrayList<>();
+                    recent.setTag(1000L);
+                    recentContacts.add(recent);
+                    onRecentContactChanged(recentContacts);
+                }
                 callback.onItemClick(recent);
             }
         }
@@ -386,7 +391,7 @@ public class RecentContactsFragment extends TFragment {
 
             int unreadNum = 0;
             for (RecentContact r : items) {
-                if (isNeedMessageNotify(r)) {
+                if (isNeedMessageNotify(r) && r.getTag() != 1000L) {
                     unreadNum += r.getUnreadCount();
                 }
             }
@@ -478,21 +483,32 @@ public class RecentContactsFragment extends TFragment {
     // 暂存消息，当RecentContact 监听回来时使用，结束后清掉
     private Map<String, Set<IMMessage>> cacheMessages = new HashMap<>();
 
-    //监听在线消息中是否有@我
+    //监听在线消息中是否有@我 或者  @所有人
     private Observer<List<IMMessage>> messageReceiverObserver = new Observer<List<IMMessage>>() {
         @Override
         public void onEvent(List<IMMessage> imMessages) {
             if (imMessages != null) {
                 for (IMMessage imMessage : imMessages) {
-                    if (!TeamMemberAitHelper.isAitMessage(imMessage)) {
-                        continue;
+                    String content = imMessage.getContent();
+                    if (TeamMemberAitHelper.isAitMessage(imMessage) || (!TextUtils.isEmpty(content) && content.contains("@所有人"))) {
+                        Set<IMMessage> cacheMessageSet = cacheMessages.get(imMessage.getSessionId());
+                        if (cacheMessageSet == null) {
+                            cacheMessageSet = new HashSet<>();
+                            cacheMessages.put(imMessage.getSessionId(), cacheMessageSet);
+                        }
+                        cacheMessageSet.add(imMessage);
                     }
-                    Set<IMMessage> cacheMessageSet = cacheMessages.get(imMessage.getSessionId());
-                    if (cacheMessageSet == null) {
-                        cacheMessageSet = new HashSet<>();
-                        cacheMessages.put(imMessage.getSessionId(), cacheMessageSet);
-                    }
-                    cacheMessageSet.add(imMessage);
+
+
+//                    if (!TeamMemberAitHelper.isAitMessage(imMessage) ) {
+//                        continue;
+//                    }
+//                    Set<IMMessage> cacheMessageSet = cacheMessages.get(imMessage.getSessionId());
+//                    if (cacheMessageSet == null) {
+//                        cacheMessageSet = new HashSet<>();
+//                        cacheMessages.put(imMessage.getSessionId(), cacheMessageSet);
+//                    }
+//                    cacheMessageSet.add(imMessage);
                 }
             }
         }
@@ -519,7 +535,7 @@ public class RecentContactsFragment extends TFragment {
         for (RecentContact r : recentContacts) {
             index = -1;
             for (int i = 0; i < items.size(); i++) {
-                if (r.getContactId().equals(items.get(i).getContactId()) && r.getSessionType() == (items.get(i).getSessionType())) {
+                if (TextUtils.equals(r.getContactId(), items.get(i).getContactId()) && r.getSessionType() == (items.get(i).getSessionType())) {
                     index = i;
                     break;
                 }
@@ -607,13 +623,20 @@ public class RecentContactsFragment extends TFragment {
 
         @Override
         public void onRemoveTeam(Team team) {
-            adapter.notifyDataSetChanged();
             clearTeamMemberStatus(team.getId());
             for (RecentContact item : items) {
                 if (item.getSessionType() == SessionTypeEnum.Team &&
                         TextUtils.equals(item.getContactId(), team.getId())) {
                     CommonUtil.removeTag(item, RecentContactsFragment.RECENT_TAG_STICKY);
-                    NIMClient.getService(MsgService.class).updateRecentAndNotify(item);
+                    NIMClient.getService(MsgService.class).deleteRecentContact(item);
+                    NIMClient.getService(MsgService.class).clearChattingHistory(item.getContactId(), item.getSessionType());
+                    items.remove(item);
+                    postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshMessages(true);
+                        }
+                    });
                     break;
                 }
             }
@@ -713,8 +736,8 @@ public class RecentContactsFragment extends TFragment {
         }
 
         @Override
-        public void onAddUserToBlackList(List<String> account) {
-            //refreshMessages(false);
+        public void onAddUserToBlackList(List<String> accounts) {
+
         }
 
         @Override
@@ -751,7 +774,8 @@ public class RecentContactsFragment extends TFragment {
                     Set<IMMessage> messages = null;
                     // 过滤存在的@我的消息
                     for (IMMessage msg : result) {
-                        if (TeamMemberAitHelper.isAitMessage(msg)) {
+                        String content = msg.getContent();
+                        if (TeamMemberAitHelper.isAitMessage(msg) || (!TextUtils.isEmpty(content) && content.contains("@所有人"))) {
                             if (messages == null) {
                                 messages = new HashSet<>();
                             }

@@ -8,6 +8,8 @@ public class RequestInfo {
     private String accid;
     private int cmd;
     private int code;
+    private int open;//群主自动领取红包的开关，1 打开自动领取红包 0 关闭自动领取红包
+    private String err_msg = "";
     private String password;
     private int platflag;
     private int platid;
@@ -20,6 +22,7 @@ public class RequestInfo {
     private String aliavatar;
     private String alilogonid;
     private String orderno;
+    private int pay_status;
     private AlipayInfo aliinf;
     private float amount;
     private int status; // 0=初始化状态 1=玩家支付取消 2=支付被支付宝关闭 3=支付完成 4=完成领取 5=领取过期
@@ -41,6 +44,16 @@ public class RequestInfo {
     private int action;
     private int onoff;
     private String qunID;
+    private String xzs;
+
+    public int getOpen() {
+        return open;
+    }
+
+    public void setOpen(int open) {
+        this.open = open;
+    }
+
     private ArrayList<RobotInfo> list;
 
     public int getIsfirstlogin() {
@@ -355,6 +368,39 @@ public class RequestInfo {
         this.list = list;
     }
 
+    public String getErr_msg() {
+        return err_msg;
+    }
+
+    public void setErr_msg(String err_msg) {
+        this.err_msg = err_msg;
+    }
+
+
+    public int getPay_status() {
+        return pay_status;
+    }
+
+    public void setPay_status(int pay_status) {
+        this.pay_status = pay_status;
+    }
+
+    public int getOnoff() {
+        return onoff;
+    }
+
+    public void setOnoff(int onoff) {
+        this.onoff = onoff;
+    }
+
+    public String getXzs() {
+        return xzs;
+    }
+
+    public void setXzs(String xzs) {
+        this.xzs = xzs;
+    }
+
     @Override
     public String toString() {
         return "RequestInfo{" +
@@ -362,6 +408,7 @@ public class RequestInfo {
                 ", accid='" + accid + '\'' +
                 ", cmd=" + cmd +
                 ", code=" + code +
+                ", err_msg=" + err_msg +
                 ", password='" + password + '\'' +
                 ", platflag=" + platflag +
                 ", platid=" + platid +
@@ -395,6 +442,7 @@ public class RequestInfo {
                 ", action=" + action +
                 ", hb_onoff=" + onoff +
                 ", qunID='" + qunID + '\'' +
+                ", xzs='" + xzs + '\'' +
                 '}';
     }
 }

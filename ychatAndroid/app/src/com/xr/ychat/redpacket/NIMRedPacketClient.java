@@ -6,17 +6,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.common.ContactHttpClient;
+import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.Preferences;
-import com.netease.nim.uikit.common.RequestInfo;
 import com.netease.nim.uikit.common.TeamExtension;
-import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
-import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.netease.nim.uikit.common.util.sys.NetworkUtil;
-import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
@@ -30,7 +26,6 @@ import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.uinfo.UserServiceObserve;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.xr.ychat.DemoCache;
-import com.xr.ychat.R;
 
 import java.util.List;
 
@@ -160,7 +155,7 @@ public class NIMRedPacketClient {
         if (sessionTypeEnum == SessionTypeEnum.Team) { // 群聊红包
             // 调用群聊红包接口
             Team team = NimUIKit.getTeamProvider().getTeamById(targetAccount);
-            SendFlockRedpactActivity.start(activity, team.getId(), team.getName(), getRobotId(team), requestCode);
+            SendFlockRedpactActivity.start(activity, team.getId(), team.getName(), team.getCreator(), getRobotId(team), requestCode);
         } else { // 单聊红包
             SendSingleRedpactActivity.start(activity, targetAccount, requestCode);
         }
@@ -199,56 +194,41 @@ public class NIMRedPacketClient {
         if (selfInfo == null) {
             selfInfo = (NimUserInfo) NimUIKit.getUserInfoProvider().getUserInfo(DemoCache.getAccount());
         }
-        if (!NetworkUtil.isNetAvailable(activity)) {
-            YchatToastUtils.showShort(R.string.network_is_not_available);
-            return;
-        }
-        String mytoken = Preferences.getWeiranToken(activity);
         String uid = Preferences.getWeiranUid(activity);
-        String nickname = NimUIKitImpl.getUserInfoProvider().getUserInfo(NimUIKit.getAccount()).getName();
-        DialogMaker.showProgressDialog(activity, "", false);
-        ContactHttpClient.getInstance().queryAlipayAccount(uid, mytoken, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
-            @Override
-            public void onSuccess(RequestInfo aVoid) {
-                DialogMaker.dismissProgressDialog();
-                if (TextUtils.isEmpty(aVoid.getAliuid())) {
-                    BindAlipayActivity.start(activity);
+        String mytoken = Preferences.getWeiranToken(activity);
+        String nickname = selfInfo.getName();
+        String aliuid = SPUtils.getInstance().getString(CommonUtil.ALIPAYUID);
+        if (TextUtils.isEmpty(aliuid)) {
+            BindAlipayActivity.start(activity);
+        } else {
+            if (sessionTypeEnum == SessionTypeEnum.Team) {
+                OpenRedpacketFragment fragment = new OpenRedpacketFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("SessionId", fromSessionId);
+                bundle.putString("FromAccount", fromAccount);
+                bundle.putString("FromContent", fromContent);
+                bundle.putString("BriberyId", briberyId);
+                bundle.putInt("Type", 2);
+                bundle.putInt("Status", status);
+                fragment.setArguments(bundle);
+                fragment.show(activity.getSupportFragmentManager(), cb, message);
+            } else if (sessionTypeEnum == SessionTypeEnum.P2P) {
+                if (TextUtils.equals(fromAccount, DemoCache.getAccount())) {
+                    RedpactDetailActivity.start(activity, fromAccount, fromContent, briberyId, uid, mytoken, nickname, message);
                 } else {
-                    if (sessionTypeEnum == SessionTypeEnum.Team) {
-                        OpenRedpacketFragment fragment = new OpenRedpacketFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("SessionId", fromSessionId);
-                        bundle.putString("FromAccount", fromAccount);
-                        bundle.putString("FromContent", fromContent);
-                        bundle.putString("BriberyId", briberyId);
-                        bundle.putInt("Type", 2);
-                        bundle.putInt("Status", status);
-                        fragment.setArguments(bundle);
-                        fragment.show(activity.getSupportFragmentManager(), cb, message);
-                    } else if (sessionTypeEnum == SessionTypeEnum.P2P) {
-                        if (TextUtils.equals(fromAccount, DemoCache.getAccount())) {
-                            RedpactDetailActivity.start(activity, fromAccount, fromContent, briberyId, uid, mytoken, nickname, message);
-                        } else {
-                            OpenRedpacketFragment fragment = new OpenRedpacketFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("SessionId", fromSessionId);
-                            bundle.putString("FromAccount", fromAccount);
-                            bundle.putString("FromContent", fromContent);
-                            bundle.putString("BriberyId", briberyId);
-                            bundle.putInt("Type", 1);
-                            bundle.putInt("Status", status);
-                            fragment.setArguments(bundle);
-                            fragment.show(activity.getSupportFragmentManager(), cb, message);
-                        }
-                    }
+                    OpenRedpacketFragment fragment = new OpenRedpacketFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("SessionId", fromSessionId);
+                    bundle.putString("FromAccount", fromAccount);
+                    bundle.putString("FromContent", fromContent);
+                    bundle.putString("BriberyId", briberyId);
+                    bundle.putInt("Type", 1);
+                    bundle.putInt("Status", status);
+                    fragment.setArguments(bundle);
+                    fragment.show(activity.getSupportFragmentManager(), cb, message);
                 }
             }
-
-            @Override
-            public void onFailed(int code, String errorMsg) {
-                DialogMaker.dismissProgressDialog();
-            }
-        });
+        }
     }
 
     /**

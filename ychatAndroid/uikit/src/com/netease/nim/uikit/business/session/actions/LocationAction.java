@@ -21,23 +21,30 @@ public class LocationAction extends BaseAction {
 
     @Override
     public void onClick() {
-        if (NimUIKitImpl.getLocationProvider() != null) {
-            NimUIKitImpl.getLocationProvider().requestLocation(getActivity(), new LocationProvider.Callback() {
-                @Override
-                public void onSuccess(double longitude, double latitude, String address) {
-                    if (getContainer().sessionType == SessionTypeEnum.Team) {
-                        if (TeamHelper.isTeamMember(getContainer().account, NimUIKit.getAccount())) {
+        if (getContainer().sessionType == SessionTypeEnum.Team) {
+            if (TeamHelper.isTeamMember(getContainer().account, NimUIKit.getAccount())) {
+                if (NimUIKitImpl.getLocationProvider() != null) {
+                    NimUIKitImpl.getLocationProvider().requestLocation(getActivity(), new LocationProvider.Callback() {
+                        @Override
+                        public void onSuccess(double longitude, double latitude, String address) {
                             IMMessage message = MessageBuilder.createLocationMessage(getAccount(), getSessionType(), latitude, longitude, address);
                             sendMessage(message);
-                        } else {
-                            YchatToastUtils.showShort("你已不在本群，无法进行下一步操作");
                         }
-                    } else {
+                    });
+                }
+            } else {
+                YchatToastUtils.showShort("你已不在本群，无法进行下一步操作");
+            }
+        } else {
+            if (NimUIKitImpl.getLocationProvider() != null) {
+                NimUIKitImpl.getLocationProvider().requestLocation(getActivity(), new LocationProvider.Callback() {
+                    @Override
+                    public void onSuccess(double longitude, double latitude, String address) {
                         IMMessage message = MessageBuilder.createLocationMessage(getAccount(), getSessionType(), latitude, longitude, address);
                         sendMessage(message);
                     }
-                }
-            });
+                });
+            }
         }
     }
 }

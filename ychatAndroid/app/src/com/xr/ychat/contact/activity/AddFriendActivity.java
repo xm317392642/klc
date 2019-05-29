@@ -7,8 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
+import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
@@ -16,18 +18,12 @@ import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialogHelper;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.ResponseCode;
-import com.netease.nimlib.sdk.uinfo.UserService;
-import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
 import com.xr.ychat.common.ui.XEditText;
 import com.xr.ychat.login.MyCodeActivity;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 添加好友页面
@@ -51,7 +47,7 @@ public class AddFriendActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_friend_activity);
+        setActivityView(R.layout.add_friend_activity);
         findViews();
         initActionbar();
         getUserInfo();
@@ -153,17 +149,23 @@ public class AddFriendActivity extends SwipeBackUI {
     }
 
     private void updateUI() {
-        ContactHttpClient.getInstance().getYchatAccount(Preferences.getWeiranUid(this), Preferences.getWeiranToken(this), userAccount, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
-            @Override
-            public void onSuccess(RequestInfo aVoid) {
-                qrcode.setText(String.format("我的空了吹号: %1$s", aVoid.getYchatNo()));
-            }
+        String ychatNo = SPUtils.getInstance().getString(CommonUtil.YCHAT_ACCOUNT);
+        if (TextUtils.isEmpty(ychatNo)) {
+            ContactHttpClient.getInstance().getYchatAccount(Preferences.getWeiranUid(this), Preferences.getWeiranToken(this), userAccount, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
+                @Override
+                public void onSuccess(RequestInfo aVoid) {
+                    SPUtils.getInstance().put(CommonUtil.YCHAT_ACCOUNT, aVoid.getYchatNo());
+                    qrcode.setText(String.format("我的空了吹号: %1$s", aVoid.getYchatNo()));
+                }
 
-            @Override
-            public void onFailed(int code, String errorMsg) {
-                qrcode.setText(String.format("我的空了吹号: %1$s", userInfo.getAccount()));
-            }
-        });
+                @Override
+                public void onFailed(int code, String errorMsg) {
+                    qrcode.setText("");
+                }
+            });
+        } else {
+            qrcode.setText(String.format("我的空了吹号: %1$s", ychatNo));
+        }
     }
 
 }

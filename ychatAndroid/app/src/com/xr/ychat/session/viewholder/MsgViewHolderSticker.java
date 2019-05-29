@@ -5,12 +5,12 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.xr.ychat.R;
-import com.xr.ychat.session.extension.StickerAttachment;
 import com.netease.nim.uikit.business.session.emoji.StickerManager;
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderBase;
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderThumbBase;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseMultiItemFetchLoadAdapter;
+import com.xr.ychat.R;
+import com.xr.ychat.session.extension.StickerAttachment;
 
 /**
  * Created by zhoujianghua on 2015/8/7.

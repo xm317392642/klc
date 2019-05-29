@@ -20,9 +20,9 @@ import android.widget.TextView;
 
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
+import com.netease.nim.uikit.business.session.extension.RedPacketAttachment;
 import com.netease.nim.uikit.business.session.helper.MessageListPanelHelper;
 import com.netease.nim.uikit.business.team.helper.TeamHelper;
-import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
@@ -36,7 +36,6 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
-import com.xr.ychat.session.extension.RedPacketAttachment;
 
 public class OpenRedpacketFragment extends DialogFragment implements View.OnClickListener {
     private HeadImageView fromAvatar;
@@ -58,11 +57,17 @@ public class OpenRedpacketFragment extends DialogFragment implements View.OnClic
     private String nickname;
     private int type;
     private int status;
+    private long lastClickTime = 0L;
+    private static final int FAST_CLICK_DELAY_TIME = 400;  // 快速点击间隔
 
     public void show(FragmentManager fragmentManager, NIMOpenRpCallback callback, IMMessage message) {
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.add(this, "OpenRedpacketFragment");
-        ft.commit();
+        try {
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.add(this, "OpenRedpacketFragment");
+            ft.commit();
+        } catch (IllegalStateException ignore) {
+
+        }
         Bundle bundle = getArguments();
         this.sessionId = bundle.getString("SessionId");
         this.fromAccount = bundle.getString("FromAccount");
@@ -108,32 +113,36 @@ public class OpenRedpacketFragment extends DialogFragment implements View.OnClic
         super.onActivityCreated(savedInstanceState);
         mytoken = Preferences.getWeiranToken(getActivity());
         uid = Preferences.getWeiranUid(getActivity());
-        NimUserInfo userInfo = (NimUserInfo) NimUIKit.getUserInfoProvider().getUserInfo(DemoCache.getAccount());
+        NimUserInfo userInfo = (NimUserInfo) NimUIKit.getUserInfoProvider().getUserInfo(NimUIKit.getAccount());
         nickname = userInfo.getName();
-        NimUIKit.getUserInfoProvider().getUserInfoAsync(fromAccount, new SimpleCallback<NimUserInfo>() {
+        NimUserInfo fromUserInfo = (NimUserInfo) NimUIKit.getUserInfoProvider().getUserInfo(fromAccount);
+        if (fromUserInfo == null) {
+            NimUIKit.getUserInfoProvider().getUserInfoAsync(fromAccount, new SimpleCallback<NimUserInfo>() {
 
-            @Override
-            public void onResult(boolean success, NimUserInfo result, int code) {
-                if (success) {
-                    fromName.setText(result.getName());
-                    fromAvatar.loadBuddyAvatar(fromAccount);
+                @Override
+                public void onResult(boolean success, NimUserInfo result, int code) {
+                    if (success) {
+                        fromName.setText(result.getName());
+                        fromAvatar.loadAvatar(result.getAvatar());
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            fromName.setText(fromUserInfo.getName());
+            fromAvatar.loadAvatar(fromUserInfo.getAvatar());
+        }
         if (status == 3) {
             redpacketContent.setVisibility(View.VISIBLE);
             redpacketContent.setText("你无法领取该红包");
             openRedpacketLayout.setVisibility(View.GONE);
             openRedpacket.setVisibility(View.GONE);
             redpacketDetail.setVisibility(View.VISIBLE);
-        } else if (status == 4) {
-            redpacketContent.setVisibility(View.VISIBLE);
-            redpacketContent.setText("你的手慢了，红包已被领取");
-            openRedpacketLayout.setVisibility(View.GONE);
-            openRedpacket.setVisibility(View.GONE);
-            redpacketDetail.setVisibility(View.VISIBLE);
         } else {
-            queryRedpacketStatus(uid, mytoken, briberyId);
+            if (!TextUtils.isEmpty(briberyId)) {
+                queryRedpacketStatus(uid, mytoken, briberyId);
+            } else {
+                dismiss();
+            }
         }
     }
 
@@ -201,7 +210,7 @@ public class OpenRedpacketFragment extends DialogFragment implements View.OnClic
 
             @Override
             public void onFailed(int code, String errorMsg) {
-                YchatToastUtils.showShort(errorMsg);
+                YchatToastUtils.showShort("网络繁忙，请重试");
             }
         });
     }
@@ -215,19 +224,34 @@ public class OpenRedpacketFragment extends DialogFragment implements View.OnClic
             @Override
             public void onSuccess(RequestInfo aVoid) {
                 resetAnimation();
-                if (aVoid.getCode() == 0) {
+                if (aVoid.getCode() == 0 || aVoid.getCode() == 100039) {
                     redpacketDetail.setVisibility(View.VISIBLE);
                     redpacketContent.setVisibility(View.GONE);
                     openRedpacketLayout.setVisibility(View.VISIBLE);
                     redpacketMoney.setText(String.valueOf(aVoid.getAmount()));
                     openRedpacket.setVisibility(View.GONE);
-                    if (callback != null) {
+                    if (callback != null && aVoid.getCode() == 0) {
                         callback.sendMessage(DemoCache.getAccount(), briberyId, true);
                         callback.sendUnclaimedEnvelope(buildUnclaimedEnvelope(1));
                     }
                     if (message != null) {
                         RedPacketAttachment attachment = (RedPacketAttachment) message.getAttachment();
                         attachment.setRpType(1);
+                        NIMClient.getService(MsgService.class).updateIMMessageStatus(message);
+                        MessageListPanelHelper.getInstance().notifyUpdateMessage(message);
+                    }
+                } else if (aVoid.getCode() == 100020) {
+                    redpacketDetail.setVisibility(View.VISIBLE);
+                    redpacketContent.setVisibility(View.VISIBLE);
+                    redpacketContent.setText("你的手慢了，红包已被领取");
+                    openRedpacketLayout.setVisibility(View.GONE);
+                    openRedpacket.setVisibility(View.GONE);
+                    if (callback != null) {
+                        callback.sendUnclaimedEnvelope(buildUnclaimedEnvelope(4));
+                    }
+                    if (message != null) {
+                        RedPacketAttachment attachment = (RedPacketAttachment) message.getAttachment();
+                        attachment.setRpType(4);
                         NIMClient.getService(MsgService.class).updateIMMessageStatus(message);
                         MessageListPanelHelper.getInstance().notifyUpdateMessage(message);
                     }
@@ -252,18 +276,17 @@ public class OpenRedpacketFragment extends DialogFragment implements View.OnClic
             @Override
             public void onFailed(int code, String errorMsg) {
                 resetAnimation();
+                redpacketDetail.setVisibility(View.VISIBLE);
+                redpacketContent.setVisibility(View.VISIBLE);
+                openRedpacketLayout.setVisibility(View.GONE);
+                openRedpacket.setVisibility(View.GONE);
+                if (callback != null) {
+                    callback.sendUnclaimedEnvelope(buildUnclaimedEnvelope(4));
+                }
                 if (code == 100028) {
                     redpacketContent.setText("本群不允许您收红包");
                 } else if (code == 100018) {
                     redpacketContent.setText("红包领取错误");
-                } else if (code == 100020) {
-                    redpacketContent.setText("你的手慢了，红包已被领取");
-                    if (message != null) {
-                        RedPacketAttachment attachment = (RedPacketAttachment) message.getAttachment();
-                        attachment.setRpType(4);
-                        NIMClient.getService(MsgService.class).updateIMMessageStatus(message);
-                        MessageListPanelHelper.getInstance().notifyUpdateMessage(message);
-                    }
                 } else if (code == 100021) {
                     redpacketContent.setText("你无法领取该红包");
                     if (message != null) {
@@ -273,14 +296,9 @@ public class OpenRedpacketFragment extends DialogFragment implements View.OnClic
                         MessageListPanelHelper.getInstance().notifyUpdateMessage(message);
                     }
                 } else {
-                    redpacketContent.setText("你无法领取该红包");
-                }
-                redpacketDetail.setVisibility(View.VISIBLE);
-                redpacketContent.setVisibility(View.VISIBLE);
-                openRedpacketLayout.setVisibility(View.GONE);
-                openRedpacket.setVisibility(View.GONE);
-                if (callback != null) {
-                    callback.sendUnclaimedEnvelope(buildUnclaimedEnvelope(4));
+                    redpacketContent.setText("");
+                    YchatToastUtils.showShort("网络繁忙，领取红包失败");
+                    dismiss();
                 }
             }
         };
@@ -292,6 +310,7 @@ public class OpenRedpacketFragment extends DialogFragment implements View.OnClic
     }
 
     private void resetAnimation() {
+        openRedpacket.setEnabled(true);
         if (animationDrawable != null) {
             animationDrawable.stop();
             animationDrawable = null;
@@ -303,12 +322,14 @@ public class OpenRedpacketFragment extends DialogFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.open_redpacket: {
-                if (CommonUtil.isFastDoubleClick()) {
+                if (System.currentTimeMillis() - lastClickTime < FAST_CLICK_DELAY_TIME) {
                     return;
                 }
+                lastClickTime = System.currentTimeMillis();
                 openRedpacket.setImageResource(R.drawable.open_redpacket_amimation);
                 animationDrawable = (AnimationDrawable) openRedpacket.getDrawable();
                 animationDrawable.start();
+                openRedpacket.setEnabled(false);
                 receiveRedpacket(uid, mytoken, briberyId, nickname);
             }
             break;

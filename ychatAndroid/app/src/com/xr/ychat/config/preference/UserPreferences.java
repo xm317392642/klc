@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.alibaba.fastjson.JSONObject;
-import com.xr.ychat.DemoCache;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.xr.ychat.DemoCache;
 
 /**
  * Created by hzxuwen on 2015/4/13.

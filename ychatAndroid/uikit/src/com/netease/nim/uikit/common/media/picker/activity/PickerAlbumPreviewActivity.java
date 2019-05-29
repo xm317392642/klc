@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -15,10 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.R;
-import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.business.session.constant.Extras;
 import com.netease.nim.uikit.business.session.constant.RequestCode;
-import com.netease.nim.uikit.common.activity.ToolBarOptions;
+import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.media.picker.adapter.PickerPreviewPagerAdapter;
 import com.netease.nim.uikit.common.media.picker.model.PhotoInfo;
@@ -94,12 +94,20 @@ public class PickerAlbumPreviewActivity extends UI implements OnClickListener, O
 
     private int mutiSelectLimitSize;
 
+    private Toolbar mToolbar;
+    private TextView mToolbarTitle;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_picker_image_preview_activity);
+        setActivityView(R.layout.nim_picker_image_preview_activity);
 
-        ToolBarOptions options = new NimToolBarOptions();
-        setToolBar(R.id.toolbar, options);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbarTitle = (TextView) findViewById(R.id.toolbar_title);
+        mToolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);
+        mToolbar.setTitle("");
+        mToolbar.setNavigationOnClickListener(v -> {
+            onNavigateUpClicked();
+        });
 
         proceedExtras();
         initActionBar();
@@ -143,7 +151,7 @@ public class PickerAlbumPreviewActivity extends UI implements OnClickListener, O
         imageViewPager.setOnPageChangeListener(this);
         imageViewPager.setOffscreenPageLimit(2);
         imageViewPagerAdapter = new PickerPreviewPagerAdapter(this, photoLists, getLayoutInflater(),
-                imageViewPager.getLayoutParams().width, imageViewPager.getLayoutParams().height, this);
+                imageViewPager.getLayoutParams().width, imageViewPager.getLayoutParams().height, PickerAlbumPreviewActivity.this);
         imageViewPager.setAdapter(imageViewPagerAdapter);
 
         setTitleIndex(firstDisplayImageIndex);
@@ -165,10 +173,10 @@ public class PickerAlbumPreviewActivity extends UI implements OnClickListener, O
 
     private void setTitleIndex(int index) {
         if (totalSize <= 0) {
-            setTitle("");
+            mToolbarTitle.setText("");
         } else {
             index++;
-            setTitle(index + "/" + totalSize);
+            mToolbarTitle.setText(index + "/" + totalSize);
         }
     }
 

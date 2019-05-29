@@ -8,8 +8,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-import com.xr.ychat.R;
-import com.xr.ychat.session.search.DisplayMessageActivity;
+import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.business.contact.core.item.AbsContactItem;
 import com.netease.nim.uikit.business.contact.core.item.ItemTypes;
 import com.netease.nim.uikit.business.contact.core.item.MsgItem;
@@ -25,9 +24,10 @@ import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.activity.ToolBarOptions;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.listview.AutoRefreshListView;
-import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.search.model.MsgIndexRecord;
+import com.xr.ychat.R;
+import com.xr.ychat.session.search.DisplayMessageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ public class GlobalSearchDetailActivity2 extends UI implements OnItemClickListen
 
         parseIntent();
 
-        setContentView(R.layout.global_search_detail);
+        setActivityView(R.layout.global_search_detail);
 
         // title name
         ToolBarOptions options = new NimToolBarOptions();

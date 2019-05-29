@@ -10,12 +10,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 
 import com.netease.nim.uikit.R;
-import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.business.session.constant.Extras;
-import com.netease.nim.uikit.common.activity.ToolBarOptions;
+import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.media.picker.model.GenericFileProvider;
 import com.netease.nim.uikit.common.media.picker.model.PhotoInfo;
@@ -66,9 +66,13 @@ public class PickImageActivity extends UI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_pick_image_activity);
-        ToolBarOptions options = new NimToolBarOptions();
-        setToolBar(R.id.toolbar, options);
+        setActivityView(R.layout.nim_pick_image_activity);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);
+        mToolbar.setTitle("");
+        mToolbar.setNavigationOnClickListener(v -> {
+            onNavigateUpClicked();
+        });
     }
 
     @Override

@@ -24,27 +24,20 @@ public class CombineHelper {
      * @param builder
      */
     private void loadByMembers(final Builder builder) {
-        Bitmap bitmap = BitmapLoader.getInstance(builder.context).getBitmapToDiskCache(builder.teamUrl);
-        if (bitmap != null) {
-            if (builder.imageView != null) {
-                builder.imageView.setImageBitmap(bitmap);
+        int subSize = builder.subSize;
+        Bitmap defaultBitmap = null;
+        if (builder.placeholder != 0) {
+            defaultBitmap = CompressHelper.getInstance()
+                    .compressResource(builder.context.getResources(), builder.placeholder, subSize, subSize);
+        }
+        ProgressHandler handler = new ProgressHandler(defaultBitmap, builder.count, new OnHandlerListener() {
+            @Override
+            public void onComplete(Bitmap[] bitmaps) {
+                setBitmap(builder, bitmaps);
             }
-        } else {
-            int subSize = builder.subSize;
-            Bitmap defaultBitmap = null;
-            if (builder.placeholder != 0) {
-                defaultBitmap = CompressHelper.getInstance()
-                        .compressResource(builder.context.getResources(), builder.placeholder, subSize, subSize);
-            }
-            ProgressHandler handler = new ProgressHandler(defaultBitmap, builder.count, new OnHandlerListener() {
-                @Override
-                public void onComplete(Bitmap[] bitmaps) {
-                    setBitmap(builder, bitmaps);
-                }
-            });
-            for (int i = 0; i < builder.count; i++) {
-                BitmapLoader.getInstance(builder.context).asyncLoad(i, builder.members.get(i), subSize, subSize, handler);
-            }
+        });
+        for (int i = 0; i < builder.count; i++) {
+            BitmapLoader.getInstance(builder.context).asyncLoad(i, builder.members.get(i), subSize, subSize, handler);
         }
     }
 
@@ -107,8 +100,7 @@ public class CombineHelper {
 
     private void setBitmap(final Builder b, Bitmap[] bitmaps) {
         Bitmap result = b.layoutManager.combineBitmap(b.size, b.subSize, b.gap, b.gapColor, bitmaps);
-
-        BitmapLoader.getInstance(b.context).saveBitmapToDiskCache(b.teamUrl, result);
+        
         // 返回最终的组合Bitmap
         if (b.progressListener != null) {
             b.progressListener.onComplete(result);

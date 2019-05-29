@@ -191,7 +191,7 @@ public class ChatRoomMessageFragment extends TFragment implements ModuleProxy {
                     @Override
                     public void onFailed(int code) {
                         if (code == ResponseCode.RES_CHATROOM_MUTED) {
-                            YchatToastUtils.showShort( "用户被禁言");
+                            YchatToastUtils.showShort("用户被禁言");
                         } else if (code == ResponseCode.RES_CHATROOM_ROOM_MUTED) {
                             YchatToastUtils.showShort("全体禁言");
                         } else {
@@ -201,7 +201,7 @@ public class ChatRoomMessageFragment extends TFragment implements ModuleProxy {
 
                     @Override
                     public void onException(Throwable exception) {
-                        YchatToastUtils.showShort( "消息发送失败！");
+                        YchatToastUtils.showShort("消息发送失败！");
                     }
                 });
         messageListPanel.onMsgSend(message);
@@ -212,7 +212,12 @@ public class ChatRoomMessageFragment extends TFragment implements ModuleProxy {
     }
 
     @Override
-    public void onUnclaimedEnvelopeClick(UnclaimedEnvelope message) {}
+    public void onUnclaimedEnvelopeClick(UnclaimedEnvelope message) {
+    }
+
+    @Override
+    public void saveMessageToLocal(IMMessage msg) {
+    }
 
     private ChatRoomMessage changeToRobotMsg(ChatRoomMessage message) {
         if (aitManager == null) {

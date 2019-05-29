@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
-import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nim.uikit.business.team.helper.UpdateMemberChangeService;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.adapter.TAdapterDelegate;
@@ -45,10 +44,8 @@ import com.xr.ychat.main.adapter.SystemMessageAdapter;
 import com.xr.ychat.main.viewholder.SystemMessageViewHolder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -121,7 +118,7 @@ public class SystemMessageActivity extends SwipeBackUI implements TAdapterDelega
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.system_notification_message_activity);
+        setActivityView(R.layout.system_notification_message_activity);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);

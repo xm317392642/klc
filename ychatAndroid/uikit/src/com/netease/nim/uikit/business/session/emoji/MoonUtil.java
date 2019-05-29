@@ -10,6 +10,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ public class MoonUtil {
     private static void viewSetText(View textView, SpannableString mSpannableString) {
         if (textView instanceof TextView) {
             TextView tv = (TextView) textView;
+            String s=mSpannableString.toString();
             tv.setText(mSpannableString);
         } else if (textView instanceof EditText) {
             EditText et = (EditText) textView;

@@ -6,14 +6,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.activity.UI;
 import com.xr.ychat.R;
 
 public class UserProtocolActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_protocol_layout);
+        setActivityView(R.layout.user_protocol_layout);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
         mToolbar.setNavigationOnClickListener(v -> finish());

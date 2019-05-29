@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.contact.core.item.ContactIdFilter;
 import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
@@ -17,7 +18,11 @@ import com.netease.nim.uikit.business.recent.RecentContactsFragment;
 import com.netease.nim.uikit.business.session.helper.MessageListPanelHelper;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.CommonUtil;
+import com.netease.nim.uikit.common.ContactHttpClient;
+import com.netease.nim.uikit.common.Preferences;
+import com.netease.nim.uikit.common.RequestInfo;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
+import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialogHelper;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.ui.widget.SwitchButton;
@@ -30,7 +35,6 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.team.model.CreateTeamResult;
-import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
 import com.xr.ychat.contact.activity.UserProfileActivity;
 import com.xr.ychat.team.TeamCreateHelper;
@@ -63,7 +67,7 @@ public class MessageInfoActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.message_info_activity);
+        setActivityView(R.layout.message_info_activity);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
@@ -76,6 +80,26 @@ public class MessageInfoActivity extends SwipeBackUI {
         });
         account = getIntent().getStringExtra(EXTRA_ACCOUNT);
         findViews();
+        getYChatNum();
+    }
+
+    private String otherYchatNo;
+
+    private void getYChatNum() {
+        DialogMaker.showProgressDialog(this, "");
+        ContactHttpClient.getInstance().getYchatAccount(Preferences.getWeiranUid(this), Preferences.getWeiranToken(this), account, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
+            @Override
+            public void onSuccess(RequestInfo aVoid) {
+                otherYchatNo = aVoid.getYchatNo();
+                DialogMaker.dismissProgressDialog();
+            }
+
+            @Override
+            public void onFailed(int code, String errorMsg) {
+                otherYchatNo = "";
+                DialogMaker.dismissProgressDialog();
+            }
+        });
     }
 
     @Override
@@ -85,6 +109,11 @@ public class MessageInfoActivity extends SwipeBackUI {
     }
 
     private void findViews() {
+        findView(R.id.complaint).setOnClickListener(v -> {
+            String urlString = "web://h5/enter?&web_view_title=投诉&person_id=" + otherYchatNo;
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+            startActivity(intent);
+        });
         HeadImageView userHead = (HeadImageView) findViewById(R.id.user_layout).findViewById(R.id.imageViewHeader);
         TextView userName = (TextView) findViewById(R.id.user_layout).findViewById(R.id.textViewName);
         userHead.loadBuddyAvatar(account);
@@ -134,9 +163,8 @@ public class MessageInfoActivity extends SwipeBackUI {
 
                     @Override
                     public void doOkAction() {
-                            NIMClient.getService(MsgService.class).clearChattingHistory(account, SessionTypeEnum.P2P);
-                            MessageListPanelHelper.getInstance().notifyClearMessages(account);//用户A给好友发送多条消息,好友点...清空聊天记录，程序崩溃（数组下标越界异常）
-
+                        NIMClient.getService(MsgService.class).clearChattingHistory(account, SessionTypeEnum.P2P);
+                        MessageListPanelHelper.getInstance().notifyClearMessages(account);//用户A给好友发送多条消息,好友点...清空聊天记录，程序崩溃（数组下标越界异常）
                     }
                 }).show();
             }
@@ -150,6 +178,7 @@ public class MessageInfoActivity extends SwipeBackUI {
                 startActivity(intent);
             }
         });
+
     }
 
     private void updateSwitchBtn() {
@@ -161,14 +190,14 @@ public class MessageInfoActivity extends SwipeBackUI {
         @Override
         public void OnChanged(View v, final boolean checkState) {
             if (!NetworkUtil.isNetAvailable(MessageInfoActivity.this)) {
-                YchatToastUtils.showShort( R.string.network_is_not_available);
+                YchatToastUtils.showShort(R.string.network_is_not_available);
                 switchButton.setCheck(!checkState);
                 return;
             }
             String tag = (String) v.getTag();
             if (TextUtils.equals(tag, KEY_MSG_NOTICE)) {
                 if (!NetworkUtil.isNetAvailable(MessageInfoActivity.this)) {
-                    YchatToastUtils.showShort( R.string.network_is_not_available);
+                    YchatToastUtils.showShort(R.string.network_is_not_available);
                     switchButton.setCheck(!checkState);
                     return;
                 }
@@ -176,7 +205,7 @@ public class MessageInfoActivity extends SwipeBackUI {
                     @Override
                     public void onSuccess(Void param) {
                         if (checkState) {
-                            YchatToastUtils.showShort( "已开启消息免打扰");
+                            YchatToastUtils.showShort("已开启消息免打扰");
                         } else {
                             YchatToastUtils.showShort("已关闭消息免打扰");
                         }
@@ -244,7 +273,7 @@ public class MessageInfoActivity extends SwipeBackUI {
         option.allowSelectEmpty = false;
         ArrayList<String> includeAccounts = new ArrayList<>();
         includeAccounts.add(account);
-        includeAccounts.add(CommonUtil.ASSISTANT_ACCOUNT);
+        includeAccounts.add(SPUtils.getInstance().getString(CommonUtil.ASSISTANT));
         option.itemFilter = new ContactIdFilter(includeAccounts, true);
         NimUIKit.startContactSelector(this, option, REQUEST_CODE_ADVANCED); // 创建群
     }

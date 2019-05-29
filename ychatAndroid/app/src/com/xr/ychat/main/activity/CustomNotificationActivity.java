@@ -13,11 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
-import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.xr.ychat.DemoCache;
-import com.xr.ychat.R;
-import com.xr.ychat.main.helper.CustomNotificationCache;
-import com.xr.ychat.main.viewholder.CustomNotificationViewHolder;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
 import com.netease.nim.uikit.common.activity.ToolBarOptions;
 import com.netease.nim.uikit.common.activity.UI;
@@ -27,8 +24,7 @@ import com.netease.nim.uikit.common.adapter.TViewHolder;
 import com.netease.nim.uikit.common.ui.dialog.EasyEditDialog;
 import com.netease.nim.uikit.common.ui.listview.AutoRefreshListView;
 import com.netease.nim.uikit.common.ui.listview.MessageListView;
-import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
+import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -36,6 +32,10 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
+import com.xr.ychat.DemoCache;
+import com.xr.ychat.R;
+import com.xr.ychat.main.helper.CustomNotificationCache;
+import com.xr.ychat.main.viewholder.CustomNotificationViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +94,7 @@ public class CustomNotificationActivity extends UI implements TAdapterDelegate {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.system_notification_message_activity);
+        setActivityView(R.layout.system_notification_message_activity);
 
         ToolBarOptions options = new NimToolBarOptions();
         options.titleId = R.string.custom_notification;

@@ -27,8 +27,7 @@ public class MessageRevokeTip {
             }
         }
 
-        if (!TextUtils.isEmpty(
-                revokeAccount) && !revokeAccount.equals(fromAccount)) {
+        if (!TextUtils.isEmpty(revokeAccount) && !revokeAccount.equals(fromAccount)) {
             return getRevokeTipOfOther(item.getSessionId(), item.getSessionType(), revokeAccount);
         } else {
             String revokeNick = ""; // 撤回者

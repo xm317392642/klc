@@ -1,6 +1,5 @@
 package com.netease.nim.uikit.business.team.viewholder;
 
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;

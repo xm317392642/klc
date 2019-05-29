@@ -53,7 +53,7 @@ public class ChatBackgroundActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_session_background);
+        setActivityView(R.layout.activity_session_background);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
         mToolbar.setTitle("");

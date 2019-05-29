@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f2f2f2"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_bar_height"
+        android:background="@color/color_be6913"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:maxWidth="210dp"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/toolbar_more"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="end"
+                android:scaleType="centerInside"
+                android:src="@drawable/more_action_icon" />
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/group_card_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="138dp"
+        android:background="@drawable/btn_white_bg_5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+            android:id="@+id/user_card_avatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/nim_avatar_default"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_corner_radius="5dp" />
+
+        <TextView
+            android:id="@+id/user_card_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:ellipsize="end"
+            android:inputType="none"
+            android:maxLines="2"
+            android:textColor="@color/color_1e1e1e"
+            android:textSize="@dimen/text_size_18"
+            app:layout_constraintBottom_toBottomOf="@+id/user_card_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/user_card_avatar"
+            app:layout_constraintTop_toTopOf="@+id/user_card_avatar" />
+
+        <TextView
+            android:id="@+id/group_card_slogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="扫一扫上面的二维码图案，加群"
+            android:textColor="@color/color_grey_999999"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.netease.nim.uikit.common.ui.widget.AspectRatioImageView
+            android:id="@+id/group_card_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:scaleType="centerCrop"
+            app:ari_ratio="1"
+            app:layout_constraintBottom_toTopOf="@+id/group_card_slogan"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_card_avatar" />
+
+        <TextView
+            android:id="@+id/group_card_coverage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/clarity_white"
+            android:gravity="center"
+            android:text="该群已开启进群验证，只可通过邀请进群"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/group_card_image"
+            app:layout_constraintEnd_toEndOf="@+id/group_card_image"
+            app:layout_constraintStart_toStartOf="@+id/group_card_image"
+            app:layout_constraintTop_toTopOf="@+id/group_card_image" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>
+
+
+
+

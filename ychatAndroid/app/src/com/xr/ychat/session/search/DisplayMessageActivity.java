@@ -7,17 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.netease.nim.uikit.common.UnclaimedEnvelope;
-import com.xr.ychat.R;
+import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.business.session.module.Container;
 import com.netease.nim.uikit.business.session.module.ModuleProxy;
 import com.netease.nim.uikit.business.session.module.list.MessageListPanelEx;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
+import com.netease.nim.uikit.common.UnclaimedEnvelope;
 import com.netease.nim.uikit.common.activity.ToolBarOptions;
 import com.netease.nim.uikit.common.activity.UI;
-import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.xr.ychat.R;
 
 /**
  * 搜索结果消息列表界面
@@ -52,7 +52,7 @@ public class DisplayMessageActivity extends UI implements ModuleProxy {
         super.onCreate(savedInstanceState);
 
         View rootView = LayoutInflater.from(this).inflate(R.layout.message_history_activity, null);
-        setContentView(rootView);
+        setActivityView(rootView);
 
         ToolBarOptions options = new NimToolBarOptions();
         options.titleId = com.netease.nim.uikit.R.string.empty;
@@ -87,6 +87,10 @@ public class DisplayMessageActivity extends UI implements ModuleProxy {
     @Override
     public boolean sendMessage(IMMessage msg) {
         return false;
+    }
+
+    @Override
+    public void saveMessageToLocal(IMMessage msg) {
     }
 
     @Override

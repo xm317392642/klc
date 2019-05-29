@@ -126,7 +126,7 @@ public class WatchVideoActivity extends SwipeBackUI implements Callback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.nim_watch_video_activity);
+        setActivityView(R.layout.nim_watch_video_activity);
 
         parseIntent();
         findViews();
@@ -294,7 +294,6 @@ public class WatchVideoActivity extends SwipeBackUI implements Callback {
                 } else {
                     // 由于mediaPlayer取到的时间不统一,采用消息体中的时间
                     int leftTimes = (int) (videoLength * 1000 - mediaPlayer.getCurrentPosition());
-                    Log.e("xx", "leftTimes=" + leftTimes);
                     if (leftTimes < 0) {
                         leftTimes = 0;
                     }
@@ -302,8 +301,6 @@ public class WatchVideoActivity extends SwipeBackUI implements Callback {
 
                     playTimeTextView.setVisibility(View.VISIBLE);
                     long seconds = TimeUtil.getSecondsByMilliseconds(leftTimes);
-                    Log.e("xx", "seconds=" + seconds);
-                    Log.e("xx", "TimeUtil.secToTime((int) seconds)=" + TimeUtil.secToTime((int) seconds));
                     playTimeTextView.setText(TimeUtil.secToTime((int) seconds));
                     int cProgress = (int) (videoLength - seconds);
                     if (cProgress < 10) {

@@ -2,35 +2,30 @@ package com.xr.ychat;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.microquation.linkedme.android.LinkedME;
-import com.netease.nim.avchatkit.AVChatKit;
-import com.netease.nim.avchatkit.BuildConfig;
-import com.netease.nim.avchatkit.config.AVChatOptions;
-import com.netease.nim.avchatkit.model.ITeamDataProvider;
-import com.netease.nim.avchatkit.model.IUserInfoProvider;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
 import com.netease.nim.uikit.business.contact.core.query.PinYin;
-import com.netease.nim.uikit.business.team.helper.TeamHelper;
-import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
+import com.netease.nim.uikit.business.session.constant.Extras;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.swipeback.ActivityLifecycleHelper;
+import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.mixpush.NIMPushClient;
-import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
-import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 import com.netease.nimlib.sdk.util.NIMUtil;
 import com.tencent.bugly.crashreport.CrashReport;
-import com.xr.ychat.common.util.LogHelper;
+import com.tendcloud.tenddata.TCAgent;
 import com.xr.ychat.config.preference.UserPreferences;
 import com.xr.ychat.contact.ContactHelper;
-import com.xr.ychat.main.activity.MainActivity;
 import com.xr.ychat.main.activity.MiddleActivity;
-import com.xr.ychat.main.activity.WelcomeActivity;
 import com.xr.ychat.mixpush.DemoMixPushMessageHandler;
 import com.xr.ychat.mixpush.DemoPushContentProvider;
 import com.xr.ychat.redpacket.NIMRedPacketClient;
@@ -43,6 +38,12 @@ public class NimApplication extends Application {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
         MultiDex.install(this);
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        YchatToastUtils.showShort("NimApplication onTerminate");
     }
 
     /**
@@ -80,7 +81,7 @@ public class NimApplication extends Application {
             // 云信sdk相关业务初始化
             NIMInitManager.getInstance().init(true);
             // 初始化音视频模块
-            initAVChatKit();
+            //initAVChatKit();
         }
         // 初始化SDK
         LinkedME.getInstance(this);
@@ -93,6 +94,11 @@ public class NimApplication extends Application {
         LinkedME.getInstance().setImmediate(false);
         //设置处理跳转逻辑的中转页，MiddleActivity详见后续配置
         LinkedME.getInstance().setHandleActivity(MiddleActivity.class.getName());
+        if (BuildConfig.DEBUG) {
+            TCAgent.LOG_ON = true;
+        }
+        TCAgent.init(this);
+        TCAgent.setReportUncaughtExceptions(true);
     }
 
     private LoginInfo getLoginInfo() {
@@ -128,44 +134,6 @@ public class NimApplication extends Application {
         return options;
     }
 
-    private void initAVChatKit() {
-        AVChatOptions avChatOptions = new AVChatOptions() {
-            @Override
-            public void logout(Context context) {
-                NimUserInfo userInfo = (NimUserInfo) NimUIKit.getUserInfoProvider().getUserInfo(DemoCache.getAccount());
-                MainActivity.logout(context, true, userInfo.getAvatar());
-            }
-        };
-        avChatOptions.entranceActivity = WelcomeActivity.class;
-        avChatOptions.notificationIconRes = R.drawable.ic_stat_notify_msg;
-        AVChatKit.init(avChatOptions);
 
-        // 初始化日志系统
-        LogHelper.init();
-        // 设置用户相关资料提供者
-        AVChatKit.setUserInfoProvider(new IUserInfoProvider() {
-            @Override
-            public UserInfo getUserInfo(String account) {
-                return NimUIKit.getUserInfoProvider().getUserInfo(account);
-            }
-
-            @Override
-            public String getUserDisplayName(String account) {
-                return UserInfoHelper.getUserDisplayName(account);
-            }
-        });
-        // 设置群组数据提供者
-        AVChatKit.setTeamDataProvider(new ITeamDataProvider() {
-            @Override
-            public String getDisplayNameWithoutMe(String teamId, String account) {
-                return TeamHelper.getDisplayNameWithoutMe(teamId, account);
-            }
-
-            @Override
-            public String getTeamMemberDisplayName(String teamId, String account) {
-                return TeamHelper.getTeamMemberDisplayName(teamId, account);
-            }
-        });
-    }
 
 }

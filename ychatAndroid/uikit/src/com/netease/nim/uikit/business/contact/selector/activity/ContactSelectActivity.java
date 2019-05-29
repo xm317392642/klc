@@ -23,6 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.R;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.business.ait.AitContactType;
+import com.netease.nim.uikit.business.ait.selector.AitContactSelectorActivity;
 import com.netease.nim.uikit.business.contact.core.item.AbsContactItem;
 import com.netease.nim.uikit.business.contact.core.item.ContactItem;
 import com.netease.nim.uikit.business.contact.core.item.ContactItemFilter;
@@ -38,11 +41,13 @@ import com.netease.nim.uikit.business.contact.selector.adapter.ContactSelectAdap
 import com.netease.nim.uikit.business.contact.selector.adapter.ContactSelectAvatarAdapter;
 import com.netease.nim.uikit.business.contact.selector.viewholder.ContactsMultiSelectHolder;
 import com.netease.nim.uikit.business.contact.selector.viewholder.ContactsSelectHolder;
+import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.ui.liv.LetterIndexView;
 import com.netease.nim.uikit.common.ui.liv.LivIndex;
 import com.netease.nim.uikit.common.ui.widget.RoundRectTextView;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
+import com.netease.nim.uikit.impl.cache.TeamDataCache;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -183,6 +188,8 @@ public class ContactSelectActivity extends SwipeBackUI implements View.OnClickLi
          * 是否显示最大数目，结合maxSelectNum,与搜索位置相同
          */
         public boolean maxSelectNumVisible = false;
+
+        public boolean isAit=false;
     }
 
     public static void startActivityForResult(Context context, Option option, int requestCode) {
@@ -228,7 +235,7 @@ public class ContactSelectActivity extends SwipeBackUI implements View.OnClickLi
         });
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         this.searchView = searchView;
-        //this.searchView.setVisibility(option.searchVisible ? View.VISIBLE : View.GONE);
+        this.searchView.setVisibility(View.VISIBLE);
         searchView.setOnQueryTextListener(this);
         return true;
     }
@@ -236,12 +243,14 @@ public class ContactSelectActivity extends SwipeBackUI implements View.OnClickLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_contacts_select);
+        setActivityView(R.layout.nim_contacts_select);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         mToolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);
+        mToolbar.setContentInsetStartWithNavigation(0);
         mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
         mToolbar.setNavigationOnClickListener(v -> finish());
 
         parseIntentData();
@@ -338,9 +347,9 @@ public class ContactSelectActivity extends SwipeBackUI implements View.OnClickLi
 
             private void setSearchViewVisible(boolean visible) {
                 option.searchVisible = visible;
-                //if (searchView != null) {
-                //searchView.setVisibility(option.searchVisible ? View.VISIBLE : View.GONE);
-                //}
+                if (searchView != null) {
+                    searchView.setVisibility(View.VISIBLE);
+                }
             }
         };
 
@@ -597,7 +606,12 @@ public class ContactSelectActivity extends SwipeBackUI implements View.OnClickLi
 
     public void onSelected(ArrayList<String> selects) {
         Intent intent = new Intent();
-        intent.putStringArrayListExtra(RESULT_DATA, selects);
+        if(option.isAit){
+            intent.putExtra(AitContactSelectorActivity.RESULT_TYPE, AitContactType.TEAM_MEMBER);
+            intent.putExtra(AitContactSelectorActivity.RESULT_DATA, TeamDataCache.getInstance().getTeamMember(option.teamId,selects.get(0)));
+        }else{
+            intent.putStringArrayListExtra(RESULT_DATA, selects);
+        }
         setResult(Activity.RESULT_OK, intent);
         this.finish();
     }

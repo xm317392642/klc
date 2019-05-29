@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.SparseArray;
 
-import com.netease.nim.avchatkit.AVChatKit;
-import com.xr.ychat.DemoCache;
 import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
@@ -17,6 +15,7 @@ import com.netease.nimlib.sdk.mixpush.MixPushMessageHandler;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.xr.ychat.DemoCache;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -76,17 +75,17 @@ public class DemoMixPushMessageHandler implements MixPushMessageHandler {
     public boolean cleanMixPushNotifications(int pushType) {
         Context context = DemoCache.getContext();
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (manager != null) {
-            manager.cancelAll();
-            SparseArray<Notification> nos = AVChatKit.getNotifications();
-            if (nos != null) {
-                int key = 0;
-                for (int i = 0; i < nos.size(); i++) {
-                    key = nos.keyAt(i);
-                    manager.notify(key, nos.get(key));
-                }
-            }
-        }
+//        if (manager != null) {
+//            manager.cancelAll();
+//            SparseArray<Notification> nos = AVChatKit.getNotifications();
+//            if (nos != null) {
+//                int key = 0;
+//                for (int i = 0; i < nos.size(); i++) {
+//                    key = nos.keyAt(i);
+//                    manager.notify(key, nos.get(key));
+//                }
+//            }
+//        }
         return true;
     }
 }

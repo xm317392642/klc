@@ -28,7 +28,9 @@ import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
+import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
+import com.netease.nim.uikit.common.util.string.StringUtil;
 import com.xr.ychat.R;
 import com.xr.ychat.location.adapter.IconListAdapter;
 import com.xr.ychat.location.adapter.IconListAdapter.IconListItem;
@@ -36,8 +38,6 @@ import com.xr.ychat.location.helper.MapHelper;
 import com.xr.ychat.location.helper.NimLocationManager;
 import com.xr.ychat.location.helper.NimLocationManager.NimLocationListener;
 import com.xr.ychat.location.model.NimLocation;
-import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog;
-import com.netease.nim.uikit.common.util.string.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +72,7 @@ public class NavigationAmapActivity extends SwipeBackUI implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map_view_amap_navigation_layout);
+        setActivityView(R.layout.map_view_amap_navigation_layout);
         mapView = (MapView) findViewById(R.id.autonavi_mapView);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
 

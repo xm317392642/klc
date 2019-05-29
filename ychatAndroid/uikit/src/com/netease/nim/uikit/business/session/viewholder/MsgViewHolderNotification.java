@@ -1,13 +1,20 @@
 package com.netease.nim.uikit.business.session.viewholder;
 
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.R;
+import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.session.emoji.MoonUtil;
 import com.netease.nim.uikit.business.session.helper.TeamNotificationHelper;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseMultiItemFetchLoadAdapter;
+import com.netease.nim.uikit.common.util.YchatToastUtils;
+import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
+import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
+import com.netease.nimlib.sdk.team.constant.TeamMemberType;
+import com.netease.nimlib.sdk.team.model.TeamMember;
 
 public class MsgViewHolderNotification extends MsgViewHolderBase {
 
@@ -29,8 +36,8 @@ public class MsgViewHolderNotification extends MsgViewHolderBase {
 
     @Override
     protected void bindContentView() {
-
-        handleTextNotification(getDisplayText());
+        String text = getDisplayText();
+        handleTextNotification(text);
     }
 
     protected String getDisplayText() {

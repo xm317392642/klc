@@ -15,21 +15,12 @@ import com.netease.nim.uikit.business.contact.core.model.ContactDataAdapter;
 import com.netease.nim.uikit.business.contact.core.model.IContact;
 import com.netease.nim.uikit.business.contact.core.viewholder.AbsContactViewHolder;
 import com.netease.nim.uikit.business.contact.selector.adapter.ContactSelectAdapter;
-import com.netease.nim.uikit.common.ui.combinebitmap.helper.BitmapLoader;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.team.TeamService;
 import com.netease.nimlib.sdk.team.constant.TeamMemberType;
+import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 
 import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 public class ContactsSelectHolder extends AbsContactViewHolder<ContactItem> {
     private final boolean multi;
@@ -78,25 +69,7 @@ public class ContactsSelectHolder extends AbsContactViewHolder<ContactItem> {
             this.image.loadBuddyAvatar(contact.getContactId());
         } else if (contact.getContactType() == IContact.Type.Team) {
             String teamId = contact.getContactId();
-            NIMClient.getService(TeamService.class).queryMemberList(teamId).setCallback(new RequestCallback<List<TeamMember>>() {
-                @Override
-                public void onSuccess(List<TeamMember> param) {
-                    if (param != null && param.size() > 0) {
-                        BitmapLoader.getInstance(context).removeBitmapToMemoryCache("ychat://com.xr.ychat?groupId=" + teamId);
-                        image.loadTeamIconByTeam(param, teamId);
-                    }
-                }
-
-                @Override
-                public void onFailed(int code) {
-
-                }
-
-                @Override
-                public void onException(Throwable exception) {
-
-                }
-            });
+            image.loadTeamIconByTeam(NimUIKit.getTeamProvider().getTeamById(teamId));
         }
         image.setVisibility(View.VISIBLE);
     }

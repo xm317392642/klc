@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.alibaba.fastjson.JSONException;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.common.ApplyLeaveTeam;
@@ -13,10 +12,14 @@ import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.msg.SystemMessageService;
+import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.xr.ychat.main.helper.CustomNotificationCache;
 import com.xr.ychat.main.helper.SystemMessageUnreadManager;
 import com.xr.ychat.main.reminder.ReminderManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 自定义通知消息广播接收器
@@ -38,14 +41,20 @@ public class CustomNotificationReceiver extends BroadcastReceiver {
                     applyLeaveTeam.setHasRead(false);
                     notification.setContent(gson.toJson(applyLeaveTeam));
                     CustomNotificationCache.addCustomNotification(notification);
-                    int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock() + CustomNotificationCache.getUnreadCount();
+                    List<SystemMessageType> systemMessageTypes = new ArrayList<>();
+                    systemMessageTypes.add(SystemMessageType.TeamInvite);
+                    int teamInviteNumber = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountByType(systemMessageTypes);
+                    if (teamInviteNumber > 0) {
+                        NIMClient.getService(SystemMessageService.class).resetSystemMessageUnreadCountByType(systemMessageTypes);
+                    }
+                    int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock() - teamInviteNumber + CustomNotificationCache.getUnreadCount();
                     SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unread);
                     ReminderManager.getInstance().updateContactUnreadNum(unread);
                     LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
                     Intent intent1 = new Intent("com.xr.ychat.LastNotificationReceiver");
                     localBroadcastManager.sendBroadcast(intent1);
                 }
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 LogUtil.e("demo", e.getMessage());
             }
 

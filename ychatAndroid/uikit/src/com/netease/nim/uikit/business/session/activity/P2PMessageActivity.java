@@ -7,12 +7,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
@@ -126,8 +128,8 @@ public class P2PMessageActivity extends BaseMessageActivity {
     }
 
     private void requestBuddyInfo() {
-        toolbarAction.setVisibility(TextUtils.equals(sessionId, CommonUtil.ASSISTANT_ACCOUNT) ? View.GONE : View.VISIBLE);
-        toolbarTitle.setText(TextUtils.equals(sessionId, CommonUtil.ASSISTANT_ACCOUNT) ? "空了吹小助手" : UserInfoHelper.getUserTitleName(sessionId, SessionTypeEnum.P2P));
+        toolbarAction.setVisibility(TextUtils.equals(sessionId, SPUtils.getInstance().getString(CommonUtil.ASSISTANT)) ? View.GONE : View.VISIBLE);
+        toolbarTitle.setText(TextUtils.equals(sessionId, SPUtils.getInstance().getString(CommonUtil.ASSISTANT)) ? "空了吹小助手" : UserInfoHelper.getUserTitleName(sessionId, SessionTypeEnum.P2P));
         if (UserPreferences.isEarPhoneModeEnable()) {
             Drawable drawable = getResources().getDrawable(R.drawable.ear_small);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());//必须设置图片大小，否则不显示
@@ -257,7 +259,6 @@ public class P2PMessageActivity extends BaseMessageActivity {
     @Override
     protected void initToolBar() {
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
-        toolbarTitle.setText("群聊");
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);
         mToolbar.setTitle("");

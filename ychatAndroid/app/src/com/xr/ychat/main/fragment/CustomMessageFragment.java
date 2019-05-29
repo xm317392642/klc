@@ -213,6 +213,7 @@ public class CustomMessageFragment extends Fragment implements TAdapterDelegate,
             command.setSessionId(message.getSessionId());
             command.setSessionType(SessionTypeEnum.P2P);
             applyLeaveTeam.setTeamLeaveType(1);
+            applyLeaveTeam.setHasRead(true);
             applyLeaveTeam.setContent(UserInfoHelper.getUserDisplayName(NimUIKit.getAccount()) + "[已同意退群申请]");
             String newContent = gson.toJson(applyLeaveTeam);
             int index = items.indexOf(message);
@@ -270,6 +271,7 @@ public class CustomMessageFragment extends Fragment implements TAdapterDelegate,
             command.setSessionId(message.getSessionId());
             command.setSessionType(SessionTypeEnum.P2P);
             applyLeaveTeam.setTeamLeaveType(2);
+            applyLeaveTeam.setHasRead(true);
             applyLeaveTeam.setContent(UserInfoHelper.getUserDisplayName(NimUIKit.getAccount()) + "[已拒绝退群申请]");
             String newContent = gson.toJson(applyLeaveTeam);
             int index = items.indexOf(message);

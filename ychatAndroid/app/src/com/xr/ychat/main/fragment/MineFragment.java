@@ -1,6 +1,5 @@
 package com.xr.ychat.main.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,18 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
+import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
-import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
-import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.netease.nim.uikit.common.util.sys.NetworkUtil;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.uinfo.UserService;
-import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
@@ -34,10 +29,8 @@ import com.xr.ychat.main.activity.SettingsActivity;
 import com.xr.ychat.redpacket.BindAlipayActivity;
 import com.xr.ychat.redpacket.RedpactRecordActivity;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class MineFragment extends Fragment {
+    private static final int REQUEST_CODE_DETAIL = 101;
     private HeadImageView avatar;
     private TextView name;
     private TextView account;
@@ -80,12 +73,12 @@ public class MineFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        userAccount = DemoCache.getAccount();
         uid = Preferences.getWeiranUid(getActivity());
         mytoken = Preferences.getWeiranToken(getActivity());
         getUserInfo();
         listener = v -> {
             switch (v.getId()) {
+                case R.id.mine_avatar:
                 case R.id.mine_information: {
                     UserProfileSettingActivity.start(getActivity(), DemoCache.getAccount());
                 }
@@ -99,7 +92,12 @@ public class MineFragment extends Fragment {
                 }
                 break;
                 case R.id.mine_packet: {
-                    queryAlipayAccount();
+                    String aliuid = SPUtils.getInstance().getString(CommonUtil.ALIPAYUID);
+                    if (TextUtils.isEmpty(aliuid)) {
+                        BindAlipayActivity.start(getActivity());
+                    } else {
+                        RedpactRecordActivity.start(getActivity(), REQUEST_CODE_DETAIL);
+                    }
                 }
                 break;
                 case R.id.mine_scan: {
@@ -114,9 +112,11 @@ public class MineFragment extends Fragment {
         setting.setOnClickListener(listener);
         help.setOnClickListener(listener);
         infomation.setOnClickListener(listener);
+        queryAlipayAccount();
     }
 
     private void getUserInfo() {
+        userAccount = NimUIKit.getAccount();
         userInfo = (NimUserInfo) NimUIKit.getUserInfoProvider().getUserInfo(userAccount);
         if (userInfo == null) {
             NimUIKit.getUserInfoProvider().getUserInfoAsync(userAccount, new SimpleCallback<NimUserInfo>() {
@@ -137,17 +137,23 @@ public class MineFragment extends Fragment {
     private void updateUI() {
         name.setText(String.format("%1$s", userInfo.getName()));
         avatar.loadAvatar(userInfo.getAvatar());
-        ContactHttpClient.getInstance().getYchatAccount(uid, mytoken, userAccount, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
-            @Override
-            public void onSuccess(RequestInfo aVoid) {
-                account.setText(String.format("空了吹号: %1$s", aVoid.getYchatNo()));
-            }
+        String ychatNo = SPUtils.getInstance().getString(CommonUtil.YCHAT_ACCOUNT);
+        if (TextUtils.isEmpty(ychatNo)) {
+            ContactHttpClient.getInstance().getYchatAccount(uid, mytoken, userAccount, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
+                @Override
+                public void onSuccess(RequestInfo aVoid) {
+                    SPUtils.getInstance().put(CommonUtil.YCHAT_ACCOUNT, aVoid.getYchatNo());
+                    account.setText(String.format("空了吹号: %1$s", aVoid.getYchatNo()));
+                }
 
-            @Override
-            public void onFailed(int code, String errorMsg) {
-                account.setText(String.format("空了吹号: %1$s", userInfo.getAccount()));
-            }
-        });
+                @Override
+                public void onFailed(int code, String errorMsg) {
+                    account.setText("");
+                }
+            });
+        } else {
+            account.setText(String.format("空了吹号: %1$s", ychatNo));
+        }
     }
 
     @Override
@@ -157,28 +163,17 @@ public class MineFragment extends Fragment {
     }
 
     private void queryAlipayAccount() {
-        if (!NetworkUtil.isNetAvailable(getActivity())) {
-            YchatToastUtils.showShort(R.string.network_is_not_available);
-            return;
-        }
-        DialogMaker.showProgressDialog(getActivity(), "", false);
         ContactHttpClient.getInstance().queryAlipayAccount(uid, mytoken, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
             @Override
             public void onSuccess(RequestInfo aVoid) {
-                DialogMaker.dismissProgressDialog();
-                if (TextUtils.isEmpty(aVoid.getAliuid())) {
-                    BindAlipayActivity.start(getActivity());
-                } else {
-                    RedpactRecordActivity.start(getActivity());
-                }
+                SPUtils.getInstance().put(CommonUtil.ALIPAYUID, aVoid.getAliuid());
             }
 
             @Override
             public void onFailed(int code, String errorMsg) {
-                DialogMaker.dismissProgressDialog();
+
             }
         });
     }
-
 
 }

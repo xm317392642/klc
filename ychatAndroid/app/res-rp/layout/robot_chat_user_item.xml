@@ -27,7 +27,6 @@
             android:layout_marginStart="12dp"
             android:includeFontPadding="false"
             android:singleLine="true"
-            android:text="用户昵称"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_13" />
 
@@ -37,9 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:includeFontPadding="false"
-            android:text="ID:123456"
             android:textColor="@color/color_grey_888888"
-            android:textSize="@dimen/text_size_11" />
+            android:textSize="@dimen/text_size_11"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/user_score"
@@ -47,7 +46,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:includeFontPadding="false"
-            android:text="分数：9"
             android:textColor="@color/color_1485ef"
             android:textSize="@dimen/text_size_14" />
 

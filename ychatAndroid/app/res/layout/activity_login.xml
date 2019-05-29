@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
@@ -9,7 +10,7 @@
         android:id="@+id/login_icon"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -55,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="63dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:layout_marginEnd="63dp"
             android:layout_marginBottom="26dp"
             android:visibility="visible">
@@ -236,8 +237,8 @@
         android:id="@+id/login_user_agreement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:padding="10dp"
+        android:layout_marginBottom="10dp"
+        android:padding="6dp"
         android:textColor="@color/color_1e1e1e"
         android:background="?attr/selectableItemBackground"
         android:textSize="12sp"
@@ -247,33 +248,32 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <FrameLayout
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_height="40dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="25dp">
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#D2D2D2"
             android:layout_gravity="center_vertical"
-            />
+            android:background="#D2D2D2" />
+
         <TextView
-            android:id="@+id/tx_third_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="第三方登录"
-            android:paddingLeft="11dp"
-            android:paddingRight="11dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:layout_gravity="center"
-            android:textSize="13sp"
-            android:background="@color/white"
             android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:paddingLeft="11dp"
+            android:paddingTop="5dp"
+            android:paddingRight="11dp"
+            android:paddingBottom="5dp"
+            android:text="第三方登录"
             android:textColor="#010101"
-            />
+            android:textSize="13sp" />
 
     </FrameLayout>
 
@@ -282,10 +282,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
-        android:src="@mipmap/wechat_circle"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:background="?attr/selectableItemBackground"
+        android:src="@drawable/wechat_login"
+        app:layout_constraintBottom_toTopOf="@+id/login_user_agreement"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 </android.support.constraint.ConstraintLayout>

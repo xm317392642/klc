@@ -151,27 +151,31 @@
             android:id="@+id/invite_type_identity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:text="进群方式"
             android:textColor="@color/color_black_333333"
             android:textSize="@dimen/text_size_16"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/invite_type_detail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/invite_type_detail"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:gravity="right|center_vertical"
+            android:layout_marginEnd="15dp"
+            android:ellipsize="end"
+            android:gravity="end|center_vertical"
             android:hint="@string/team_nickname_none"
+            android:singleLine="true"
             android:textColor="@color/grey"
             android:textSize="@dimen/text_size_17"
             app:layout_constraintBottom_toBottomOf="@+id/invite_type_identity"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/invite_type_identity"
             app:layout_constraintTop_toTopOf="@+id/invite_type_identity" />
     </android.support.constraint.ConstraintLayout>
 

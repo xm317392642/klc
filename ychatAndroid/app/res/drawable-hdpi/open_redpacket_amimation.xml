@@ -4,24 +4,24 @@
 
     <item
         android:drawable="@drawable/kai_1"
-        android:duration="100"></item>
+        android:duration="100" />
     <item
         android:drawable="@drawable/kai_2"
-        android:duration="100"></item>
+        android:duration="100" />
     <item
         android:drawable="@drawable/kai_3"
-        android:duration="100"></item>
+        android:duration="100" />
     <item
         android:drawable="@drawable/kai_4"
-        android:duration="100"></item>
+        android:duration="100" />
     <item
         android:drawable="@drawable/kai_5"
-        android:duration="100"></item>
+        android:duration="100" />
     <item
         android:drawable="@drawable/kai_6"
-        android:duration="100"></item>
+        android:duration="100" />
     <item
         android:drawable="@drawable/kai_7"
-        android:duration="100"></item>
+        android:duration="100" />
     
 </animation-list>

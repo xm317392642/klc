@@ -28,16 +28,6 @@
         </item>
     </style>
 
-    <style name="blue_bottom_line_edit_text_style" parent="@android:style/Widget.EditText">
-        <item name="android:background">@drawable/nim_blue_edit_text_bg</item>
-        <item name="android:paddingLeft">6dp</item>
-        <item name="android:paddingRight">6dp</item>
-        <item name="android:paddingBottom">6dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:gravity">center_vertical</item>
-    </style>
-
     <style name="horizontal_light_thin_divider">
         <item name="android:layout_height">2px</item>
         <item name="android:layout_width">fill_parent</item>

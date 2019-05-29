@@ -3,6 +3,7 @@
 
     <color name="transparent">#00000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="clarity_white">#F2FFFFFF</color>
     <color name="black">#000000</color>
     <color name="grey">#333333</color>
     <color name="global_bg">#9000</color>
@@ -69,5 +70,6 @@
     <color name="color_888888">#888888</color>
     <color name="color_3774fe">#3774FE</color>
     <color name="color_e6e9ec">#E6E9EC</color>
+    <color name="color_201e1e">#201E1E</color>
 
 </resources>

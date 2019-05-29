@@ -12,10 +12,10 @@ import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.text.TextUtils;
 
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.common.util.sys.NetworkUtil;
 import com.xr.ychat.common.util.sys.InstallUtil;
 import com.xr.ychat.common.util.sys.SysInfoUtil;
-import com.netease.nim.uikit.common.util.sys.NetworkUtil;
-import com.netease.nim.uikit.api.NimUIKit;
 
 import java.io.BufferedReader;
 import java.io.File;

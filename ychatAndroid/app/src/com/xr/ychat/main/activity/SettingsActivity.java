@@ -12,7 +12,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.common.CommonUtil;
+import com.netease.nim.uikit.common.Preferences;
+import com.netease.nim.uikit.common.UnsentRedPacketCache;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialog;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
@@ -66,7 +70,7 @@ public class SettingsActivity extends SwipeBackUI implements SettingsAdapter.Swi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
+        setActivityView(R.layout.settings_activity);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
@@ -100,7 +104,7 @@ public class SettingsActivity extends SwipeBackUI implements SettingsAdapter.Swi
     Observer<Boolean> pushConfigObserver = new Observer<Boolean>() {
         @Override
         public void onEvent(Boolean aBoolean) {
-            YchatToastUtils.showShort( "收到multiport push config：" + aBoolean);
+            YchatToastUtils.showShort("收到multiport push config：" + aBoolean);
         }
     };
 
@@ -217,16 +221,24 @@ public class SettingsActivity extends SwipeBackUI implements SettingsAdapter.Swi
                 exit(userInfo);
             });
         } else {
-          exit(userInfo);
+            exit(userInfo);
         }
     }
 
-    private void exit(NimUserInfo userInfo){
-
+    private void exit(NimUserInfo userInfo) {
+        NimUIKit.setAccount(null);
+        DemoCache.setAccount(null);
+        Preferences.saveWeiranUid(this, "");
+        Preferences.saveWeiranToken(this, "");
+        SPUtils.getInstance().remove(CommonUtil.ALIPAYUID);
+        SPUtils.getInstance().remove(CommonUtil.ASSISTANT);
+        SPUtils.getInstance().remove(CommonUtil.YCHAT_ACCOUNT);
+        SPUtils.getInstance().remove(UnsentRedPacketCache.TAG);
         MainActivity.logout(SettingsActivity.this, true, userInfo.getAvatar());
         NIMClient.getService(AuthService.class).logout();
         finish();
     }
+
     @Override
     public void onSwitchChange(SettingTemplate item, boolean checkState) {
         switch (item.getId()) {
@@ -266,7 +278,7 @@ public class SettingsActivity extends SwipeBackUI implements SettingsAdapter.Swi
                     notificationItem.setChecked(checkState);
                     setToggleNotification(checkState);
                 } else if (code == ResponseCode.RES_EFREQUENTLY) {
-                    YchatToastUtils.showShort( R.string.operation_too_frequent);
+                    YchatToastUtils.showShort(R.string.operation_too_frequent);
                 } else {
                     YchatToastUtils.showShort(R.string.user_info_update_failed);
                 }

@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.netease.nim.uikit.business.contact.core.item.AbsContactItem;
 import com.netease.nim.uikit.business.contact.core.item.ContactItemFilter;
 import com.netease.nim.uikit.business.contact.core.model.ContactDataTask.Host;
@@ -23,8 +22,6 @@ import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nim.uikit.impl.cache.UIKitLogTag;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,7 +130,6 @@ public class ContactDataAdapter extends BaseAdapter {
         AbsContactViewHolder<AbsContactItem> holder = null;
         try {
             if (convertView == null || (holder = (AbsContactViewHolder<AbsContactItem>) convertView.getTag()) == null) {
-                LogUtils.e(position + " item.getItemType()" + item.getItemType());
                 holder = (AbsContactViewHolder<AbsContactItem>) viewHolderMap.get(item.getItemType()).newInstance();
                 if (holder != null) {
                     holder.create(context);

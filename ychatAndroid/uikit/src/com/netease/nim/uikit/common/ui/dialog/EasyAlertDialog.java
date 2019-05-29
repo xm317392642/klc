@@ -2,9 +2,9 @@ package com.netease.nim.uikit.common.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -242,6 +242,9 @@ public class EasyAlertDialog extends Dialog {
             if (messageTV != null) {
                 messageTV.setText(message);
                 setMessageVisible(isMessageVisble);
+                if(title.toString().contains("最新版本")){
+                    messageTV.setGravity(Gravity.LEFT);
+                }
                 if (NO_TEXT_COLOR != msgTextColor)
                     messageTV.setTextColor(msgTextColor);
                 if (NO_TEXT_SIZE != msgTextSize)

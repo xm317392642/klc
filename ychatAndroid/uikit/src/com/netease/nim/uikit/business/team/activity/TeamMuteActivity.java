@@ -26,7 +26,7 @@ public class TeamMuteActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_advanced_team_mute_activity);
+        setActivityView(R.layout.nim_advanced_team_mute_activity);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);
         mToolbar.setTitle("");

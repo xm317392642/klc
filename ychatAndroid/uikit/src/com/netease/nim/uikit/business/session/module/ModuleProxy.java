@@ -12,6 +12,8 @@ public interface ModuleProxy extends Serializable {
     // 发送消息
     boolean sendMessage(IMMessage msg);
 
+    void saveMessageToLocal(IMMessage msg);
+
     // 消息输入区展开时候的处理
     void onInputPanelExpand();
 

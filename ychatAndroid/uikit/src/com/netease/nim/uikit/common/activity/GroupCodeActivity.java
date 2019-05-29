@@ -10,24 +10,23 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ImageUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.R;
-import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.api.model.SimpleCallback;
-import com.netease.nim.uikit.common.ui.combinebitmap.helper.BitmapLoader;
+import com.netease.nim.uikit.business.team.model.TeamExtras;
+import com.netease.nim.uikit.common.TeamExtension;
 import com.netease.nim.uikit.common.ui.dialog.MenuDialog;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.ui.widget.AspectRatioImageView;
 import com.netease.nim.uikit.common.util.QrCodeUtils;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.team.TeamService;
 import com.netease.nimlib.sdk.team.model.Team;
-import com.netease.nimlib.sdk.team.model.TeamMember;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,16 +41,19 @@ public class GroupCodeActivity extends SwipeBackUI {
     private ImageView moreAction;
     private HeadImageView userAvatar;
     private TextView userName;
+    private TextView coverage;
     private AspectRatioImageView codeImage;
     private ConstraintLayout constraintLayout;
     private Team team;
+    private Gson gson;
+    private boolean inviteVerity = false;
     private MenuDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_qrcode);
-
+        setActivityView(R.layout.activity_group_qrcode);
+        gson = new Gson();
         team = (Team) getIntent().getSerializableExtra(GROUP_CODE);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
@@ -65,33 +67,32 @@ public class GroupCodeActivity extends SwipeBackUI {
         });
         userAvatar = (HeadImageView) findViewById(R.id.user_card_avatar);
         userName = (TextView) findViewById(R.id.user_card_name);
+        coverage = (TextView) findViewById(R.id.group_card_coverage);
         codeImage = (AspectRatioImageView) findViewById(R.id.group_card_image);
         constraintLayout = (ConstraintLayout) findViewById(R.id.group_card_info);
         slogan = (TextView) findViewById(R.id.group_card_slogan);
         slogan.setText("");
+        try {
+            TeamExtension extension = gson.fromJson(team.getExtension(), new TypeToken<TeamExtension>() {
+            }.getType());
+            if (extension != null && TextUtils.equals(TeamExtras.OPEN, extension.getInviteVerity())) {
+                inviteVerity = true;
+            }
+        } catch (Exception e) {
+
+        }
+        if (inviteVerity) {
+            moreAction.setVisibility(View.GONE);
+            coverage.setVisibility(View.VISIBLE);
+        } else {
+            moreAction.setVisibility(View.VISIBLE);
+            coverage.setVisibility(View.GONE);
+        }
         getUserInfo();
     }
 
     private void getUserInfo() {
-        NIMClient.getService(TeamService.class).queryMemberList(team.getId()).setCallback(new RequestCallback<List<TeamMember>>() {
-            @Override
-            public void onSuccess(List<TeamMember> param) {
-                if (param != null && param.size() > 0) {
-                    BitmapLoader.getInstance(GroupCodeActivity.this).removeBitmapToMemoryCache("ychat://com.xr.ychat?groupId=" + team.getId());
-                    userAvatar.loadTeamIconByTeam(param, team);
-                }
-            }
-
-            @Override
-            public void onFailed(int code) {
-                userAvatar.setImageResource(R.drawable.nim_avatar_group);
-            }
-
-            @Override
-            public void onException(Throwable exception) {
-
-            }
-        });
+        userAvatar.loadTeamIconByTeam(team);
         userName.setText(team.getName());
         codeImage.post(new Runnable() {
             @Override

@@ -1,7 +1,7 @@
 package com.xr.ychat.login;
 
-import com.xr.ychat.DemoCache;
 import com.netease.nim.uikit.api.NimUIKit;
+import com.xr.ychat.DemoCache;
 import com.xr.ychat.redpacket.NIMRedPacketClient;
 
 /**

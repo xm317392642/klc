@@ -69,7 +69,7 @@ public class LocationAmapActivity extends SwipeBackUI implements OnCameraChangeL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map_view_amap_layout);
+        setActivityView(R.layout.map_view_amap_layout);
         mapView = (MapView) findViewById(R.id.autonavi_mapView);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
 

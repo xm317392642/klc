@@ -2,13 +2,12 @@ package com.xr.ychat.session.viewholder;
 
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.netease.nim.avchatkit.common.util.ScreenUtil;
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderBase;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseMultiItemFetchLoadAdapter;
+import com.netease.nim.uikit.common.util.sys.ScreenUtil;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.xr.ychat.R;
 import com.xr.ychat.contact.activity.UserProfileActivity;

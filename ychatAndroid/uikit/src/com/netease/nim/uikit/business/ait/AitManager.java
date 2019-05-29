@@ -7,11 +7,21 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.ait.selector.AitContactSelectorActivity;
+import com.netease.nim.uikit.business.contact.core.item.ContactIdFilter;
+import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
+import com.netease.nim.uikit.business.team.activity.AdvancedTeamInfoActivity;
+import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
+import com.netease.nim.uikit.common.TeamExtension;
 import com.netease.nimlib.sdk.robot.model.NimRobotInfo;
+import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -179,7 +189,26 @@ public class AitManager implements TextWatcher {
             if (s.toString().equals("@")) {
                 // 启动@联系人界面
                 if (!TextUtils.isEmpty(tid) || robot) {
-                    AitContactSelectorActivity.start(context, tid, robot);
+                    //AitContactSelectorActivity.start(context, tid, robot); 原来旧的@界面
+
+
+                    ContactSelectActivity.Option option = new ContactSelectActivity.Option();
+                    option.type = ContactSelectActivity.ContactSelectType.TEAM_MEMBER;
+                    option.teamId = tid;
+                    option.title = "选择联系人";
+                    option.multi = false;//单选
+                    option.searchVisible=false;
+                    //需要过滤（不显示）的联系人项
+                    ArrayList<String> includeAccounts = new ArrayList<>(1);
+                    Team team = NimUIKit.getTeamProvider().getTeamById(tid);
+                    String robotId = getRobotId(team);
+                    if (!TextUtils.isEmpty(robotId)) {
+                        includeAccounts.add(robotId);
+                    }
+                    includeAccounts.add(NimUIKit.getAccount());
+                    option.itemFilter = new ContactIdFilter(includeAccounts, true);
+                    option.isAit = true;
+                    NimUIKit.startContactSelector(context, option, AitContactSelectorActivity.REQUEST_CODE);
                 }
             }
             aitContactsModel.onInsertText(start, s.toString());
@@ -206,5 +235,24 @@ public class AitManager implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         afterTextChanged(s, editTextStart, delete ? editTextBefore : editTextCount, delete);
+    }
+
+    public String getRobotId(Team team) {
+        if (team == null) {
+            return null;
+        }
+        TeamExtension extension;
+        if (!TextUtils.isEmpty(team.getExtension())) {
+            try {
+                Gson gson = new Gson();
+                extension = gson.fromJson(team.getExtension(), new TypeToken<TeamExtension>() {
+                }.getType());
+            } catch (Exception exception) {
+                extension = new TeamExtension();
+            }
+        } else {
+            extension = new TeamExtension();
+        }
+        return extension.getRobotId();
     }
 }

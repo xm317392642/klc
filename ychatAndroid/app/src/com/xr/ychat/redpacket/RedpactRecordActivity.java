@@ -22,8 +22,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
+import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
@@ -65,7 +67,7 @@ public class RedpactRecordActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_redpacket_record);
+        setActivityView(R.layout.activity_redpacket_record);
         localBroadcastManager = LocalBroadcastManager.getInstance(RedpactRecordActivity.this);
         decimalFormat = new DecimalFormat("0.00");
         initToolbar();
@@ -108,7 +110,6 @@ public class RedpactRecordActivity extends SwipeBackUI {
 
                     Dialog mDialog = pvTime.getDialog();
                     if (mDialog != null) {
-
                         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                                 ViewGroup.LayoutParams.MATCH_PARENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -176,7 +177,10 @@ public class RedpactRecordActivity extends SwipeBackUI {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
         mToolbar.setTitle("");
-        mToolbar.setNavigationOnClickListener(v -> finish());
+        mToolbar.setNavigationOnClickListener(v -> {
+            setResult(Activity.RESULT_CANCELED);
+            finish();
+        });
     }
 
     private void sendBroadcastReceiver() {
@@ -246,7 +250,9 @@ public class RedpactRecordActivity extends SwipeBackUI {
         ContactHttpClient.getInstance().cancelAlipayAuth(uid, mytoken, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
             @Override
             public void onSuccess(RequestInfo aVoid) {
+                SPUtils.getInstance().put(CommonUtil.ALIPAYUID, "");
                 YchatToastUtils.showShort("支付宝解绑成功");
+                setResult(Activity.RESULT_OK);
                 finish();
             }
 
@@ -278,9 +284,9 @@ public class RedpactRecordActivity extends SwipeBackUI {
         });
     }
 
-    public static void start(Activity context) {
+    public static void start(Activity context, int requestCode) {
         Intent intent = new Intent(context, RedpactRecordActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        context.startActivity(intent);
+        context.startActivityForResult(intent, requestCode);
     }
 }

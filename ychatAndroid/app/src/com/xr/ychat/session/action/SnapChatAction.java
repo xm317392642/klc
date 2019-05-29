@@ -1,11 +1,11 @@
 package com.xr.ychat.session.action;
 
-import com.xr.ychat.R;
-import com.xr.ychat.session.extension.SnapChatAttachment;
 import com.netease.nim.uikit.business.session.actions.PickImageAction;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.xr.ychat.R;
+import com.xr.ychat.session.extension.SnapChatAttachment;
 
 import java.io.File;
 

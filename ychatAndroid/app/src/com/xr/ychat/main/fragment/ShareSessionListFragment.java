@@ -7,6 +7,9 @@ import android.widget.TextView;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.recent.RecentContactsCallback;
 import com.netease.nim.uikit.business.recent.RecentContactsFragment;
+import com.netease.nim.uikit.business.session.extension.RedPacketAttachment;
+import com.netease.nim.uikit.business.session.extension.RedPacketOpenedAttachment;
+import com.netease.nim.uikit.business.session.extension.TeamInviteAttachment;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nim.uikit.common.util.log.LogUtil;
@@ -33,8 +36,6 @@ import com.xr.ychat.session.extension.BussinessCardAttachment;
 import com.xr.ychat.session.extension.GameShareAttachment;
 import com.xr.ychat.session.extension.GuessAttachment;
 import com.xr.ychat.session.extension.MahjongAttachment;
-import com.xr.ychat.session.extension.RedPacketAttachment;
-import com.xr.ychat.session.extension.RedPacketOpenedAttachment;
 import com.xr.ychat.session.extension.ScreenCaptureAttachment;
 import com.xr.ychat.session.extension.SnapChatAttachment;
 import com.xr.ychat.session.extension.StickerAttachment;
@@ -168,7 +169,7 @@ public class ShareSessionListFragment extends MainShareTabFragment {
 
         if (code == StatusCode.PWD_ERROR) {
             LogUtil.e("Auth", "user password error");
-            YchatToastUtils.showShort( R.string.login_failed);
+            YchatToastUtils.showShort(R.string.login_failed);
         } else {
             LogUtil.i("Auth", "Kicked!");
         }
@@ -234,7 +235,8 @@ public class ShareSessionListFragment extends MainShareTabFragment {
                 } else if (attachment instanceof BussinessCardAttachment) {
                     return "[个人名片]";
                 } else if (attachment instanceof GameShareAttachment) {
-                    return "[游戏分享]";
+                    GameShareAttachment msgAttachment = (GameShareAttachment) attachment;
+                    return "[链接]" + msgAttachment.getShareLinkTitle();
                 } else if (attachment instanceof ScreenCaptureAttachment) {
                     return "[屏幕截图]";
                 } else if (attachment instanceof RedPacketAttachment) {
@@ -243,8 +245,9 @@ public class ShareSessionListFragment extends MainShareTabFragment {
                     return ((RedPacketOpenedAttachment) attachment).getDesc(recentContact.getSessionType(), recentContact.getContactId());
                 } else if (attachment instanceof MahjongAttachment) {
                     return "[机器人消息]";
+                } else if (attachment instanceof TeamInviteAttachment) {
+                    return "[邀请你入群]";
                 }
-
                 return null;
             }
 

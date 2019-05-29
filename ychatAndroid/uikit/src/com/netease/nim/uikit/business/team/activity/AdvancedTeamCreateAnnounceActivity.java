@@ -2,10 +2,14 @@ package com.netease.nim.uikit.business.team.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,7 +39,7 @@ public class AdvancedTeamCreateAnnounceActivity extends SwipeBackUI {
     private final static String EXTRA_TID = "EXTRA_TID";
 
     // data
-    private String teamId;
+    private String teamId,content;
     private String announce;
 
     // view
@@ -45,23 +49,24 @@ public class AdvancedTeamCreateAnnounceActivity extends SwipeBackUI {
     private EditText teamAnnounceContent;
     private TextView toolbarView;
 
-    public static void startActivityForResult(Activity activity, String teamId, int requestCode) {
+    public static void startActivityForResult(Activity activity, String teamId,String content, int requestCode) {
         Intent intent = new Intent();
         intent.setClass(activity, AdvancedTeamCreateAnnounceActivity.class);
         intent.putExtra(EXTRA_TID, teamId);
+        intent.putExtra("content", content);
         activity.startActivityForResult(intent, requestCode);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_advanced_team_create_announce);
+        setActivityView(R.layout.nim_advanced_team_create_announce);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbarTitle = (TextView)findViewById(R.id.toolbar_title);
+        toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         mToolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);
         mToolbar.setTitle("");
-        toolbarTitle.setText("新建群公告");
+        toolbarTitle.setText("编辑群公告");
         mToolbar.setNavigationOnClickListener(v -> finish());
 
         parseIntentData();
@@ -71,6 +76,7 @@ public class AdvancedTeamCreateAnnounceActivity extends SwipeBackUI {
 
     private void parseIntentData() {
         teamId = getIntent().getStringExtra(EXTRA_TID);
+        content = getIntent().getStringExtra("content");
     }
 
     private void findViews() {
@@ -78,11 +84,42 @@ public class AdvancedTeamCreateAnnounceActivity extends SwipeBackUI {
         teamAnnounceContent = (EditText) findViewById(R.id.team_announce_content);
         teamAnnounceTitle.setFilters(new InputFilter[]{new InputFilter.LengthFilter(64)});
         teamAnnounceContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(800)});
+        teamAnnounceContent.setText(content);
+        if(!TextUtils.isEmpty(content)){
+            teamAnnounceContent.setSelection(content.length());//将光标移至文字末尾
+        }
     }
 
     private void initActionbar() {
         toolbarView = findView(R.id.action_bar_right_clickable_textview);
         toolbarView.setText("发布");
+        if(TextUtils.isEmpty(content)){
+            toolbarView.setTextColor(Color.parseColor("#99ffffff"));
+            toolbarView.setEnabled(false);
+        }
+        teamAnnounceContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String v=s.toString().trim();
+                if("".equals(v) || v.equals(content)){
+                    toolbarView.setTextColor(Color.parseColor("#99ffffff"));
+                    toolbarView.setEnabled(false);
+                }else{
+                    toolbarView.setTextColor(Color.WHITE);
+                    toolbarView.setEnabled(true);
+                }
+            }
+        });
         toolbarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,6 +182,7 @@ public class AdvancedTeamCreateAnnounceActivity extends SwipeBackUI {
      * 创建公告更新到服务器
      */
     private void updateAnnounce() {
+        DialogMaker.showProgressDialog(this,"");
         String announcement = AnnouncementHelper.makeAnnounceJson("", "titlenull",
                 teamAnnounceContent.getText().toString());
         NIMClient.getService(TeamService.class).updateTeam(teamId, TeamFieldEnum.Announcement, announcement).setCallback(new RequestCallback<Void>() {
@@ -154,7 +192,7 @@ public class AdvancedTeamCreateAnnounceActivity extends SwipeBackUI {
                 setResult(Activity.RESULT_OK);
                 showKeyboard(false);
                 finish();
-                YchatToastUtils.showShort( R.string.update_success);
+                YchatToastUtils.showShort("发布成功");
             }
 
             @Override
@@ -162,9 +200,9 @@ public class AdvancedTeamCreateAnnounceActivity extends SwipeBackUI {
                 DialogMaker.dismissProgressDialog();
                 toolbarView.setEnabled(true);
                 if (code == ResponseCode.RES_TEAM_ENACCESS) {
-                    YchatToastUtils.showShort( "该群无法新建群公告");
+                    YchatToastUtils.showShort("该群无法新建群公告");
                 } else {
-                    YchatToastUtils.showShort( String.format(getString(R.string.update_failed), code));
+                    YchatToastUtils.showShort(String.format(getString(R.string.update_failed), code));
                 }
             }
 

@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.activity.UI;
 import com.xr.ychat.R;
 
 public class DownloadTipsActivity extends SwipeBackUI {
@@ -18,7 +17,7 @@ public class DownloadTipsActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_download_tips);
+        setActivityView(R.layout.activity_download_tips);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
         mToolbar.setTitle("");

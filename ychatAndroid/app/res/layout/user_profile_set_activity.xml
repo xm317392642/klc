@@ -275,7 +275,6 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
-                android:id="@+id/gender_attribute"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -315,7 +314,6 @@
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/authentication_attribute"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -329,7 +327,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/authentication_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"

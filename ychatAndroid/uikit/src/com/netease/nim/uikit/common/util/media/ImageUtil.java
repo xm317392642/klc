@@ -1,6 +1,5 @@
 package com.netease.nim.uikit.common.util.media;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;

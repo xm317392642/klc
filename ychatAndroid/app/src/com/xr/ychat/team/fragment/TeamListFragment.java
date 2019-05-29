@@ -1,6 +1,7 @@
 package com.xr.ychat.team.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.netease.nim.avchatkit.common.TFragment;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.team.TeamDataChangedObserver;
 import com.netease.nim.uikit.business.contact.core.item.AbsContactItem;
@@ -30,24 +30,25 @@ import com.xr.ychat.session.SessionHelper;
 
 import java.util.List;
 
-public class TeamListFragment extends TFragment implements AdapterView.OnItemClickListener{
+public class TeamListFragment extends Fragment implements AdapterView.OnItemClickListener{
     private ContactDataAdapter adapter;
 
     private ListView lvContacts;
 
-
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //ToastHelper.showToast(getContext(),"TeamListFragment onCreateView");
-        return inflater.inflate(R.layout.group_list_activity, container, false);
+         view=inflater.inflate(R.layout.group_list_activity, container, false);
+        return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        lvContacts = findView(R.id.group_list);
+        lvContacts = view.findViewById(R.id.group_list);
         //ToastHelper.showToast(getContext(),"TeamListFragment onActivityCreated");
-        findView(R.id.app_bar_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.app_bar_layout).setVisibility(View.GONE);
         GroupStrategy groupStrategy = new GroupStrategy();
         IContactDataProvider dataProvider = new ContactDataProvider(ItemTypes.TEAMS.ADVANCED_TEAM);
         adapter = new ContactDataAdapter(getContext(), groupStrategy, dataProvider) {
@@ -72,7 +73,7 @@ public class TeamListFragment extends TFragment implements AdapterView.OnItemCli
         lvContacts.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                showKeyboard(false);
+               // showKeyboard(false);
             }
 
             @Override

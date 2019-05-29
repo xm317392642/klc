@@ -2,22 +2,14 @@ package com.netease.nim.uikit.business.session.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.model.session.SessionCustomization;
 import com.netease.nim.uikit.business.preference.UserPreferences;
@@ -26,9 +18,6 @@ import com.netease.nim.uikit.business.session.constant.Extras;
 import com.netease.nim.uikit.business.session.fragment.MessageFragment;
 import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.activity.UI;
-import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.netease.nim.uikit.common.util.sys.ScreenUtil;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 import java.util.List;
@@ -63,7 +52,7 @@ public abstract class BaseMessageActivity extends SwipeBackUI {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(getContentViewId());
+        setActivityView(getContentViewId());
         initToolBar();
         parseIntent(getIntent());
 
@@ -111,7 +100,6 @@ public abstract class BaseMessageActivity extends SwipeBackUI {
 
     private void parseIntent(Intent intent) {
         sessionId = intent.getStringExtra(Extras.EXTRA_ACCOUNT);
-        LogUtils.e("sessionId=" + sessionId);
         customization = (SessionCustomization) intent.getSerializableExtra(Extras.EXTRA_CUSTOMIZATION);
 
         if (customization != null) {

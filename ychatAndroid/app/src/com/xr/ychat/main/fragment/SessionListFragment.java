@@ -7,6 +7,9 @@ import android.widget.TextView;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.recent.RecentContactsCallback;
 import com.netease.nim.uikit.business.recent.RecentContactsFragment;
+import com.netease.nim.uikit.business.session.extension.RedPacketAttachment;
+import com.netease.nim.uikit.business.session.extension.RedPacketOpenedAttachment;
+import com.netease.nim.uikit.business.session.extension.TeamInviteAttachment;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
@@ -33,8 +36,6 @@ import com.xr.ychat.session.extension.BussinessCardAttachment;
 import com.xr.ychat.session.extension.GameShareAttachment;
 import com.xr.ychat.session.extension.GuessAttachment;
 import com.xr.ychat.session.extension.MahjongAttachment;
-import com.xr.ychat.session.extension.RedPacketAttachment;
-import com.xr.ychat.session.extension.RedPacketOpenedAttachment;
 import com.xr.ychat.session.extension.ScreenCaptureAttachment;
 import com.xr.ychat.session.extension.SnapChatAttachment;
 import com.xr.ychat.session.extension.StickerAttachment;
@@ -99,14 +100,14 @@ public class SessionListFragment extends MainTabFragment {
 
     private void registerObservers(boolean register) {
         NIMClient.getService(AuthServiceObserver.class).observeOtherClients(clientsObserver, register);
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
+        //NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
     }
 
 
     /**
      * 用户状态变化
      */
-    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
+/*    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
 
         @Override
         public void onEvent(StatusCode code) {
@@ -127,10 +128,12 @@ public class SessionListFragment extends MainTabFragment {
                     notifyBarText.setText(R.string.nim_status_connecting);
                 } else {
                     notifyBar.setVisibility(View.GONE);
+                    checkUpdate();//每次网络恢复，检查当前版本是不是最新版本
                 }
             }
         }
-    };
+    };*/
+
 
     Observer<List<OnlineClient>> clientsObserver = new Observer<List<OnlineClient>>() {
         @Override
@@ -168,7 +171,7 @@ public class SessionListFragment extends MainTabFragment {
 
         if (code == StatusCode.PWD_ERROR) {
             LogUtil.e("Auth", "user password error");
-            YchatToastUtils.showShort( R.string.login_failed);
+            YchatToastUtils.showShort(R.string.login_failed);
         } else {
             LogUtil.i("Auth", "Kicked!");
         }
@@ -236,15 +239,17 @@ public class SessionListFragment extends MainTabFragment {
                 } else if (attachment instanceof ScreenCaptureAttachment) {
                     return "[屏幕截图]";
                 } else if (attachment instanceof GameShareAttachment) {
-                    return "[游戏分享]";
+                    GameShareAttachment msgAttachment = (GameShareAttachment) attachment;
+                    return "[链接]" + msgAttachment.getShareLinkTitle();
                 } else if (attachment instanceof RedPacketAttachment) {
                     return "[红包]";
                 } else if (attachment instanceof RedPacketOpenedAttachment) {
                     return ((RedPacketOpenedAttachment) attachment).getDesc(recentContact.getSessionType(), recentContact.getContactId());
                 } else if (attachment instanceof MahjongAttachment) {
                     return "[机器人消息]";
+                } else if (attachment instanceof TeamInviteAttachment) {
+                    return "[邀请你入群]";
                 }
-
                 return null;
             }
 

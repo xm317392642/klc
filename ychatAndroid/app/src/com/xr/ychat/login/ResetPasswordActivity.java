@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.activity.UI;
 import com.xr.ychat.R;
 
 public class ResetPasswordActivity extends SwipeBackUI {
@@ -19,7 +18,7 @@ public class ResetPasswordActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reset_password);
+        setActivityView(R.layout.activity_reset_password);
         needOpenLogin = getIntent().getBooleanExtra(NEED_LOGIN, false);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);

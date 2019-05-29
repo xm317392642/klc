@@ -13,9 +13,9 @@ import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
 import com.netease.nim.uikit.api.model.team.TeamDataChangedObserver;
 import com.netease.nim.uikit.business.team.helper.TeamHelper;
+import com.netease.nim.uikit.business.team.helper.UpdateMemberChangeService;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.ui.combinebitmap.helper.BitmapLoader;
 import com.netease.nim.uikit.common.ui.dialog.EasyEditDialog;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
@@ -25,7 +25,6 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.team.TeamService;
 import com.netease.nimlib.sdk.team.constant.VerifyTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
-import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
 import com.xr.ychat.session.SessionHelper;
@@ -51,7 +50,7 @@ public class AdvancedTeamJoinActivity extends SwipeBackUI implements View.OnClic
         public void onUpdateTeams(List<Team> teams) {
             for (Team team : teams) {
                 if (TextUtils.equals(teamId, team.getId()) && TeamHelper.isTeamMember(teamId, NimUIKit.getAccount())) {
-                    YchatToastUtils.showShort( getString(R.string.team_join_success, team.getName()));
+                    YchatToastUtils.showShort(getString(R.string.team_join_success, team.getName()));
                     SessionHelper.startTeamSession(AdvancedTeamJoinActivity.this, teamId);
                     finish();
                 }
@@ -72,7 +71,7 @@ public class AdvancedTeamJoinActivity extends SwipeBackUI implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.nim_advanced_team_join_activity);
+        setActivityView(R.layout.nim_advanced_team_join_activity);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
@@ -117,7 +116,7 @@ public class AdvancedTeamJoinActivity extends SwipeBackUI implements View.OnClic
      */
     private void updateTeamInfo(final Team t) {
         if (t == null) {
-            YchatToastUtils.showShort( R.string.team_not_exist);
+            YchatToastUtils.showShort(R.string.team_not_exist);
             finish();
         } else {
             VerifyTypeEnum verifyTypeEnum = t.getVerifyType();
@@ -127,25 +126,7 @@ public class AdvancedTeamJoinActivity extends SwipeBackUI implements View.OnClic
             teamNameText.setText(team.getName());
             teamTypeText.setText("群号:");
             memberCountText.setText(team.getId());
-            NIMClient.getService(TeamService.class).queryMemberList(team.getId()).setCallback(new RequestCallback<List<TeamMember>>() {
-                @Override
-                public void onSuccess(List<TeamMember> param) {
-                    if (param != null && param.size() > 0) {
-                        BitmapLoader.getInstance(AdvancedTeamJoinActivity.this).removeBitmapToMemoryCache("ychat://com.xr.ychat?groupId=" + team.getId());
-                        groupHead.loadTeamIconByTeam(param, team);
-                    }
-                }
-
-                @Override
-                public void onFailed(int code) {
-                    groupHead.setImageResource(R.drawable.nim_avatar_group);
-                }
-
-                @Override
-                public void onException(Throwable exception) {
-
-                }
-            });
+            groupHead.loadTeamIconByTeam(team);
         }
     }
 
@@ -173,7 +154,8 @@ public class AdvancedTeamJoinActivity extends SwipeBackUI implements View.OnClic
                         @Override
                         public void onSuccess(Team team) {
                             applyJoinButton.setEnabled(false);
-                            YchatToastUtils.showShort( getString(R.string.team_join_success, team.getName()));
+                            YchatToastUtils.showShort(getString(R.string.team_join_success, team.getName()));
+                            UpdateMemberChangeService.start(AdvancedTeamJoinActivity.this, NimUIKit.getAccount(), teamId, 1, "qr");
                             NimUIKit.startTeamInfo(AdvancedTeamJoinActivity.this, teamId);
                             finish();
                         }
@@ -183,18 +165,18 @@ public class AdvancedTeamJoinActivity extends SwipeBackUI implements View.OnClic
                             //仅仅是申请成功
                             if (code == ResponseCode.RES_TEAM_APPLY_SUCCESS) {
                                 applyJoinButton.setEnabled(false);
-                                YchatToastUtils.showShort( R.string.team_apply_to_join_send_success);
+                                YchatToastUtils.showShort(R.string.team_apply_to_join_send_success);
                             } else if (code == ResponseCode.RES_TEAM_ALREADY_IN) {
                                 applyJoinButton.setEnabled(false);
-                                YchatToastUtils.showShort( R.string.has_exist_in_team);
+                                YchatToastUtils.showShort(R.string.has_exist_in_team);
                             } else if (code == ResponseCode.RES_TEAM_LIMIT) {
                                 applyJoinButton.setEnabled(false);
-                                YchatToastUtils.showShort( R.string.team_num_limit);
+                                YchatToastUtils.showShort(R.string.team_num_limit);
                             } else if (code == ResponseCode.RES_TEAM_ENACCESS) {
                                 applyJoinButton.setEnabled(false);
-                                YchatToastUtils.showShort( "该群无法申请加入");
+                                YchatToastUtils.showShort("该群无法申请加入");
                             } else {
-                                YchatToastUtils.showShort( "failed, error code =" + code);
+                                YchatToastUtils.showShort("failed, error code =" + code);
                             }
                         }
 

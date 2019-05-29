@@ -1,17 +1,13 @@
 package com.netease.nim.uikit.business.session.viewholder;
 
-import android.graphics.Color;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.business.session.constant.Extras;
 import com.netease.nim.uikit.business.session.emoji.MoonUtil;
-import com.netease.nim.uikit.business.session.helper.TypefaceHelper;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseMultiItemFetchLoadAdapter;
 import com.netease.nim.uikit.common.util.sys.ScreenUtil;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
@@ -60,11 +56,11 @@ public class MsgViewHolderText extends MsgViewHolderBase {
         if (isReceivedMessage()) {
             bodyTextView.setBackgroundResource(NimUIKitImpl.getOptions().messageLeftBackground);
             //bodyTextView.setTextColor(Color.BLACK);
-            bodyTextView.setPadding(ScreenUtil.dip2px(15), ScreenUtil.dip2px(8), ScreenUtil.dip2px(10), ScreenUtil.dip2px(8));
+            bodyTextView.setPadding(ScreenUtil.dip2px(15), ScreenUtil.dip2px(7), ScreenUtil.dip2px(9), ScreenUtil.dip2px(7));
         } else {
             bodyTextView.setBackgroundResource(NimUIKitImpl.getOptions().messageRightBackground);
             //bodyTextView.setTextColor(Color.WHITE);
-            bodyTextView.setPadding(ScreenUtil.dip2px(10), ScreenUtil.dip2px(8), ScreenUtil.dip2px(15), ScreenUtil.dip2px(8));
+            bodyTextView.setPadding(ScreenUtil.dip2px(9), ScreenUtil.dip2px(7), ScreenUtil.dip2px(15), ScreenUtil.dip2px(7));
         }
     }
 

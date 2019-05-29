@@ -13,10 +13,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
 import com.netease.nim.uikit.api.model.contact.ContactChangedObserver;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
+import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
@@ -85,6 +87,7 @@ public class UserProfileActivity extends SwipeBackUI {
     private View chatBtnView;
 
     private NimUserInfo userInfo;
+    private String otherYchatNo;
 
     public static void start(Context context, String account) {
         Intent intent = new Intent();
@@ -97,7 +100,7 @@ public class UserProfileActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_profile_activity);
+        setActivityView(R.layout.user_profile_activity);
         account = getIntent().getStringExtra(Extras.EXTRA_ACCOUNT);
         if (TextUtils.isEmpty(account)) {
             finish();
@@ -245,18 +248,38 @@ public class UserProfileActivity extends SwipeBackUI {
      * 设置空了吹号
      */
     private void setYChatNo() {
-        ContactHttpClient.getInstance().getYchatAccount(Preferences.getWeiranUid(this), Preferences.getWeiranToken(this), account, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
-            @Override
-            public void onSuccess(RequestInfo aVoid) {
-                nickText.setText(String.format("空了吹号: %1$s", aVoid.getYchatNo()));
-            }
+        if (TextUtils.equals(account, NimUIKit.getAccount())) {
+            String ychatNo = SPUtils.getInstance().getString(CommonUtil.YCHAT_ACCOUNT);
+            if (TextUtils.isEmpty(ychatNo)) {
+                ContactHttpClient.getInstance().getYchatAccount(Preferences.getWeiranUid(this), Preferences.getWeiranToken(this), account, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
+                    @Override
+                    public void onSuccess(RequestInfo aVoid) {
+                        otherYchatNo = aVoid.getYchatNo();
+                        nickText.setText(String.format("空了吹号: %1$s", aVoid.getYchatNo()));
+                    }
 
-            @Override
-            public void onFailed(int code, String errorMsg) {
-                nickText.setText(String.format("空了吹号: %1$s", userInfo.getAccount()));
+                    @Override
+                    public void onFailed(int code, String errorMsg) {
+                        nickText.setText("");
+                    }
+                });
+            } else {
+                nickText.setText(String.format("空了吹号: %1$s", ychatNo));
             }
-        });
+        } else {
+            ContactHttpClient.getInstance().getYchatAccount(Preferences.getWeiranUid(this), Preferences.getWeiranToken(this), account, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
+                @Override
+                public void onSuccess(RequestInfo aVoid) {
+                    otherYchatNo = aVoid.getYchatNo();
+                    nickText.setText(String.format("空了吹号: %1$s", aVoid.getYchatNo()));
+                }
 
+                @Override
+                public void onFailed(int code, String errorMsg) {
+                    nickText.setText("");
+                }
+            });
+        }
     }
 
     private void updateUserOperatorView() {
@@ -281,10 +304,13 @@ public class UserProfileActivity extends SwipeBackUI {
             nameText.setText(userInfo.getName());
             accountText.setText(String.format("昵称: %1$s", userInfo.getName()));
             nickText.setVisibility(View.VISIBLE);
-
             setYChatNo();
-            phoneLayout.setVisibility(View.VISIBLE);
-            phoneText.setText(userInfo.getMobile());
+            if (TextUtils.isEmpty(userInfo.getMobile())) {
+                phoneLayout.setVisibility(View.GONE);
+            } else {
+                phoneLayout.setVisibility(View.VISIBLE);
+                phoneText.setText(userInfo.getMobile());
+            }
             toggleLayout.setVisibility(View.GONE);
             notificationLayout.setVisibility(View.GONE);
         }
@@ -485,6 +511,11 @@ public class UserProfileActivity extends SwipeBackUI {
         }
         if (!TextUtils.isEmpty(account) && account.equals(DemoCache.getAccount())) {
             YchatToastUtils.showShort("不能加自己为好友");
+            return;
+        }
+        boolean black = NIMClient.getService(FriendService.class).isInBlackList(account);
+        if (black) {
+            YchatToastUtils.showShort("该用户在您的黑名单中，请先移除再添加");
             return;
         }
         final VerifyType verifyType = addDirectly ? VerifyType.DIRECT_ADD : VerifyType.VERIFY_REQUEST;

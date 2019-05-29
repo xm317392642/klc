@@ -142,7 +142,7 @@ public class NormalTeamInfoActivity extends UI implements OnClickListener, TAdap
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_team_info_activity);
+        setActivityView(R.layout.nim_team_info_activity);
 
         ToolBarOptions options = new NimToolBarOptions();
         setToolBar(R.id.toolbar, options);

@@ -26,6 +26,7 @@
     <string name="input_panel_video">视频</string>
     <string name="input_panel_location">位置</string>
     <string name="input_panel_take">拍照</string>
+    <string name="input_panel_paymentcode">支付宝收款</string>
     <string name="repeat_download_message">重新下载?</string>
     <string name="repeat_send_has_blank">重发</string>
     <string name="repeat_send_message">重发消息?</string>

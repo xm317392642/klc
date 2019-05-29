@@ -2,21 +2,15 @@ package com.xr.ychat.main.helper;
 
 import android.text.TextUtils;
 
+import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
-import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageStatus;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
-import com.netease.nimlib.sdk.team.TeamService;
 import com.netease.nimlib.sdk.team.model.Team;
-import com.netease.nimlib.sdk.team.model.TeamMember;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by huangjun on 2015/4/9.

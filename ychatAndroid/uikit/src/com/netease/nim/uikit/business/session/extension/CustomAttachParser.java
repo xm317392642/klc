@@ -24,6 +24,9 @@ public class CustomAttachParser implements MsgAttachmentParser {
                 case CustomAttachmentType.GameShare://游戏分享
                     attachment = new GameShareAttachment();
                     break;
+                case CustomAttachmentType.TEAM_AUTHENTICATION://开启群认证
+                    attachment = new TeamAuthAttachment();
+                    break;
             }
 
             if (attachment != null) {

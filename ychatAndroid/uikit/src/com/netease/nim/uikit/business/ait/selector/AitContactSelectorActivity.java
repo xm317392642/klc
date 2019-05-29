@@ -16,14 +16,11 @@ import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
-import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.business.ait.selector.adapter.AitContactAdapter;
 import com.netease.nim.uikit.business.ait.selector.model.AitContactItem;
 import com.netease.nim.uikit.business.ait.selector.model.ItemType;
 import com.netease.nim.uikit.common.TeamExtension;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.activity.ToolBarOptions;
-import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.recyclerview.listener.OnItemClickListener;
 import com.netease.nimlib.sdk.robot.model.NimRobotInfo;
 import com.netease.nimlib.sdk.team.model.Team;
@@ -71,7 +68,7 @@ public class AitContactSelectorActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_team_member_list_layout);
+        setActivityView(R.layout.nim_team_member_list_layout);
         parseIntent();
         initViews();
         initData();

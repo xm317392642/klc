@@ -8,6 +8,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 
+import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
+import com.netease.nim.uikit.common.activity.ToolBarOptions;
+import com.netease.nim.uikit.common.activity.UI;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.msg.model.TeamMsgAckInfo;
 import com.xr.ychat.R;
 import com.xr.ychat.common.ui.viewpager.FadeInOutPageTransformer;
 import com.xr.ychat.common.ui.viewpager.PagerSlidingTabStrip;
@@ -16,11 +21,6 @@ import com.xr.ychat.main.reminder.ReminderItem;
 import com.xr.ychat.session.adapter.AckMsgTabPagerAdapter;
 import com.xr.ychat.session.model.AckMsgTab;
 import com.xr.ychat.session.model.AckMsgViewModel;
-import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
-import com.netease.nim.uikit.common.activity.ToolBarOptions;
-import com.netease.nim.uikit.common.activity.UI;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.msg.model.TeamMsgAckInfo;
 
 /**
  * 消息已读详情界面
@@ -54,7 +54,7 @@ public class AckMsgInfoActivity extends UI implements ViewPager.OnPageChangeList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ack_msg_info_layout);
+        setActivityView(R.layout.ack_msg_info_layout);
 
 
         ToolBarOptions options = new NimToolBarOptions();

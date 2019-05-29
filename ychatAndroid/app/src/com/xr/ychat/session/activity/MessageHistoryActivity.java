@@ -13,7 +13,6 @@ import com.netease.nim.uikit.business.session.module.ModuleProxy;
 import com.netease.nim.uikit.business.session.module.list.MessageListPanelEx;
 import com.netease.nim.uikit.common.UnclaimedEnvelope;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.xr.ychat.R;
@@ -53,7 +52,7 @@ public class MessageHistoryActivity extends SwipeBackUI implements ModuleProxy {
         super.onCreate(savedInstanceState);
 
         View rootView = LayoutInflater.from(this).inflate(R.layout.message_history_activity, null);
-        setContentView(rootView);
+        setActivityView(rootView);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
@@ -89,6 +88,11 @@ public class MessageHistoryActivity extends SwipeBackUI implements ModuleProxy {
     @Override
     public boolean sendMessage(IMMessage msg) {
         return false;
+    }
+
+    @Override
+    public void saveMessageToLocal(IMMessage msg) {
+
     }
 
     @Override

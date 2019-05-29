@@ -9,16 +9,14 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Pair;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.blankj.utilcode.util.LogUtils;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
@@ -27,20 +25,21 @@ import com.netease.nim.uikit.api.model.user.UserInfoObserver;
 import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
 import com.netease.nim.uikit.business.preference.UserPreferences;
 import com.netease.nim.uikit.business.robot.parser.elements.group.LinkElement;
-import com.netease.nim.uikit.business.session.activity.BaseMessageActivity;
 import com.netease.nim.uikit.business.session.activity.P2PMessageActivity;
 import com.netease.nim.uikit.business.session.activity.TeamMessageActivity;
 import com.netease.nim.uikit.business.session.activity.VoiceTrans;
 import com.netease.nim.uikit.business.session.audio.MessageAudioControl;
 import com.netease.nim.uikit.business.session.extension.CustomAttachment;
 import com.netease.nim.uikit.business.session.extension.CustomAttachmentType;
+import com.netease.nim.uikit.business.session.extension.RedPacketAttachment;
+import com.netease.nim.uikit.business.session.extension.TeamAuthAttachment;
 import com.netease.nim.uikit.business.session.fragment.MessageFragment;
 import com.netease.nim.uikit.business.session.helper.MessageHelper;
 import com.netease.nim.uikit.business.session.helper.MessageListPanelHelper;
 import com.netease.nim.uikit.business.session.module.Container;
 import com.netease.nim.uikit.business.session.viewholder.robot.RobotLinkView;
 import com.netease.nim.uikit.common.CommonUtil;
-import com.netease.nim.uikit.common.TeamExtension;
+import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog;
 import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialog;
 import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialogHelper;
@@ -65,12 +64,10 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
-import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
 import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
-import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -79,10 +76,8 @@ import com.netease.nimlib.sdk.msg.model.RevokeMsgNotification;
 import com.netease.nimlib.sdk.msg.model.TeamMessageReceipt;
 import com.netease.nimlib.sdk.robot.model.RobotAttachment;
 import com.netease.nimlib.sdk.robot.model.RobotMsgType;
-import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
 import com.netease.nimlib.sdk.team.constant.TeamMemberType;
 import com.netease.nimlib.sdk.team.model.TeamMember;
-import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,8 +86,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-
-import static android.content.Context.INPUT_METHOD_SERVICE;
 
 /**
  * 基于RecyclerView的消息收发模块
@@ -109,6 +102,7 @@ public class MessageListPanelEx {
 
     // message list view
     public RecyclerView messageListView;
+    private WrapContentLinearLayoutManager linearLayoutManager;
     private List<IMMessage> items;
     public MsgAdapter adapter;
     private ImageView ivBackground;
@@ -135,6 +129,8 @@ public class MessageListPanelEx {
     //所以消息会重复
     private boolean mIsInitFetchingLocal;
     private SimpleCallback simpleCallback;
+    private String account;
+    private String token;
 
     public void setSimpleCallback(SimpleCallback simpleCallback) {
         this.simpleCallback = simpleCallback;
@@ -149,7 +145,8 @@ public class MessageListPanelEx {
         this.rootView = rootView;
         this.recordOnly = recordOnly;
         this.remote = remote;
-
+        this.account = Preferences.getWeiranUid(container.activity);
+        this.token = Preferences.getWeiranToken(container.activity);
         init(anchor);
     }
 
@@ -199,32 +196,35 @@ public class MessageListPanelEx {
 
         // RecyclerView
         messageListView = rootView.findViewById(R.id.messageListView);
+        SimpleItemAnimator itemAnimator = (SimpleItemAnimator) messageListView.getItemAnimator();
+        itemAnimator.setSupportsChangeAnimations(false);
+        messageListView.setItemAnimator(null);
         //messageListView.setLayoutManager(new LinearLayoutManager(container.activity));
-
-        messageListView.setLayoutManager(new WrapContentLinearLayoutManager(container.activity, LinearLayoutManager.VERTICAL, false));
+        linearLayoutManager = new WrapContentLinearLayoutManager(container.activity, LinearLayoutManager.VERTICAL, false);
+        messageListView.setLayoutManager(linearLayoutManager);
         messageListView.requestDisallowInterceptTouchEvent(true);
-        messageListView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (null != container.activity.getCurrentFocus()) {
-                    if (container.activity instanceof BaseMessageActivity) {
-                        BaseMessageActivity baseMessageActivity = (BaseMessageActivity) container.activity;
-                        MessageFragment messageFragment = (MessageFragment) baseMessageActivity.getSupportFragmentManager().getFragments().get(0);
-                        if (messageFragment.inputPanel.getEmojiLayoutIsOpen()) {
-                            messageFragment.inputPanel.hideEmojiLayout();//如果表情布局开启，点击空白处 则 隐藏表情布局
-                        }
-                        if (messageFragment.inputPanel.getMoreLayoutIsOpen()) {
-                            messageFragment.inputPanel.hideActionPanelLayout();//如果更多布局开启，点击空白处 则 隐藏更多布局
-                        }
-                    }
-
-                    InputMethodManager mInputMethodManager = (InputMethodManager) container.activity.getSystemService(INPUT_METHOD_SERVICE);
-                    assert mInputMethodManager != null;
-                    return mInputMethodManager.hideSoftInputFromWindow(container.activity.getCurrentFocus().getWindowToken(), 0);
-                }
-                return false;
-            }
-        });
+//        messageListView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (null != container.activity.getCurrentFocus()) {
+//                    if (container.activity instanceof BaseMessageActivity) {
+//                        BaseMessageActivity baseMessageActivity = (BaseMessageActivity) container.activity;
+//                        MessageFragment messageFragment = (MessageFragment) baseMessageActivity.getSupportFragmentManager().getFragments().get(0);
+//                        if (messageFragment.inputPanel.getEmojiLayoutIsOpen()) {
+//                            messageFragment.inputPanel.hideEmojiLayout();//如果表情布局开启，点击空白处 则 隐藏表情布局
+//                        }
+//                        if (messageFragment.inputPanel.getMoreLayoutIsOpen()) {
+//                            messageFragment.inputPanel.hideActionPanelLayout();//如果更多布局开启，点击空白处 则 隐藏更多布局
+//                        }
+//                    }
+//
+//                    InputMethodManager mInputMethodManager = (InputMethodManager) container.activity.getSystemService(INPUT_METHOD_SERVICE);
+//                    assert mInputMethodManager != null;
+//                    return mInputMethodManager.hideSoftInputFromWindow(container.activity.getCurrentFocus().getWindowToken(), 0);
+//                }
+//                return false;
+//            }
+//        });
         messageListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -338,7 +338,7 @@ public class MessageListPanelEx {
         uiHandler.post(new Runnable() {
             @Override
             public void run() {
-                messageListView.scrollToPosition(getItemIndex(message));
+                linearLayoutManager.scrollToPosition(getItemIndex(message));
             }
         });
     }
@@ -353,11 +353,39 @@ public class MessageListPanelEx {
         List<IMMessage> addedListItems = new ArrayList<>(messages.size());
         for (IMMessage message : messages) {
             if (isMyMessage(message)) {
-                items.add(message);
-                addedListItems.add(message);
-                needRefresh = true;
+                LogUtils.file("收到一条新消息: " + message.getContent() + message.getUuid());
+                boolean is_not_add = false;
+                if (TextUtils.equals(message.getFromAccount(), NimUIKit.getAccount()) && message.getMsgType() == MsgTypeEnum.custom) {
+                    MsgAttachment comeMsgAttachment = message.getAttachment();
+                    if (comeMsgAttachment != null && comeMsgAttachment instanceof RedPacketAttachment) {
+                        RedPacketAttachment redPacketAttachment = (RedPacketAttachment) comeMsgAttachment;
+                        if (redPacketAttachment.getRpType() == 0 || redPacketAttachment.getRpType() == 5) {
+                            LogUtils.file("收到一条自己发的红包新消息: " + redPacketAttachment.getRpId() + message.getContent() + redPacketAttachment.getRpType());
+                            for (IMMessage imMessage : items) {
+                                if (isMyMessage(imMessage) && TextUtils.equals(imMessage.getFromAccount(), NimUIKit.getAccount()) && imMessage.getMsgType() == MsgTypeEnum.custom) {
+                                    MsgAttachment msgAttachment = imMessage.getAttachment();
+                                    if (msgAttachment != null && msgAttachment instanceof RedPacketAttachment) {
+                                        RedPacketAttachment attachment = (RedPacketAttachment) msgAttachment;
+                                        if (TextUtils.equals(attachment.getRpId(), redPacketAttachment.getRpId())) {
+                                            LogUtils.file("已有的会话列表发现同样的红包，删除本地数据，不添加到会话列表 : " + redPacketAttachment.getRpId() + message.getContent() + message.getUuid());
+                                            NIMClient.getService(MsgService.class).deleteChattingHistory(message);
+                                            is_not_add = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!is_not_add) {
+                    addedListItems.add(message);
+                    needRefresh = true;
+                    items.add(message);
+                }
             }
         }
+
         if (needRefresh) {
             sortMessages(items);
             adapter.notifyDataSetChanged();
@@ -384,22 +412,31 @@ public class MessageListPanelEx {
 
     // 发送消息后，更新本地消息列表
     public void onMsgSend(IMMessage message) {
-        List<IMMessage> addedListItems = new ArrayList<>(1);
-        addedListItems.add(message);
-        adapter.updateShowTimeItem(addedListItems, false, true);
-
-        adapter.appendData(message);
-
-        boolean doScrollToBottom = true;
-        MsgAttachment msgAttachment = message.getAttachment();
-        if (msgAttachment != null && msgAttachment instanceof CustomAttachment) {
-            CustomAttachment customAttachment = (CustomAttachment) msgAttachment;
-            if (customAttachment.getType() == CustomAttachmentType.OpenedRedPacket) {
-                doScrollToBottom = false;
+        if (message.getSessionType() == container.sessionType) {
+            boolean is_not_add = false;
+            for (IMMessage imMessage : adapter.getData()) {
+                if (imMessage.isTheSame(message)) {
+                    is_not_add = true;
+                    break;
+                }
             }
-        }
-        if (doScrollToBottom) {
-            doScrollToBottom();
+            if (!is_not_add) {
+                List<IMMessage> addedListItems = new ArrayList<>(1);
+                addedListItems.add(message);
+                adapter.updateShowTimeItem(addedListItems, false, true);
+                adapter.appendData(message);
+                boolean doScrollToBottom = true;
+                MsgAttachment msgAttachment = message.getAttachment();
+                if (msgAttachment != null && msgAttachment instanceof CustomAttachment) {
+                    CustomAttachment customAttachment = (CustomAttachment) msgAttachment;
+                    if (customAttachment.getType() == CustomAttachmentType.OpenedRedPacket) {
+                        doScrollToBottom = false;
+                    }
+                }
+                if (doScrollToBottom) {
+                    doScrollToBottom();
+                }
+            }
         }
     }
 
@@ -879,31 +916,6 @@ public class MessageListPanelEx {
         }
     }
 
-    private boolean robotMessage(IMMessage message) {
-        MsgAttachment msgAttachment = message.getAttachment();
-        if (msgAttachment != null && msgAttachment instanceof NotificationAttachment) {
-            NotificationAttachment notificationAttachment = (NotificationAttachment) msgAttachment;
-            if (notificationAttachment.getType() == NotificationType.UpdateTeam) {
-                UpdateTeamAttachment updateTeamAttachment = (UpdateTeamAttachment) notificationAttachment;
-                for (Map.Entry<TeamFieldEnum, Object> field : updateTeamAttachment.getUpdatedFields().entrySet()) {
-                    if (field.getKey() == TeamFieldEnum.Extension) {
-                        try {
-                            Gson gson = new Gson();
-                            TeamExtension extension = gson.fromJson(field.getValue().toString(), new TypeToken<TeamExtension>() {
-                            }.getType());
-                            if (extension.getExtensionType() == 4) {
-                                return true;
-                            }
-                        } catch (Exception e) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     private class MsgItemEventListener implements MsgAdapter.ViewHolderEventListener {
 
         @Override
@@ -1210,7 +1222,6 @@ public class MessageListPanelEx {
                     if (customConfig != null) {
                         payload = customConfig.getPushPayload(item);
                     }
-//                    NIMClient.getService(MsgService.class).revokeMessage(item).setCallback(new RequestCallback<Void>() {
                     NIMClient.getService(MsgService.class).revokeMessageEx(item, "撤回一条消息", payload).setCallback(new RequestCallback<Void>() {
                         @Override
                         public void onSuccess(Void param) {
@@ -1446,4 +1457,29 @@ public class MessageListPanelEx {
             }
         }
     }
+
+    public void updateInviteMessage(IMMessage message) {
+        for (IMMessage imMessage : items) {
+            if (TextUtils.equals(message.getUuid(), imMessage.getUuid())) {
+                imMessage.setStatus(MsgStatusEnum.read);
+                NIMClient.getService(MsgService.class).updateIMMessageStatus(imMessage);
+            }
+        }
+        refreshMessageList();
+    }
+
+    public void updateInviteAuthMessage(IMMessage message) {
+        for (IMMessage imMessage : items) {
+            if (TextUtils.equals(message.getUuid(), imMessage.getUuid())) {
+                TeamAuthAttachment authAttachment = (TeamAuthAttachment) imMessage.getAttachment();
+                String notifica = " " + "\"" + message.getFromNick() + "\"" + "想邀请" + authAttachment.getInviteTipToId().split(",").length + "位朋友加入群聊  已确认";
+                authAttachment.setInviteTipContent(notifica);
+                authAttachment.setInviteTipType("-1");
+                imMessage.setAttachment(authAttachment);
+                NIMClient.getService(MsgService.class).updateIMMessageStatus(imMessage);
+            }
+        }
+        refreshMessageList();
+    }
+
 }

@@ -20,7 +20,6 @@ import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.common.adapter.TAdapter;
 import com.netease.nim.uikit.common.adapter.TAdapterDelegate;
 import com.netease.nim.uikit.common.adapter.TViewHolder;
-import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nim.uikit.common.util.sys.ScreenUtil;
 
 import java.util.LinkedList;

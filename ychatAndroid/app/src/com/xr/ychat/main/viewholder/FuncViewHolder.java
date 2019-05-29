@@ -65,7 +65,7 @@ public class FuncViewHolder extends AbsContactViewHolder<FuncViewHolder.FuncItem
             image.setImageResource(R.drawable.ic_advanced_team);
         } else if (item == FuncItem.INVITE_WECHAT_FRIEND) {
             funcName.setText("邀请微信好友");
-            image.setImageResource(R.mipmap.wechat);
+            image.setImageResource(R.drawable.wechat);
         }
 //        else if (item == FuncItem.BLACK_LIST) {
 //            funcName.setText("黑名单");
@@ -156,7 +156,7 @@ public class FuncViewHolder extends AbsContactViewHolder<FuncViewHolder.FuncItem
             } else if (item == ADD_FRIEND) {
                 AddFriendActivity.start(context);
             } else if (item == INVITE_WECHAT_FRIEND) {
-                WxShareUtils.share(context);
+                WxShareUtils.shareMenu(context);
             }
         }
     }

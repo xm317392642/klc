@@ -10,17 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
+import com.netease.nim.uikit.business.team.ui.TeamInfoGridView;
+import com.netease.nim.uikit.common.adapter.TAdapterDelegate;
+import com.netease.nim.uikit.common.adapter.TViewHolder;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.msg.model.TeamMsgAckInfo;
 import com.xr.ychat.R;
 import com.xr.ychat.session.activity.AckMsgInfoActivity;
 import com.xr.ychat.session.adapter.AckMsgDetailAdapter;
 import com.xr.ychat.session.fragment.tab.AckMsgTabFragment;
 import com.xr.ychat.session.model.AckMsgViewModel;
 import com.xr.ychat.session.viewholder.AckMsgDetailHolder;
-import com.netease.nim.uikit.business.team.ui.TeamInfoGridView;
-import com.netease.nim.uikit.common.adapter.TAdapterDelegate;
-import com.netease.nim.uikit.common.adapter.TViewHolder;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.msg.model.TeamMsgAckInfo;
 
 import java.util.ArrayList;
 import java.util.List;

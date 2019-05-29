@@ -12,7 +12,8 @@ public class NimMessageRevokeObserver implements Observer<RevokeMsgNotification>
 
     @Override
     public void onEvent(RevokeMsgNotification notification) {
-        if (notification == null || notification.getMessage() == null) {
+        //2为漫游撤回消息
+        if (notification == null || notification.getMessage() == null || notification.getNotificationType() == 2) {
             return;
         }
 

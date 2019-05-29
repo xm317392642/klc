@@ -1,28 +1,28 @@
 package com.xr.ychat.session.activity;
 
-        import android.content.Context;
-        import android.content.Intent;
-        import android.graphics.Bitmap;
-        import android.os.Bundle;
-        import android.os.Handler;
-        import android.text.TextUtils;
-        import android.view.View;
-        import android.view.WindowManager;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.WindowManager;
 
-        import com.netease.nim.uikit.common.activity.SwipeBackUI;
-        import com.netease.nim.uikit.common.util.YchatToastUtils;
-        import com.xr.ychat.R;
-        import com.xr.ychat.session.extension.SnapChatAttachment;
-        import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog;
-        import com.netease.nim.uikit.common.ui.imageview.BaseZoomableImageView;
-        import com.netease.nim.uikit.common.util.media.BitmapDecoder;
-        import com.netease.nim.uikit.common.util.media.ImageUtil;
-        import com.netease.nimlib.sdk.NIMClient;
-        import com.netease.nimlib.sdk.Observer;
-        import com.netease.nimlib.sdk.msg.MsgService;
-        import com.netease.nimlib.sdk.msg.MsgServiceObserve;
-        import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
-        import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.netease.nim.uikit.common.activity.SwipeBackUI;
+import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog;
+import com.netease.nim.uikit.common.util.YchatToastUtils;
+import com.netease.nim.uikit.common.util.media.BitmapDecoder;
+import com.netease.nim.uikit.common.util.media.ImageUtil;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.xr.ychat.R;
+import com.xr.ychat.session.extension.SnapChatAttachment;
 
 
 /**
@@ -35,7 +35,7 @@ public class WatchSnapChatPictureActivity extends SwipeBackUI {
     private IMMessage message;
 
     private View loadingLayout;
-    private BaseZoomableImageView image;
+    private PhotoView image;
     protected CustomAlertDialog alertDialog;
 
     private static WatchSnapChatPictureActivity instance;
@@ -57,7 +57,7 @@ public class WatchSnapChatPictureActivity extends SwipeBackUI {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_watch_snapchat_activity);
+        setActivityView(R.layout.nim_watch_snapchat_activity);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         onParseIntent();
@@ -84,7 +84,7 @@ public class WatchSnapChatPictureActivity extends SwipeBackUI {
     private void findViews() {
         alertDialog = new CustomAlertDialog(this);
         loadingLayout = findViewById(R.id.loading_layout);
-        image = (BaseZoomableImageView) findViewById(R.id.watch_image_view);
+        image = (PhotoView) findViewById(R.id.watch_image_view);
     }
 
     private void requestOriImage() {

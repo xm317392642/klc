@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,15 +50,15 @@ public class TeamManagmentActivity extends SwipeBackUI {
     private static final int REQUEST_CODE_REMOVE = 103;//转让群
     private static final int REQUEST_CODE_TRANSFER = 101;//转让群
     private static final int REQUEST_CODE_TRANSFER_AND_EXIT = 104;//群主转让群并且退出，先调用转让群transferTeam(final String account)  接口成功后，成为普通成员后在调用 退出接口 quitTeam
-    private View layoutTeamMute, layoutControlExit, layoutAuthentication, layoutInvite, layoutInfoUpdate, layoutInviteeAuthen, layoutTransferTeam, layoutCopyTeam, teamMemberActivity, teamMemberChangeRecord, teamMemberForbidRedPacket, teamRobot;
-    private TextView controlExitText, authenticationText, inviteText, infoUpdateText, inviteeAutenText, tx_member_protect;
+    private View layoutTeamMute, layoutControlExit, layoutAuthentication, layoutInvite, layoutInfoUpdate, layoutInviteeAuthen, layoutOpenTeamAuthentication, layoutTransferTeam, layoutCopyTeam, teamMemberActivity, teamMemberChangeRecord, teamMemberForbidRedPacket, teamRobot;
+    private TextView controlExitText, authenticationText, inviteText, infoUpdateText, inviteeAutenText, tx_member_protect, openTeamAuthentication;
     private MenuDialog authenDialog, inviteDialog, teamInfoUpdateDialog, teamInviteeDialog, dialog;
     private String teamId;
     private Team team;
     private String robotId;
     private boolean isSelfAdmin;//是否是群主
     private View teamProtectView;
-    private SwitchButton switchButton, switchButtonControlExit;
+    private SwitchButton protectSwitchBtn, exitTeamSwitchBtn, openTeamAuthSitchBtn;
     private Gson gson;
     // state
     private boolean isSelfManager = false;
@@ -67,7 +66,7 @@ public class TeamManagmentActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_advanced_team_managment_activity);
+        setActivityView(R.layout.nim_advanced_team_managment_activity);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);
         mToolbar.setNavigationOnClickListener(v -> finish());
@@ -110,7 +109,8 @@ public class TeamManagmentActivity extends SwipeBackUI {
         initCopyTeam();
         //转让群
         initTransferTeam();
-
+        //是否开启群认证
+        initTeamAuthentication();
 
         updateAuthenView();
         updateBeInvitedText(team.getTeamBeInviteMode());
@@ -136,29 +136,28 @@ public class TeamManagmentActivity extends SwipeBackUI {
         setMarginTop(teamProtectView);
         teamProtectView.findViewById(R.id.line).setVisibility(View.GONE);
         TextView tpotectTx = teamProtectView.findViewById(R.id.item_title);
-        switchButton = teamProtectView.findViewById(R.id.setting_item_toggle);
+        protectSwitchBtn = teamProtectView.findViewById(R.id.setting_item_toggle);
         tpotectTx.setText("群成员保护模式");
-        Log.e("xx", "team.getExtension()==" + team.getExtension());
         if (!TextUtils.isEmpty(team.getExtension())) {
             try {
                 TeamExtension extension = gson.fromJson(team.getExtension(), new TypeToken<TeamExtension>() {
                 }.getType());
                 if (TeamExtras.OPEN.equals(extension.getMemberProtect())) {
-                    switchButton.setCheck(true);
+                    protectSwitchBtn.setCheck(true);
                 } else {
-                    switchButton.setCheck(false);
+                    protectSwitchBtn.setCheck(false);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            switchButton.setCheck(false);
+            protectSwitchBtn.setCheck(false);
         }
-        switchButton.setOnChangedListener((v, checkState) -> {
+        protectSwitchBtn.setOnChangedListener((v, checkState) -> {
             if (checkState) {
-                synExtensionToServer(TeamExtras.OPEN, true);
+                synExtensionToServer(protectSwitchBtn, 1, TeamExtras.OPEN, true, "群成员保护模式");
             } else {
-                synExtensionToServer(TeamExtras.CLOSE, false);
+                synExtensionToServer(protectSwitchBtn, 1, TeamExtras.CLOSE, false, "群成员保护模式");
             }
         });
     }
@@ -166,9 +165,9 @@ public class TeamManagmentActivity extends SwipeBackUI {
     /**
      * 把新增的字段同步存储到服务器
      *
-     * @param protectValue
+     * @param extensionValue
      */
-    private void synExtensionToServer(String protectValue, boolean checkState) {
+    private void synExtensionToServer(SwitchButton switchBtn, int extensionType, String extensionValue, boolean checkState, String toastTip) {
         TeamExtension extension;
         if (!TextUtils.isEmpty(team.getExtension())) {
             try {
@@ -180,33 +179,47 @@ public class TeamManagmentActivity extends SwipeBackUI {
         } else {
             extension = new TeamExtension();
         }
-        extension.setMemberProtect(protectValue);
-        extension.setExtensionType(1);
+        /**
+         * 1:群成员保护模式
+         * 2:退群验证
+         * 3:截屏通知
+         * 4:添加、移出机器人
+         * 5:开启群认证
+         */
+        switch (extensionType) {
+            case 1:
+                extension.setMemberProtect(extensionValue);
+                break;
+            case 2:
+                extension.setLeaveTeamVerify(extensionValue);
+                break;
+            case 5:
+                extension.setInviteVerity(extensionValue);
+                break;
+        }
+
+        extension.setExtensionType(extensionType);
         String extensionString = gson.toJson(extension);
-        DialogMaker.showProgressDialog(this, getString(R.string.empty), true);
         NIMClient.getService(TeamService.class).updateTeam(teamId, TeamFieldEnum.Extension, extensionString).setCallback(new RequestCallback<Void>() {
             @Override
             public void onSuccess(Void param) {
-                DialogMaker.dismissProgressDialog();
                 team.setExtension(extensionString);
-                switchButton.setCheck(checkState);
+                switchBtn.setCheck(checkState);
                 if (checkState) {
-                    YchatToastUtils.showShort("群成员保护模式开启");
+                    YchatToastUtils.showShort(toastTip + "开启");
                 } else {
-                    YchatToastUtils.showShort("群成员保护模式关闭");
+                    YchatToastUtils.showShort(toastTip + "关闭");
                 }
             }
 
             @Override
             public void onFailed(int code) {
-                DialogMaker.dismissProgressDialog();
-                switchButton.setCheck(!checkState);
+                switchBtn.setCheck(!checkState);
             }
 
             @Override
             public void onException(Throwable exception) {
-                DialogMaker.dismissProgressDialog();
-                switchButton.setCheck(!checkState);
+                switchBtn.setCheck(!checkState);
             }
         });
     }
@@ -425,9 +438,51 @@ public class TeamManagmentActivity extends SwipeBackUI {
 
         ((TextView) layoutTransferTeam.findViewById(R.id.item_title)).setText(R.string.transfer_team);
         ((TextView) layoutTransferTeam.findViewById(R.id.item_detail)).setHint("");
-        layoutTransferTeam.findViewById(R.id.line).setVisibility(View.GONE);
         layoutTransferTeam.setOnClickListener(v -> transferTeamAndEixtDialog());
     }
+
+    /**
+     * 是否开启群认证
+     */
+    private void initTeamAuthentication() {
+        layoutOpenTeamAuthentication = findViewById(R.id.open_team_authentication_layout);
+        openTeamAuthentication = (TextView) findViewById(R.id.open_team_authentication_tips);
+        if (isSelfAdmin) {
+            layoutOpenTeamAuthentication.setVisibility(View.VISIBLE);
+            openTeamAuthentication.setVisibility(View.VISIBLE);
+        } else {
+            layoutOpenTeamAuthentication.setVisibility(View.GONE);
+            openTeamAuthentication.setVisibility(View.GONE);
+        }
+
+        ((TextView) layoutOpenTeamAuthentication.findViewById(R.id.item_title)).setText("是否开启群认证");
+        layoutOpenTeamAuthentication.findViewById(R.id.line).setVisibility(View.GONE);
+
+        openTeamAuthSitchBtn = layoutOpenTeamAuthentication.findViewById(R.id.setting_item_toggle);
+        if (!TextUtils.isEmpty(team.getExtension())) {
+            try {
+                TeamExtension extension = gson.fromJson(team.getExtension(), new TypeToken<TeamExtension>() {
+                }.getType());
+                if (TeamExtras.OPEN.equals(extension.getInviteVerity())) {
+                    openTeamAuthSitchBtn.setCheck(true);
+                } else {
+                    openTeamAuthSitchBtn.setCheck(false);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            openTeamAuthSitchBtn.setCheck(false);
+        }
+        openTeamAuthSitchBtn.setOnChangedListener((v, checkState) -> {
+            if (checkState) {
+                synExtensionToServer(openTeamAuthSitchBtn, 5, TeamExtras.OPEN, true, "群认证");
+            } else {
+                synExtensionToServer(openTeamAuthSitchBtn, 5, TeamExtras.CLOSE, false, "群认证");
+            }
+        });
+    }
+
 
     /**
      * 更新被邀请人detail显示
@@ -524,11 +579,7 @@ public class TeamManagmentActivity extends SwipeBackUI {
      */
     private void findLayoutInviteeAuthen() {
         layoutInviteeAuthen = findViewById(R.id.team_invitee_authen_layout);
-        if (isSelfAdmin) {
-            layoutInviteeAuthen.setVisibility(View.VISIBLE);
-        } else if (isSelfManager) {
-            layoutInviteeAuthen.setVisibility(View.GONE);
-        }
+        layoutInviteeAuthen.setVisibility(View.GONE);
 
         layoutInviteeAuthen.findViewById(R.id.line).setVisibility(View.GONE);
         ((TextView) layoutInviteeAuthen.findViewById(R.id.item_title)).setText(R.string.team_invitee_authentication);
@@ -570,11 +621,7 @@ public class TeamManagmentActivity extends SwipeBackUI {
      */
     private void findLayoutInvite() {
         layoutInvite = findViewById(R.id.team_invite_layout);
-        if (isSelfAdmin) {
-            layoutInvite.setVisibility(View.VISIBLE);
-        } else if (isSelfManager) {
-            layoutInvite.setVisibility(View.GONE);
-        }
+        layoutInvite.setVisibility(View.GONE);
 
         setMarginTop(layoutInvite);
         ((TextView) layoutInvite.findViewById(R.id.item_title)).setText(R.string.team_invite);
@@ -650,6 +697,7 @@ public class TeamManagmentActivity extends SwipeBackUI {
         }
 
         ((TextView) layoutInfoUpdate.findViewById(R.id.item_title)).setText(R.string.team_info_update);
+        layoutInfoUpdate.findViewById(R.id.line).setVisibility(View.GONE);
         infoUpdateText = ((TextView) layoutInfoUpdate.findViewById(R.id.item_detail));
         layoutInfoUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -672,7 +720,6 @@ public class TeamManagmentActivity extends SwipeBackUI {
 
         setMarginTop(layoutAuthentication);
         ((TextView) layoutAuthentication.findViewById(R.id.item_title)).setText(R.string.team_authentication);
-        layoutAuthentication.findViewById(R.id.line).setVisibility(View.GONE);
         authenticationText = ((TextView) layoutAuthentication.findViewById(R.id.item_detail));
         layoutAuthentication.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -695,74 +742,31 @@ public class TeamManagmentActivity extends SwipeBackUI {
         setMarginTop(layoutControlExit);
         ((TextView) layoutControlExit.findViewById(R.id.item_title)).setText("退群验证");
         layoutControlExit.findViewById(R.id.line).setVisibility(View.GONE);
-        switchButtonControlExit = layoutControlExit.findViewById(R.id.setting_item_toggle);
+        exitTeamSwitchBtn = layoutControlExit.findViewById(R.id.setting_item_toggle);
         if (!TextUtils.isEmpty(team.getExtension())) {
             try {
                 TeamExtension extension = gson.fromJson(team.getExtension(), new TypeToken<TeamExtension>() {
                 }.getType());
                 if (TeamExtras.OPEN.equals(extension.getLeaveTeamVerify())) {
-                    switchButtonControlExit.setCheck(true);
+                    exitTeamSwitchBtn.setCheck(true);
                 } else {
-                    switchButtonControlExit.setCheck(false);
+                    exitTeamSwitchBtn.setCheck(false);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            switchButtonControlExit.setCheck(false);
+            exitTeamSwitchBtn.setCheck(false);
         }
-        switchButtonControlExit.setOnChangedListener((v, checkState) -> {
+        exitTeamSwitchBtn.setOnChangedListener((v, checkState) -> {
             if (checkState) {
-                synExtensionControlExit(TeamExtras.OPEN, true);
+                synExtensionToServer(exitTeamSwitchBtn, 2, TeamExtras.OPEN, true, "退群验证");
             } else {
-                synExtensionControlExit(TeamExtras.CLOSE, false);
+                synExtensionToServer(exitTeamSwitchBtn, 2, TeamExtras.CLOSE, false, "退群验证");
             }
         });
     }
 
-    private void synExtensionControlExit(String protectValue, boolean checkState) {
-        TeamExtension extension;
-        if (!TextUtils.isEmpty(team.getExtension())) {
-            LogUtils.e(team.getExtension());
-            try {
-                extension = gson.fromJson(team.getExtension(), new TypeToken<TeamExtension>() {
-                }.getType());
-            } catch (Exception exception) {
-                extension = new TeamExtension();
-            }
-        } else {
-            extension = new TeamExtension();
-        }
-        extension.setLeaveTeamVerify(protectValue);
-        extension.setExtensionType(2);
-        String extensionString = gson.toJson(extension);
-        DialogMaker.showProgressDialog(this, getString(R.string.empty), true);
-        NIMClient.getService(TeamService.class).updateTeam(teamId, TeamFieldEnum.Extension, extensionString).setCallback(new RequestCallback<Void>() {
-            @Override
-            public void onSuccess(Void param) {
-                DialogMaker.dismissProgressDialog();
-                team.setExtension(extensionString);
-                switchButtonControlExit.setCheck(checkState);
-                if (checkState) {
-                    YchatToastUtils.showShort("退群验证开启");
-                } else {
-                    YchatToastUtils.showShort("退群验证关闭");
-                }
-            }
-
-            @Override
-            public void onFailed(int code) {
-                DialogMaker.dismissProgressDialog();
-                switchButtonControlExit.setCheck(!checkState);
-            }
-
-            @Override
-            public void onException(Throwable exception) {
-                DialogMaker.dismissProgressDialog();
-                switchButtonControlExit.setCheck(!checkState);
-            }
-        });
-    }
 
     /**
      * 显示验证菜单

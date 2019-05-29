@@ -46,7 +46,6 @@
     </RelativeLayout>
 
     <View
-        android:id="@+id/bottom_line"
         style="@style/horizontal_light_thin_divider"
         android:layout_marginLeft="62dip"
         android:layout_marginRight="10dip"/>

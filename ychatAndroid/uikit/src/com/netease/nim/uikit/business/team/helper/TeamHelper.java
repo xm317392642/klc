@@ -3,6 +3,7 @@ package com.netease.nim.uikit.business.team.helper;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.contact.core.item.ContactIdFilter;
@@ -190,6 +191,7 @@ public class TeamHelper {
             return R.string.team_invitee_not_need_authen;
         }
     }
+
     /**
      * 获取复制群通讯录选择器option
      *
@@ -214,6 +216,7 @@ public class TeamHelper {
         option.alreadySelectedAccounts = memberAccounts;
         return option;
     }
+
     /**
      * 获取创建群通讯录选择器option
      *
@@ -228,7 +231,7 @@ public class TeamHelper {
         option.allowSelectEmpty = false;
         option.alreadySelectedAccounts = memberAccounts;
         ArrayList<String> includeAccounts = new ArrayList<>();
-        includeAccounts.add(CommonUtil.ASSISTANT_ACCOUNT);
+        includeAccounts.add(SPUtils.getInstance().getString(CommonUtil.ASSISTANT));
         option.itemFilter = new ContactIdFilter(includeAccounts, true);
         return option;
     }
@@ -248,7 +251,7 @@ public class TeamHelper {
             option.itemDisableFilter = new ContactIdFilter(disableAccounts);
         }
         ArrayList<String> includeAccounts = new ArrayList<>();
-        includeAccounts.add(CommonUtil.ASSISTANT_ACCOUNT);
+        includeAccounts.add(SPUtils.getInstance().getString(CommonUtil.ASSISTANT));
         option.itemFilter = new ContactIdFilter(includeAccounts, true);
         return option;
     }
@@ -279,7 +282,7 @@ public class TeamHelper {
                 }
             }
             tipContent.append("所在群组数量达到上限，邀请失败");
-            YchatToastUtils.showShort( tipContent.toString());
+            YchatToastUtils.showShort(tipContent.toString());
         }
     }
 
@@ -383,6 +386,21 @@ public class TeamHelper {
             }
         }
         return changeTeamInfo;
+    }
+
+    public static boolean canConfirmJoin(String tid, String account) {
+        boolean canConfirmJoin = false;
+        Team team = NimUIKit.getTeamProvider().getTeamById(tid);
+        if (team != null && team.getType() == TeamTypeEnum.Advanced) {
+            TeamMember member = NimUIKit.getTeamProvider().getTeamMember(tid, account);
+            if (member != null) {
+                TeamMemberType teamMemberType = member.getType();
+                if (teamMemberType == TeamMemberType.Owner || teamMemberType == TeamMemberType.Manager) {
+                    canConfirmJoin = true;
+                }
+            }
+        }
+        return canConfirmJoin;
     }
 
     public static boolean isTeamMember(String tid, String account) {

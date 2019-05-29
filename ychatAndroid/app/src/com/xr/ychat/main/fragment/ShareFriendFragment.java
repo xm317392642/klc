@@ -6,7 +6,6 @@ import com.netease.nim.uikit.api.model.contact.ContactsCustomization;
 import com.netease.nim.uikit.business.contact.ContactsFragment;
 import com.netease.nim.uikit.business.contact.core.item.AbsContactItem;
 import com.netease.nim.uikit.business.contact.core.viewholder.AbsContactViewHolder;
-import com.netease.nim.uikit.common.activity.UI;
 import com.xr.ychat.R;
 import com.xr.ychat.main.activity.GlobalSearchActivity;
 import com.xr.ychat.main.activity.MainShareActivity;

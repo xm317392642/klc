@@ -1,15 +1,11 @@
 package com.xr.ychat.session.viewholder;
 
-import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.xr.ychat.R;
-import com.xr.ychat.session.activity.WatchSnapChatPictureActivity;
-import com.xr.ychat.session.extension.SnapChatAttachment;
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderBase;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseMultiItemFetchLoadAdapter;
 import com.netease.nim.uikit.common.util.file.AttachmentStore;
@@ -18,6 +14,9 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
+import com.xr.ychat.R;
+import com.xr.ychat.session.activity.WatchSnapChatPictureActivity;
+import com.xr.ychat.session.extension.SnapChatAttachment;
 
 /**
  * Created by zhoujianghua on 2015/8/7.

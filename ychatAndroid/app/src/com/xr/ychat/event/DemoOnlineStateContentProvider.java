@@ -2,8 +2,8 @@ package com.xr.ychat.event;
 
 import android.text.TextUtils;
 
-import com.xr.ychat.DemoCache;
 import com.netease.nim.uikit.api.model.main.OnlineStateContentProvider;
+import com.xr.ychat.DemoCache;
 
 /**
  * Created by hzchenkang on 2017/3/31.

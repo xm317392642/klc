@@ -1,4 +1,4 @@
-﻿package com.xr.ychat.main.activity;
+package com.xr.ychat.main.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresPermission;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -21,25 +23,34 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.microquation.linkedme.android.LinkedME;
-import com.netease.nim.avchatkit.AVChatProfile;
-import com.netease.nim.avchatkit.activity.AVChatActivity;
-import com.netease.nim.avchatkit.constant.AVChatExtras;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.main.LoginSyncDataStatusObserver;
 import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
+import com.netease.nim.uikit.business.session.activity.BaseMessageActivity;
 import com.netease.nim.uikit.business.session.constant.Extras;
+import com.netease.nim.uikit.business.session.extension.RedPacketAttachment;
+import com.netease.nim.uikit.business.session.fragment.MessageFragment;
 import com.netease.nim.uikit.business.team.helper.TeamHelper;
+import com.netease.nim.uikit.common.CommonUtil;
+import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
+import com.netease.nim.uikit.common.RequestInfo;
+import com.netease.nim.uikit.common.UnsentRedPacket;
+import com.netease.nim.uikit.common.UnsentRedPacketCache;
+import com.netease.nim.uikit.common.UpdateInfo;
 import com.netease.nim.uikit.common.activity.ToolBarOptions;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.ui.drop.DropCover;
 import com.netease.nim.uikit.common.ui.drop.DropFake;
 import com.netease.nim.uikit.common.ui.drop.DropManager;
+import com.netease.nim.uikit.common.util.DownloadUtils;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
+import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nim.uikit.impl.preference.UserPreferences;
 import com.netease.nim.uikit.support.permission.MPermission;
 import com.netease.nim.uikit.support.permission.annotation.OnMPermissionDenied;
@@ -48,12 +59,19 @@ import com.netease.nim.uikit.support.permission.annotation.OnMPermissionNeverAsk
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
+import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.SystemMessageObserver;
 import com.netease.nimlib.sdk.msg.SystemMessageService;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
+import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.xr.ychat.BuildConfig;
 import com.xr.ychat.R;
 import com.xr.ychat.login.LoginAuthorizeActivity;
 import com.xr.ychat.login.LogoutHelper;
@@ -70,88 +88,16 @@ import com.xr.ychat.session.SessionHelper;
 import com.xr.ychat.team.TeamCreateHelper;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+//import com.netease.nim.avchatkit.AVChatProfile;
+//import com.netease.nim.avchatkit.activity.AVChatActivity;
+//import com.netease.nim.avchatkit.constant.AVChatExtras;
 
 /**
- * 主界面 测试冲突
+ * 主界面
  * Created by huangjun on 2015/3/25.
-      新增了一个断点续传的方法
- *    private void breakPointDownload(String url) {
- *         //https://github.com/lingochamp/FileDownloader/blob/master/README-zh.md compile 'com.liulishuo.filedownloader:library:1.7.6'
- *         FileDownloader.setup(getContext());
- *         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
- *         builder.setTitle("正在更新");
- *         // 给下载对话框增加进度条
- *         final LayoutInflater inflater = LayoutInflater.from(getContext());
- *         View v = inflater.inflate(R.layout.softupdate_progress, null);
- *         final ProgressBar mProgress = (ProgressBar) v.findViewById(R.id.update_progress);
- *         final TextView txProgress = (TextView) v.findViewById(R.id.txProgress);
- *         builder.setView(v);
- *         final Dialog mDownloadDialog = builder.create();
- *         mDownloadDialog.setCancelable(false );
- *         mDownloadDialog.show();
- *         String localPath = Tool.getCacheDirPath(context) + File.separator + "tutengdai.apk";
- *         //FileDownloader.isReusedOldFile
- *         Tool.printLog("localPath=" + localPath);
- *         FileDownloader.getImpl().create(url)
- *                 .setPath(localPath)//下载文件的存储绝对路径
- *                 .setForceReDownload(true)//强制重新下载，将会忽略检测文件是否健在
- *                 .setListener(new FileDownloadListener() {
- *                     @Override
- *                     protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
- *                         Tool.printLog("pending");
- *                     }
- *                     @Override
- *                     protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
- *                         Tool.printLog("connected");
- *                     }
- *                     @Override
- *                     protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
- *                         Tool.printLog("soFarBytes=" + soFarBytes + "  totalBytes=" + totalBytes);
- *                         int progress = (int) (((float) soFarBytes / totalBytes) * 100);
- *                         // 设置进度条位置
- *                         mProgress.setProgress(progress);
- *                         txProgress.setText(progress + "%-------");
- *                     }
- *
- *                     @Override
- *                     protected void blockComplete(BaseDownloadTask task) {
- *                         Tool.printLog("blockComplete");
- *                     }
- *
- *                     @Override
- *                     protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
- *                         Tool.printLog("retry");
- *                     }
- *
- *                     @Override
- *                     protected void completed(BaseDownloadTask task) {
- *                         // 安装文件
- *                         new UpdateManager(getContext()).installApk(Tool.getCacheDirPath(context));
- *                         mDownloadDialog.dismiss();
- *                         Toast.makeText(getContext(), "下载完成", 1).show();
- *                     }
- *
- *                     @Override
- *                     protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
- *                         Tool.printLog("paused");
-                           Toast.makeText(getContext(), "下载暂停", 1).show();
- *                     }
- *
- *                     @Override
- *                     protected void error(BaseDownloadTask task, Throwable e) {
- *                         Tool.printLog("error=" + e.getMessage());
- *                         mDownloadDialog.dismiss();//下载失败，下回会重新断点续传
- *                          Toast.makeText(getContext(), "下载失败", 1000).show();
- *                     }
- *
- *                     @Override
- *                     protected void warn(BaseDownloadTask task) {
- *                         Tool.printLog("下载警告1");
- *                         Tool.printLog("下载警告2");
- *                         Tool.printLog("下载警告3");
- *                     }
- *                 }).start();
- *     }
  */
 public class MainActivity extends UI implements ReminderManager.UnreadNumChangedCallback, MainMenuFragment.ClickableChildView {
     private static final String TAG_FRAGMENT_SESSION = "tag_fragment_session";
@@ -182,13 +128,18 @@ public class MainActivity extends UI implements ReminderManager.UnreadNumChanged
     private MainTabFragment sessionFragment;
     private MainTabFragment contactFragment;
     private Fragment mineFragment;
-    private MainMenuFragment mainMenuFragment;
     private int currentItem;
     private LocalBroadcastManager localBroadcastManager;
+    private List<SystemMessageType> systemMessageTypes;
     private Observer<Integer> sysMsgUnreadCountChangedObserver = new Observer<Integer>() {
         @Override
         public void onEvent(Integer unreadCount) {
-            if (unreadCount != 0) {
+            int teamInviteNumber = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountByType(systemMessageTypes);
+            if (teamInviteNumber > 0) {
+                NIMClient.getService(SystemMessageService.class).resetSystemMessageUnreadCountByType(systemMessageTypes);
+            }
+            int count = unreadCount - teamInviteNumber;
+            if (count > 0) {
                 int unread = unreadCount + CustomNotificationCache.getUnreadCount();
                 SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unread);
                 ReminderManager.getInstance().updateContactUnreadNum(unread);
@@ -196,6 +147,7 @@ public class MainActivity extends UI implements ReminderManager.UnreadNumChanged
         }
     };
     private ClearSystemCountBroadcastReceiver receiver;
+    private NetworkChangedReceiver networkChangedReceiver;
 
     private class ClearSystemCountBroadcastReceiver extends BroadcastReceiver {
         @Override
@@ -235,12 +187,12 @@ public class MainActivity extends UI implements ReminderManager.UnreadNumChanged
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setActivityView(R.layout.activity_main);
         UserPreferences.setShare(false);
         ToolBarOptions options = new ToolBarOptions();
         options.titleId = R.string.empty;
         setToolBar(R.id.toolbar, options);
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
         if (parseIntent()) {
             return;
         }
@@ -268,25 +220,28 @@ public class MainActivity extends UI implements ReminderManager.UnreadNumChanged
             }
             return false;
         }
-        if (intent.hasExtra(AVChatActivity.INTENT_ACTION_AVCHAT) && AVChatProfile.getInstance().isAVChatting()) {
-            intent.removeExtra(AVChatActivity.INTENT_ACTION_AVCHAT);
-            Intent localIntent = new Intent();
-            localIntent.setClass(this, AVChatActivity.class);
-            startActivity(localIntent);
-            return true;
-        }
-        String account = intent.getStringExtra(AVChatExtras.EXTRA_ACCOUNT);
-        if (intent.hasExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION) && !TextUtils.isEmpty(account)) {
-            intent.removeExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION);
-            NimUIKit.startP2PSession(this, account);
-            return true;
-        }
+//        if (intent.hasExtra(AVChatActivity.INTENT_ACTION_AVCHAT) && AVChatProfile.getInstance().isAVChatting()) {
+//            intent.removeExtra(AVChatActivity.INTENT_ACTION_AVCHAT);
+//            Intent localIntent = new Intent();
+//            localIntent.setClass(this, AVChatActivity.class);
+//            startActivity(localIntent);
+//            return true;
+//        }
+//        String account = intent.getStringExtra(AVChatExtras.EXTRA_ACCOUNT);
+//        if (intent.hasExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION) && !TextUtils.isEmpty(account)) {
+//            intent.removeExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION);
+//            NimUIKit.startP2PSession(this, account);
+//            return true;
+//        }
         return false;
     }
 
     private void init() {
+        SPUtils.getInstance().put(CommonUtil.ASSISTANT, BuildConfig.ASSISTANT_ID);
         observerSyncDataComplete();
         findViews();
+        systemMessageTypes = new ArrayList<>();
+        systemMessageTypes.add(SystemMessageType.TeamInvite);
         registerMsgUnreadInfoObserver(true);
         registerSystemMessageObservers(true);
         requestSystemMessageUnreadCount();
@@ -473,8 +428,15 @@ public class MainActivity extends UI implements ReminderManager.UnreadNumChanged
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("com.xr.ychat.ClearSystemCountBroadcastReceiver");
             localBroadcastManager.registerReceiver(receiver, intentFilter);
+            networkChangedReceiver = new NetworkChangedReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+            filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+            filter.addAction("android.net.wifi.STATE_CHANGE");
+            registerReceiver(networkChangedReceiver, filter);
         } else {
             localBroadcastManager.unregisterReceiver(receiver);
+            unregisterReceiver(networkChangedReceiver);
         }
     }
 
@@ -489,7 +451,11 @@ public class MainActivity extends UI implements ReminderManager.UnreadNumChanged
      * 查询系统消息未读数
      */
     private void requestSystemMessageUnreadCount() {
-        int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock() + CustomNotificationCache.getUnreadCount();
+        int teamInviteNumber = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountByType(systemMessageTypes);
+        if (teamInviteNumber > 0) {
+            NIMClient.getService(SystemMessageService.class).resetSystemMessageUnreadCountByType(systemMessageTypes);
+        }
+        int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock() - teamInviteNumber + CustomNotificationCache.getUnreadCount();
         SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unread);
         ReminderManager.getInstance().updateContactUnreadNum(unread);
     }
@@ -528,6 +494,7 @@ public class MainActivity extends UI implements ReminderManager.UnreadNumChanged
                 .permissions(BASIC_PERMISSIONS)
                 .request();
     }
+
 
     private void onLogout(String avatar) {
         Preferences.saveUserToken(this, "");
@@ -590,6 +557,9 @@ public class MainActivity extends UI implements ReminderManager.UnreadNumChanged
         registerMsgUnreadInfoObserver(false);
         registerSystemMessageObservers(false);
         DropManager.getInstance().destroy();
+        if (ActivityUtils.getActivityList().size() == 0) {
+            CommonUtil.setCancelValue(false);
+        }
     }
 
     @Override
@@ -661,4 +631,150 @@ public class MainActivity extends UI implements ReminderManager.UnreadNumChanged
         res.updateConfiguration(config, res.getDisplayMetrics());
         return res;
     }
+
+
+    private void kickOut(StatusCode code) {
+        Preferences.saveUserToken(this, "");
+
+        if (code == StatusCode.PWD_ERROR) {
+            LogUtil.e("Auth", "user password error");
+            YchatToastUtils.showShort(R.string.login_failed);
+        } else {
+            LogUtil.i("Auth", "Kicked!");
+        }
+        //logout
+        // 清理缓存&注销监听&清除状态
+        LogoutHelper.logout();
+        //LoginActivity.start(getActivity(), true);
+        LoginAuthorizeActivity.start(this, true);
+        finish();
+    }
+
+    /**
+     * 用户状态变化
+     */
+    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
+
+        @Override
+        public void onEvent(StatusCode code) {
+            if (code.wontAutoLogin()) {
+                kickOut(code);
+            } else {
+                if (code == StatusCode.NET_BROKEN) {
+                    title.setText(getString(R.string.home_tab_chat) + "(" + getString(R.string.net_broken) + ")");
+                } else if (code == StatusCode.UNLOGIN) {
+                    title.setText(getString(R.string.home_tab_chat) + "(" + getString(R.string.nim_status_unlogin) + ")");
+                } else if (code == StatusCode.CONNECTING) {
+                    title.setText(getString(R.string.home_tab_chat) + "(" + getString(R.string.nim_status_connecting) + ")");
+                } else if (code == StatusCode.LOGINING) {
+                    title.setText(getString(R.string.home_tab_chat) + "(" + getString(R.string.nim_status_connecting) + ")");
+                } else {
+                    title.setText(R.string.home_tab_chat);
+                    //每次网络恢复，实时调用接口检查当前版本是不是最新版本
+                    DownloadUtils.queryAppVersion((boolean success, Object result, int code2) -> {
+                        if (success) {
+                            update((UpdateInfo) result);
+                        }
+                    });
+                }
+            }
+        }
+    };
+
+
+    public class NetworkChangedReceiver extends BroadcastReceiver {
+
+        @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (manager == null) {
+                return;
+            }
+            NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
+            if (activeNetwork != null && activeNetwork.isConnected()) {
+                List<UnsentRedPacket> datalist = UnsentRedPacketCache.getDataList();
+                if (datalist != null && datalist.size() > 0) {
+                    for (UnsentRedPacket unsentRedPacket : datalist) {
+                        if (unsentRedPacket.getTime() < 10) {
+                            String uid = Preferences.getWeiranUid(MainActivity.this);
+                            String mytoken = Preferences.getWeiranToken(MainActivity.this);
+                            ContactHttpClient.getInstance().verifyPaymentResult(uid, mytoken, unsentRedPacket.getRedPacketID(), new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
+                                @Override
+                                public void onSuccess(RequestInfo aVoid) {
+                                    unsentRedPacket.setTime(unsentRedPacket.getTime() + 1);
+                                    UnsentRedPacketCache.updateUnsentRedPacket(unsentRedPacket);
+                                    if (aVoid.getPay_status() == 0 && contains(unsentRedPacket)) {
+                                        sendRepacketMessage(unsentRedPacket);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailed(int code, String errorMsg) {
+                                }
+                            });
+                        } else {
+                            UnsentRedPacketCache.removeUnsentRedPacket(unsentRedPacket.getRedPacketID());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean contains(UnsentRedPacket orderno) {
+        boolean contains = false;
+        List<UnsentRedPacket> datalist = UnsentRedPacketCache.getDataList();
+        if (datalist != null && datalist.size() > 0) {
+            Iterator<UnsentRedPacket> iterator = datalist.iterator();
+            while (iterator.hasNext()) {
+                UnsentRedPacket unsentRedPacket = iterator.next();
+                if (TextUtils.equals(orderno.getRedPacketID(), unsentRedPacket.getRedPacketID())) {
+                    contains = true;
+                    break;
+                }
+            }
+        }
+        return contains;
+    }
+
+    private void sendRepacketMessage(UnsentRedPacket orderno) {
+        RedPacketAttachment attachment = new RedPacketAttachment();
+        attachment.setRpId(orderno.getRedPacketID());
+        attachment.setRpContent(orderno.getRedPacketMessage());
+        attachment.setRpTitle(orderno.getRedPacketMessage());
+        attachment.setRpType(5);
+        String content = "发来了一个红包";
+        CustomMessageConfig config = new CustomMessageConfig();
+        config.enableHistory = false;
+        config.enableUnreadCount = false;
+        IMMessage message = MessageBuilder.createCustomMessage(orderno.getRedPacketAccount(), orderno.getSessionTypeEnum(), content, attachment, config);
+        message.setStatus(MsgStatusEnum.success);
+        if (hasMessageActivity()) {
+            Intent intent = new Intent("com.xr.ychat.NewMessageBroadcastReceiver");
+            intent.putExtra(MessageFragment.NEW_MESSAGE, message);
+            intent.putExtra(MessageFragment.NEW_MESSAGE_TYPE, 2);
+            localBroadcastManager.sendBroadcast(intent);
+        }
+    }
+
+    private boolean hasMessageActivity() {
+        boolean hasMessageActivity = false;
+        List<Activity> activities = ActivityUtils.getActivityList();
+        if (activities != null && activities.size() > 0) {
+            Iterator<Activity> iterator = activities.iterator();
+            while (iterator.hasNext()) {
+                Activity activity = iterator.next();
+                if (activity instanceof BaseMessageActivity) {
+                    hasMessageActivity = true;
+                    break;
+                }
+            }
+        }
+        return hasMessageActivity;
+    }
+
+    //    private boolean hasMessageActivity() {
+//        return !(ActivityUtils.getTopActivity() instanceof MainActivity);
+//    }
 }

@@ -21,9 +21,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -170,17 +168,21 @@ public class BitmapLoader {
                                            int reqHeight) throws IOException {
         Bitmap bitmap = null;
         String key = Utils.hashKeyFormUrl(url);
-        DiskLruCache.Snapshot snapShot = mDiskLruCache.get(key);
-        if (snapShot != null) {
-            FileInputStream fileInputStream = (FileInputStream) snapShot.getInputStream(0);
-            FileDescriptor fileDescriptor = fileInputStream.getFD();
-            bitmap = compressHelper.compressDescriptor(fileDescriptor, reqWidth, reqHeight);
-            if (bitmap != null) {
-                lruCacheHelper.addBitmapToMemoryCache(key, bitmap);
+        if(mDiskLruCache==null){
+            return null;
+        }else{
+            DiskLruCache.Snapshot snapShot = mDiskLruCache.get(key);
+            if (snapShot != null) {
+                FileInputStream fileInputStream = (FileInputStream) snapShot.getInputStream(0);
+                FileDescriptor fileDescriptor = fileInputStream.getFD();
+                bitmap = compressHelper.compressDescriptor(fileDescriptor, reqWidth, reqHeight);
+                if (bitmap != null) {
+                    lruCacheHelper.addBitmapToMemoryCache(key, bitmap);
+                }
             }
+            return bitmap;
         }
 
-        return bitmap;
     }
 
     private boolean collectUndoTasks(String url, Runnable task) {
@@ -193,7 +195,7 @@ public class BitmapLoader {
         DiskLruCache.Snapshot snapShot = null;
         try {
             snapShot = mDiskLruCache.get(key);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

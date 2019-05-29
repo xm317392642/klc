@@ -25,6 +25,7 @@ import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
+import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
@@ -41,6 +42,8 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.tendcloud.tenddata.TCAgent;
+import com.tendcloud.tenddata.TDAccount;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
 import com.xr.ychat.common.ui.XEditText;
@@ -53,7 +56,7 @@ import com.xr.ychat.main.activity.MainActivity;
  * <p/>
  * Created by huangjun on 2015/2/1.
  */
-public class SwitchAccountActivity extends SwipeBackUI implements OnKeyListener {
+public class SwitchAccountActivity extends UI implements OnKeyListener {
     private static final String ACCOUNT = "Account";
     private TextView switchLogin;
     private TextView loginAccount;
@@ -97,7 +100,7 @@ public class SwitchAccountActivity extends SwipeBackUI implements OnKeyListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        setContentView(R.layout.activity_switch_account);
+        setActivityView(R.layout.activity_switch_account);
         account = Preferences.getUserPhone(SwitchAccountActivity.this);
         avatar = getIntent().getStringExtra(ACCOUNT);
         initRightTopBtn();
@@ -231,7 +234,7 @@ public class SwitchAccountActivity extends SwipeBackUI implements OnKeyListener 
         }
 
         if (!NetworkUtil.isNetAvailable(SwitchAccountActivity.this)) {
-            YchatToastUtils.showShort( R.string.network_is_not_available);
+            YchatToastUtils.showShort(R.string.network_is_not_available);
             return;
         }
 
@@ -249,6 +252,7 @@ public class SwitchAccountActivity extends SwipeBackUI implements OnKeyListener 
                     @Override
                     public void onResult(int code, Object result, Throwable exception) {
                         if (code == ResponseCode.RES_SUCCESS) {
+                            TCAgent.onLogin(aVoid.getAccid(), TDAccount.AccountType.WEIXIN, aVoid.getUid());
                             loginRequest = null;
                             NimUIKit.loginSuccess(aVoid.getAccid());
                             DemoCache.setAccount(aVoid.getAccid());
@@ -344,6 +348,7 @@ public class SwitchAccountActivity extends SwipeBackUI implements OnKeyListener 
                     @Override
                     public void onResult(int code, Object result, Throwable exception) {
                         if (code == ResponseCode.RES_SUCCESS) {
+                            TCAgent.onLogin(aVoid.getAccid(), TDAccount.AccountType.WEIXIN, aVoid.getUid());
                             loginRequest = null;
                             NimUIKit.loginSuccess(aVoid.getAccid());
                             DemoCache.setAccount(aVoid.getAccid());

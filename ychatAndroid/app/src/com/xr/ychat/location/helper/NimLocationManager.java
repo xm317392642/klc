@@ -14,11 +14,9 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.xr.ychat.location.model.NimLocation;
 import com.netease.nim.uikit.common.framework.infra.TaskExecutor;
 import com.netease.nim.uikit.common.util.log.LogUtil;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.test.MockTestService;
+import com.xr.ychat.location.model.NimLocation;
 
 import java.io.IOException;
 import java.util.List;

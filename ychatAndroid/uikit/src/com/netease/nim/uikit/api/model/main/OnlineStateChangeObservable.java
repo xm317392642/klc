@@ -2,6 +2,7 @@ package com.netease.nim.uikit.api.model.main;
 
 import android.content.Context;
 import android.os.Handler;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;

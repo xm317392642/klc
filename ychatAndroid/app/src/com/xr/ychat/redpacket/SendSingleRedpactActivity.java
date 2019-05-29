@@ -24,11 +24,14 @@ import com.netease.nim.uikit.api.model.SimpleCallback;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
+import com.netease.nim.uikit.common.UnsentRedPacket;
+import com.netease.nim.uikit.common.UnsentRedPacketCache;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nim.uikit.common.util.string.StringTextWatcher;
 import com.netease.nim.uikit.common.util.sys.NetworkUtil;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
@@ -38,6 +41,7 @@ import java.util.Map;
 
 public class SendSingleRedpactActivity extends SwipeBackUI {
     private static final int SDK_PAY_FLAG = 1;
+    private static final int REQUEST_CODE_DETAIL = 101;
     private static final String TARGETID = "target_id";
     private static final String ORDERINFO = "order_info";
     private TextView moneyTips;
@@ -49,6 +53,7 @@ public class SendSingleRedpactActivity extends SwipeBackUI {
     private String nickname;
     private String targetAccount;
     private String envelopeMessage;
+    private float sendAmount;
     private boolean isClearBlank = true;
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -56,13 +61,14 @@ public class SendSingleRedpactActivity extends SwipeBackUI {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SDK_PAY_FLAG: {
+                    Bundle bundle = msg.getData();
+                    String orderno = bundle.getString(ORDERINFO);
                     PayResult payResult = new PayResult((Map<String, String>) msg.obj);
                     String resultStatus = payResult.getResultStatus();
-                    // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
-                        Bundle bundle = msg.getData();
-                        String orderno = bundle.getString(ORDERINFO);
-                        attestationPay(uid, mytoken, payResult.getResult(), orderno);
+                        sendRepacketMessage(orderno);
+                    } else if (TextUtils.equals(resultStatus, "8000")) {
+                        sendRepacketMessage(orderno);
                     }
                     break;
                 }
@@ -76,7 +82,7 @@ public class SendSingleRedpactActivity extends SwipeBackUI {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        setContentView(R.layout.activity_send_single_redpactet);
+        setActivityView(R.layout.activity_send_single_redpactet);
         uid = Preferences.getWeiranUid(this);
         mytoken = Preferences.getWeiranToken(this);
         targetAccount = getIntent().getStringExtra(TARGETID);
@@ -91,7 +97,7 @@ public class SendSingleRedpactActivity extends SwipeBackUI {
         });
         TextView record = (TextView) findViewById(R.id.single_red_packet_record);
         record.setOnClickListener(v -> {
-            RedpactRecordActivity.start(SendSingleRedpactActivity.this);
+            RedpactRecordActivity.start(SendSingleRedpactActivity.this, REQUEST_CODE_DETAIL);
         });
         send = (Button) findViewById(R.id.single_red_packet_send_money);
         send.setOnClickListener(v -> {
@@ -99,7 +105,7 @@ public class SendSingleRedpactActivity extends SwipeBackUI {
         });
         moneyTips = (TextView) findViewById(R.id.single_red_packet_input_money);
         inputMessage = (EditText) findViewById(R.id.input_brief);
-        inputMessage.addTextChangedListener(new StringTextWatcher(25, inputMessage, new SimpleCallback<String>() {
+        inputMessage.addTextChangedListener(new StringTextWatcher(20, inputMessage, new SimpleCallback<String>() {
             @Override
             public void onResult(boolean success, String result, int code) {
                 if (TextUtils.isEmpty(result)) {
@@ -154,7 +160,6 @@ public class SendSingleRedpactActivity extends SwipeBackUI {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
-
                     float sendAmount = Float.valueOf(s.toString());
                     moneyTips.setText("¥" + decimalFormat.format(sendAmount));
                     send.setEnabled(sendAmount > 0);
@@ -184,7 +189,7 @@ public class SendSingleRedpactActivity extends SwipeBackUI {
             YchatToastUtils.showShort("请输入发送金额");
             return;
         }
-        float sendAmount = Float.valueOf(money);
+        sendAmount = Float.valueOf(money);
         if (sendAmount <= 0) {
             YchatToastUtils.showShort("金额不能为0");
             return;
@@ -209,7 +214,7 @@ public class SendSingleRedpactActivity extends SwipeBackUI {
             public void onSuccess(RequestInfo aVoid) {
                 DialogMaker.dismissProgressDialog();
                 if (aVoid.getHb_onoff() == 1) {
-                    sendSingleRedpacket(sendAmount, envelopeMessage);
+                    sendSingleRedpacket();
                 } else {
                     YchatToastUtils.showShort("此服务暂时关闭");
                 }
@@ -218,17 +223,18 @@ public class SendSingleRedpactActivity extends SwipeBackUI {
             @Override
             public void onFailed(int code, String errorMsg) {
                 DialogMaker.dismissProgressDialog();
-                YchatToastUtils.showShort("此服务暂时关闭");
+                YchatToastUtils.showShort("网络繁忙，请重试");
             }
         });
     }
 
-    private void sendSingleRedpacket(float sendAmount, String envelopeMessage) {
+    private void sendSingleRedpacket() {
         DialogMaker.showProgressDialog(this, "", false);
         ContactHttpClient.getInstance().sendRedpacket(uid, mytoken, targetAccount, nickname, sendAmount, 1, envelopeMessage, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
             @Override
             public void onSuccess(RequestInfo aVoid) {
                 DialogMaker.dismissProgressDialog();
+                UnsentRedPacketCache.addUnsentRedPacket(new UnsentRedPacket(targetAccount, aVoid.getOrderno(), envelopeMessage, SessionTypeEnum.P2P));
                 if (aVoid != null && !TextUtils.isEmpty(aVoid.getPara())) {
                     final Runnable payRunnable = new Runnable() {
 
@@ -254,32 +260,32 @@ public class SendSingleRedpactActivity extends SwipeBackUI {
             @Override
             public void onFailed(int code, String errorMsg) {
                 DialogMaker.dismissProgressDialog();
+                YchatToastUtils.showShort("网络繁忙，请重试");
             }
 
         });
     }
 
-    /**
-     * 验签支付
-     */
-    private void attestationPay(String uid, String mytoken, String response, String orderno) {
-        ContactHttpClient.getInstance().attestationPay(uid, mytoken, response, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
-            @Override
-            public void onSuccess(RequestInfo aVoid) {
-                EnvelopeBean envelopeBean = new EnvelopeBean();
-                envelopeBean.setEnvelopesID(orderno);
-                envelopeBean.setEnvelopeMessage(envelopeMessage);
-                Intent intent = getIntent();
-                intent.putExtra("Envelope", envelopeBean);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-            }
+    private void sendRepacketMessage(String orderno) {
+        EnvelopeBean envelopeBean = new EnvelopeBean();
+        envelopeBean.setEnvelopesID(orderno);
+        envelopeBean.setEnvelopeMessage(envelopeMessage);
+        envelopeBean.setEnvelopeType(5);
+        Intent intent = getIntent();
+        intent.putExtra("Envelope", envelopeBean);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
 
-            @Override
-            public void onFailed(int code, String errorMsg) {
-
-            }
-        });
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_CODE_DETAIL) {
+            //finish();
+        }
     }
 
     public static void start(Activity context, String targetAccount, int requestCode) {

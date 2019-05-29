@@ -6,15 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.xr.ychat.R;
-import com.xr.ychat.main.model.Extras;
-import com.xr.ychat.session.SessionHelper;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.common.activity.ToolBarOptions;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
-import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nimlib.sdk.robot.model.NimRobotInfo;
+import com.xr.ychat.R;
+import com.xr.ychat.main.model.Extras;
+import com.xr.ychat.session.SessionHelper;
 
 /**
  * Created by hzchenkang on 2017/6/30.
@@ -45,7 +45,7 @@ public class RobotProfileActivity extends UI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_robot_profile);
+        setActivityView(R.layout.activity_robot_profile);
 
         ToolBarOptions options = new NimToolBarOptions();
         options.titleId = R.string.nim_robot_title;

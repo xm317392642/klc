@@ -8,18 +8,18 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.xr.ychat.DemoCache;
-import com.xr.ychat.R;
-import com.xr.ychat.event.OnlineStateEventManager;
+import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.common.activity.ToolBarOptions;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.framework.infra.Handlers;
-import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.ClientType;
 import com.netease.nimlib.sdk.auth.OnlineClient;
+import com.xr.ychat.DemoCache;
+import com.xr.ychat.R;
+import com.xr.ychat.event.OnlineStateEventManager;
 
 import java.io.Serializable;
 import java.util.List;
@@ -46,7 +46,7 @@ public class MultiportActivity extends UI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.multiport_activity);
+        setActivityView(R.layout.multiport_activity);
 
         ToolBarOptions options = new NimToolBarOptions();
         options.titleId = R.string.multiport_manager;

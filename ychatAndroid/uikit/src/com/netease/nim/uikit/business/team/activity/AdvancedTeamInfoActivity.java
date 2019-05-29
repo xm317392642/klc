@@ -9,8 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.R;
@@ -22,6 +24,11 @@ import com.netease.nim.uikit.api.model.user.UserInfoObserver;
 import com.netease.nim.uikit.business.contact.core.item.ContactIdFilter;
 import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
 import com.netease.nim.uikit.business.recent.RecentContactsFragment;
+import com.netease.nim.uikit.business.session.activity.P2PMessageActivity;
+import com.netease.nim.uikit.business.session.activity.TeamMessageActivity;
+import com.netease.nim.uikit.business.session.extension.TeamAuthAttachment;
+import com.netease.nim.uikit.business.session.extension.TeamInviteAttachment;
+import com.netease.nim.uikit.business.session.fragment.MessageFragment;
 import com.netease.nim.uikit.business.session.helper.MessageListPanelHelper;
 import com.netease.nim.uikit.business.team.adapter.TeamMemberAdapter;
 import com.netease.nim.uikit.business.team.adapter.TeamMemberAdapter.TeamMemberItem;
@@ -37,22 +44,29 @@ import com.netease.nim.uikit.business.team.viewholder.TeamMemberHolder;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.ApplyLeaveTeam;
 import com.netease.nim.uikit.common.CommonUtil;
+import com.netease.nim.uikit.common.ContactHttpClient;
+import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.TeamExtension;
 import com.netease.nim.uikit.common.activity.GroupCodeActivity;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.adapter.TAdapterDelegate;
 import com.netease.nim.uikit.common.adapter.TViewHolder;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
+import com.netease.nim.uikit.common.ui.dialog.EasyEditDialog;
 import com.netease.nim.uikit.common.ui.dialog.MenuDialog;
 import com.netease.nim.uikit.common.ui.widget.SwitchButton;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nim.uikit.common.util.sys.ScreenUtil;
+import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
+import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.team.TeamService;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
@@ -75,7 +89,7 @@ import java.util.Map;
  */
 public class AdvancedTeamInfoActivity extends SwipeBackUI implements
         TAdapterDelegate, TeamMemberAdapter.AddMemberCallback, TeamMemberAdapter.RemoveMemberCallback, TeamMemberHolder.TeamMemberHolderEventListener {
-
+    public static final int DEFAULT_AVATAR_THUMB_SIZE = (int) NimUIKit.getContext().getResources().getDimension(R.dimen.avatar_max_size);
     private static final int REQUEST_CODE_TRANSFER = 101;//转让群
     private static final int REQUEST_CODE_TRANSFER_AND_EXIT = 104;//群主转让群并且退出，先调用转让群transferTeam(final String account)  接口成功后，成为普通成员后在调用 退出接口 quitTeam
     private static final int REQUEST_CODE_MEMBER_LIST = 102;
@@ -107,7 +121,6 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
     private MenuDialog authenDialog;
     private List<String> managerList;
     private UserInfoObserver userInfoObserver;
-    private AbortableFuture<String> uploadFuture;
 
     // view
     private Toolbar mToolbar;
@@ -120,9 +133,9 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
     private View layoutTeamName;
     private View layoutTeamNumber;
     private View layoutTeamCode;
-    private View layoutTeamIntroduce;
+    private View layoutTeamIntroduce, layoutComplaint;
     private View layoutTeamAnnouncement;
-    private View layoutFindChat;
+    private View layoutFindChat, layoutAutoGetRedpacket;
     private View layoutUnclaimedEnvelope;
     private View teamManagmentlayout;//群管理
     private View layoutNotificationConfig;
@@ -170,7 +183,7 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.nim_advanced_team_info_activity);
+        setActivityView(R.layout.nim_advanced_team_info_activity);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
@@ -203,7 +216,27 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
             case REQUEST_CODE_CONTACT_SELECT:
                 final ArrayList<String> addSelected = data.getStringArrayListExtra(ContactSelectActivity.RESULT_DATA);
                 if (addSelected != null && !addSelected.isEmpty()) {
-                    inviteMembers(addSelected);
+                    //群主管理员拉人
+                    if (isSelfManager || isSelfAdmin) {
+                        inviteeIsAgreeRequest(addSelected);//查询被邀请人是否需要同意
+                    } else {
+                        boolean isMute = NimUIKit.getTeamProvider().getTeamMember(teamId, NimUIKit.getAccount()).isMute();
+                        if (isMute) {
+                            YchatToastUtils.showShort("你被禁言，无法邀请好友");
+                        } else if (team.isAllMute()) {
+                            YchatToastUtils.showShort("全员禁言中，无法邀请好友");
+                        } else {
+                            TeamExtension extension = gson.fromJson(team.getExtension(), new TypeToken<TeamExtension>() {
+                            }.getType());
+                            //普通成员拉人时
+                            if (extension != null && TextUtils.equals(TeamExtras.OPEN, extension.getInviteVerity())) {
+                                onAddMemberDialog(addSelected);//当前开启了群认证，输入邀请理由
+                            } else {
+                                //未开启群认证
+                                inviteeIsAgreeRequest(addSelected);//查询被邀请人是否需要同意
+                            }
+                        }
+                    }
                 }
                 break;
             case REQUEST_CODE_CONTACT_SELECT_DELETE:
@@ -271,6 +304,11 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
 
     private void parseIntentData() {
         teamId = getIntent().getStringExtra(EXTRA_ID);
+    }
+
+    private void setMarginTop(View layout) {
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layout.getLayoutParams();
+        layoutParams.topMargin = ScreenUtil.dip2px(10f);
     }
 
     private void findViews() {
@@ -360,6 +398,17 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         });
+
+        //群主自动领取红包
+        layoutAutoGetRedpacket = findViewById(R.id.team_auto_get_redpacket);
+        ((TextView) layoutAutoGetRedpacket.findViewById(R.id.item_title)).setText("群主自动领取红包");
+        ((TextView) layoutAutoGetRedpacket.findViewById(R.id.item_detail)).setHint("");
+        layoutAutoGetRedpacket.findViewById(R.id.line).setVisibility(View.GONE);
+        setMarginTop(layoutAutoGetRedpacket);
+        layoutAutoGetRedpacket.setOnClickListener(v -> {
+            startActivity(new Intent(this, TeamAutoGetRedpacketActivity.class).putExtra("teamId", teamId));
+        });
+
         //长时间未领取红包
         layoutUnclaimedEnvelope = findViewById(R.id.team_unclaimed_envelope_layout);
         ((TextView) layoutUnclaimedEnvelope.findViewById(R.id.item_title)).setText("长时间未领红包");
@@ -384,9 +433,24 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
         initNotifyWithToggle();
         //阅后即焚设置-48小时自动清理
         initBurnAndAutoClear();
-
+        initTeamComplaint();
     }
 
+
+    /**
+     * 群投诉
+     */
+    private void initTeamComplaint() {
+        layoutComplaint = findViewById(R.id.team_complaint_layout);
+        ((TextView) layoutComplaint.findViewById(R.id.item_title)).setText("投诉");
+        ((TextView) layoutComplaint.findViewById(R.id.item_detail)).setHint("");
+        layoutComplaint.setOnClickListener(v -> {
+
+            String urlString = "web://h5/enter?&web_view_title=投诉&team_id=" + teamId;
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+            startActivity(intent);
+        });
+    }
 
     /**
      * 清空聊天记录对话框提示
@@ -623,12 +687,11 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
                 @Override
                 public void onFailed(int code) {
                     burnSwitchBtn.setCheck(!checkState);
-                    YchatToastUtils.showShort("onFailed=" + code);
                 }
 
                 @Override
                 public void onException(Throwable exception) {
-                    YchatToastUtils.showShort("exception=" + exception.getMessage());
+                    burnSwitchBtn.setCheck(!checkState);
                 }
             });
         });
@@ -808,8 +871,10 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
         updateTeamNotifyText(team.getMessageNotifyType());
         if (isSelfAdmin) {
             deleteAndExitText.setText(getString(R.string.dismiss_team));
+            layoutAutoGetRedpacket.setVisibility(View.VISIBLE);
         } else {
             deleteAndExitText.setText(getString(R.string.quit_team));
+            layoutAutoGetRedpacket.setVisibility(View.GONE);
         }
         updateScreenshotSwitch();
     }
@@ -1113,17 +1178,111 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
     };
 
     /**
+     * 拉人进群的时候，发送一条自定义tip
+     * 普通成员拉人申请,发tipType=1的消息
+     * 群主拉人申请,发tipType=2的消息(目的是替换系统发的)
+     */
+    private void sendTip(ArrayList<String> addSelected, String inviteTipContent, String inviteTipType) {
+        TeamAuthAttachment authAttachment = new TeamAuthAttachment();
+        authAttachment.setInviteTipType(inviteTipType);//1为申请， 2为群主同意   群主同意和群主拉人的时候也要发一条InviteTipType=2的自定义消息，原来拉人进群自带的系统tip屏蔽掉
+        authAttachment.setInviteTipId(System.currentTimeMillis() / 1000 + NimUIKit.getAccount());//msgid:时间戳+accid(时间戳单位：秒)
+        authAttachment.setInviteTipFromId(NimUIKit.getAccount());
+        String tipToId = "";
+        for (int i = 0, len = addSelected.size(); i < len; i++) {
+            if (i == len - 1) {
+                tipToId = tipToId + addSelected.get(i);
+            } else {
+                tipToId = tipToId + addSelected.get(i) + ",";
+            }
+        }
+        authAttachment.setInviteTipToId(tipToId);
+        authAttachment.setInviteTipContent(inviteTipContent);
+        CustomMessageConfig config = new CustomMessageConfig();
+        config.enableHistory = false;
+        config.enablePush = false;
+        config.enableUnreadCount = false;
+        IMMessage imMessage = MessageBuilder.createCustomMessage(teamId, SessionTypeEnum.Team, inviteTipContent, authAttachment, config);
+        DialogMaker.showProgressDialog(this, "", true);
+        NIMClient.getService(MsgService.class).sendMessage(imMessage, false).setCallback(new RequestCallback<Void>() {
+            @Override
+            public void onSuccess(Void param) {
+                DialogMaker.dismissProgressDialog();
+                if ("2".equals(inviteTipType)) {
+
+                } else {
+                    YchatToastUtils.showShort("邀请已发送给群管理，请等待其确认");
+                }
+
+                List<Activity> activityList = ActivityUtils.getActivityList();
+                for (Activity activity : activityList) {
+                    if (TextUtils.equals("TeamMessageActivity", activity.getClass().getSimpleName())) {
+                        TeamMessageActivity teamMessageActivity = (TeamMessageActivity) activity;
+                        MessageFragment messageFragment = (MessageFragment) teamMessageActivity.getSupportFragmentManager().getFragments().get(0);
+                        messageFragment.messageListPanel.onMsgSend(imMessage);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailed(int code) {
+                DialogMaker.dismissProgressDialog();
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+                DialogMaker.dismissProgressDialog();
+            }
+        });
+    }
+
+    /**
      * ******************************* Action *********************************
      */
+    /**
+     * 普通成员拉人,弹出对话框
+     */
+    private void onAddMemberDialog(ArrayList<String> addSelected) {
+        final EasyEditDialog requestDialog = new EasyEditDialog(this);
+        requestDialog.setCancelable(false);
+        requestDialog.setCanceledOnTouchOutside(false);
+        requestDialog.setTitle("群主或管理员已开启群认证，邀请朋友进群可向群主或群管理员描述原因。");
+        requestDialog.mMaxNum = 30;
+        requestDialog.setEditHint("说明邀请理由");
+        requestDialog.addNegativeButtonListener(R.string.cancel, v -> requestDialog.dismiss());
+        requestDialog.addPositiveButtonListener(R.string.send, R.color.color_be6913, v -> {
+            String inviteTipContent = requestDialog.mEdit.getText().toString().trim();
+            if (TextUtils.isEmpty(inviteTipContent)) {
+                YchatToastUtils.showShort("邀请理由不能为空");
+                return;
+            }
+            requestDialog.dismiss();
+            sendTip(addSelected, inviteTipContent, TeamAuthAttachment.APPLY1);//普通成员拉人申请,发tipType=1的消息
+        });
+        requestDialog.show();
+    }
 
     /**
      * 从联系人选择器发起邀请成员
      */
     @Override
     public void onAddMember() {
-        ContactSelectActivity.Option option = TeamHelper.getContactSelectOption(memberAccounts);
-        option.title = "邀请成员";
-        NimUIKit.startContactSelector(AdvancedTeamInfoActivity.this, option, REQUEST_CODE_CONTACT_SELECT);
+        if (isSelfManager || isSelfAdmin) {
+            ContactSelectActivity.Option option = TeamHelper.getContactSelectOption(memberAccounts);
+            option.title = "邀请成员";
+            NimUIKit.startContactSelector(AdvancedTeamInfoActivity.this, option, REQUEST_CODE_CONTACT_SELECT);
+        } else {
+            boolean isMute = NimUIKit.getTeamProvider().getTeamMember(teamId, NimUIKit.getAccount()).isMute();
+            if (isMute) {
+                YchatToastUtils.showShort("你被禁言，无法邀请好友");
+            } else if (team.isAllMute()) {
+                YchatToastUtils.showShort("全员禁言中，无法邀请好友");
+            } else {
+                ContactSelectActivity.Option option = TeamHelper.getContactSelectOption(memberAccounts);
+                option.title = "邀请成员";
+                NimUIKit.startContactSelector(AdvancedTeamInfoActivity.this, option, REQUEST_CODE_CONTACT_SELECT);
+            }
+        }
     }
 
     /**
@@ -1251,7 +1410,7 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
             @Override
             public void onFailed(int code) {
                 if (code == ResponseCode.RES_TEAM_INVITE_SUCCESS) {
-                    YchatToastUtils.showShort(R.string.team_invite_members_success);
+                    //YchatToastUtils.showShort(R.string.team_invite_members_success);
                 } else if (code == ResponseCode.RES_TEAM_ENACCESS) {
                     YchatToastUtils.showShort("您没有邀请进群的权限");
                 } else {
@@ -1677,6 +1836,95 @@ public class AdvancedTeamInfoActivity extends SwipeBackUI implements
             extension = new TeamExtension();
         }
         return extension.getRobotId();
+    }
+
+
+    /**
+     * 57查询被邀请人是否需要同意
+     */
+    private void inviteeIsAgreeRequest(ArrayList<String> addSelected) {
+        DialogMaker.showProgressDialog(this, "", false);
+        String uid = Preferences.getWeiranUid(this);
+        String mytoken = Preferences.getWeiranToken(this);
+        Team team = NimUIKitImpl.getTeamProvider().getTeamById(teamId);
+        String owner = team.getCreator();//群主
+        ContactHttpClient.getInstance().inviteeIsAgree(uid, mytoken, owner, teamId,
+                new ContactHttpClient.ContactHttpCallback<String>() {
+                    @Override
+                    public void onSuccess(String onoff) {
+                        DialogMaker.dismissProgressDialog();
+                        //1，被邀请人需要同意，0，被邀请人不需要同意
+                        if ("1".equals(onoff)) {
+                            YchatToastUtils.showShort("需要被邀请人同意方可进群");
+                            inviteMembers(addSelected);
+                            if (addSelected != null && addSelected.size() > 0) {
+                                for (String name : addSelected) {
+                                    TeamInviteAttachment attachment = new TeamInviteAttachment();
+                                    attachment.setInvitor_id(NimUIKit.getAccount());
+                                    attachment.setInvitor_name(UserInfoHelper.getUserName(NimUIKit.getAccount()));
+                                    attachment.setTeam_id(teamId);
+                                    attachment.setTeam_name(TeamHelper.getTeamName(teamId));
+                                    IMMessage imMessage = MessageBuilder.createCustomMessage(name, SessionTypeEnum.P2P, "邀请你入群", attachment);
+                                    NIMClient.getService(MsgService.class).sendMessage(imMessage, false).setCallback(new RequestCallback<Void>() {
+                                        @Override
+                                        public void onSuccess(Void param) {
+                                            List<Activity> activityList = ActivityUtils.getActivityList();
+                                            for (Activity activity : activityList) {
+                                                if (TextUtils.equals("P2PMessageActivity", activity.getClass().getSimpleName())) {
+                                                    P2PMessageActivity teamMessageActivity = (P2PMessageActivity) activity;
+                                                    MessageFragment messageFragment = (MessageFragment) teamMessageActivity.getSupportFragmentManager().getFragments().get(0);
+                                                    messageFragment.messageListPanel.onMsgSend(imMessage);
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailed(int code) {
+                                        }
+
+                                        @Override
+                                        public void onException(Throwable exception) {
+                                        }
+                                    });
+                                }
+                            }
+                        } else {
+                            //被邀请人不需要同意，普通成员、群主、管理员则直接把他拉进群
+                            inviteMembers(addSelected);
+                            if (isSelfAdmin) {
+                                String connectNickname = "";
+                                String tipToId = "";
+                                for (int i = 0, len = addSelected.size(); i < len; i++) {
+                                    if (i == len - 1) {
+                                        tipToId = tipToId + addSelected.get(i);
+                                    } else {
+                                        tipToId = tipToId + addSelected.get(i) + ",";
+                                    }
+                                }
+                                String[] toIdArray = tipToId.split(",");
+                                for (int i = 0, len = toIdArray.length; i < len; i++) {
+                                    String toNickname = TeamHelper.getTeamMemberDisplayNameYou(teamId, toIdArray[i]);
+                                    if (i == len - 1) {
+                                        connectNickname = connectNickname + toNickname;
+                                    } else {
+                                        connectNickname = connectNickname + toNickname + ",";
+                                    }
+                                }
+                                String tipContent = " " + TeamHelper.getTeamMemberDisplayNameYou(teamId, NimUIKit.getAccount()) + "邀请" + connectNickname + "进入了群 ";
+
+
+                                sendTip(addSelected, tipContent, TeamAuthAttachment.AGREE2);//群主拉人的时候要发一条InviteTipType=2的自定义消息
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(int code, String errorMsg) {
+                        DialogMaker.dismissProgressDialog();
+                        YchatToastUtils.showShort(errorMsg + code);
+                    }
+                });
     }
 
 }

@@ -9,11 +9,9 @@ import com.netease.nim.uikit.business.contact.core.item.ContactItem;
 import com.netease.nim.uikit.business.contact.core.item.ItemTypes;
 import com.netease.nim.uikit.business.contact.core.model.ContactGroupStrategy;
 import com.netease.nim.uikit.business.contact.core.model.IContact;
-import com.netease.nim.uikit.business.contact.core.model.TeamContact;
 import com.netease.nim.uikit.business.contact.core.model.TeamMemberContact;
 import com.netease.nim.uikit.business.contact.core.query.TextComparator;
 import com.netease.nim.uikit.business.contact.core.query.TextQuery;
-import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 
 import java.util.ArrayList;

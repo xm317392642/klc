@@ -23,6 +23,7 @@ import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
+import com.netease.nim.uikit.common.UnsentRedPacketCache;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nim.uikit.common.util.sys.ScreenUtil;
@@ -45,6 +46,8 @@ import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.tendcloud.tenddata.TCAgent;
+import com.tendcloud.tenddata.TDAccount;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
 import com.xr.ychat.common.util.WxShareUtils;
@@ -56,8 +59,6 @@ import com.xr.ychat.login.LoginAuthorizeActivity;
 import com.xr.ychat.login.SwitchAccountActivity;
 import com.xr.ychat.main.activity.MainActivity;
 import com.xr.ychat.main.activity.MainShareActivity;
-
-import java.util.ArrayList;
 
 public class WXEntryActivity extends UI implements IWXAPIEventHandler {
 
@@ -127,13 +128,12 @@ public class WXEntryActivity extends UI implements IWXAPIEventHandler {
             case BaseResp.ErrCode.ERR_OK://用户同意
                 switch (baseResp.getType()) {
                     case ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX:// ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX是微信分享，api自带
+                        YchatToastUtils.showShort("分享成功");
                         finish();
                         break;
                     case ConstantsAPI.COMMAND_SENDAUTH://授权登录
-
                         String wxCode = ((SendAuth.Resp) baseResp).code;
                         //授权登录code：0810QszF1vGaB80ek1BF1RgqzF10Qszc  0213JtBc1vAuYw0mWMCc1yzlBc13JtBR
-                        //DialogMaker.showProgressDialog(this, "登录中...",false);
                         ContactHttpClient.getInstance().wxRegister(wxCode, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
                             @Override
                             public void onSuccess(RequestInfo loginInfo) {
@@ -143,6 +143,9 @@ public class WXEntryActivity extends UI implements IWXAPIEventHandler {
                                     public void onResult(int code, Object result, Throwable exception) {
                                         if (code == ResponseCode.RES_SUCCESS) {
                                             NimUIKit.loginSuccess(loginInfo.getAccid());
+                                            SPUtils.getInstance().remove(CommonUtil.ALIPAYUID);
+                                            SPUtils.getInstance().remove(CommonUtil.YCHAT_ACCOUNT);
+                                            SPUtils.getInstance().remove(UnsentRedPacketCache.TAG);
                                             DemoCache.setAccount(loginInfo.getAccid());
                                             Preferences.saveWeiranToken(WXEntryActivity.this, loginInfo.getMytoken());
                                             Preferences.saveWeiranUid(WXEntryActivity.this, loginInfo.getUid());
@@ -152,30 +155,29 @@ public class WXEntryActivity extends UI implements IWXAPIEventHandler {
                                             dealAutoAddEvent(loginInfo.getAccid());
                                             // 只是第一次登录时弹出绑定手机号
                                             if (loginInfo.getIsfirstlogin() == 1) {
+                                                TCAgent.onRegister(loginInfo.getAccid(), TDAccount.AccountType.WEIXIN, loginInfo.getUid());
                                                 BindPhoneNumActivity.start(WXEntryActivity.this, null);//首次登录成功，用户没有绑定手机号，跳转到绑定页面
                                                 finishPage();
                                             } else {
+                                                TCAgent.onLogin(loginInfo.getAccid(), TDAccount.AccountType.WEIXIN, loginInfo.getUid());
                                                 NimUIKit.getUserInfoProvider().getUserInfoAsync(NimUIKit.getAccount(), (success, responseResult, responseCode) -> {
                                                     NimUserInfo userInfo = (NimUserInfo) responseResult;
                                                     if (success && userInfo != null && !TextUtils.isEmpty(userInfo.getMobile())) {
                                                         Preferences.saveUserPhone(WXEntryActivity.this, userInfo.getMobile());//说明该用户已绑定手机号
                                                     }
                                                 });
-
                                                 jumpToMainOrShare();
                                             }
                                         } else {
-                                            YchatToastUtils.showShort("登录失败" + code);
+                                            YchatToastUtils.showShort("登录失败");
                                             finish();
                                         }
                                     }
                                 });
-                                //DialogMaker.dismissProgressDialog();
                             }
 
                             @Override
                             public void onFailed(int code, String errorMsg) {
-                                //DialogMaker.dismissProgressDialog();
                                 if (code == 100001) {
                                     YchatToastUtils.showShort("请求缺少参数");
                                 } else if (code == 100006) {
@@ -187,8 +189,10 @@ public class WXEntryActivity extends UI implements IWXAPIEventHandler {
                                 } else if (code == 100008) {
                                     YchatToastUtils.showShort("手机号没有在平台绑定账户");
                                     DownloadTipsActivity.start(WXEntryActivity.this);
+                                } else if (code == 100030) {
+                                    YchatToastUtils.showShort("微信授权失败");
                                 } else {
-                                    YchatToastUtils.showShort(code + "注册失败");
+                                    YchatToastUtils.showShort(errorMsg + code);
                                 }
                                 finish();
                             }

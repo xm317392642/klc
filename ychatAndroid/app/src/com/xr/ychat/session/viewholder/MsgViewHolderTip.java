@@ -3,11 +3,18 @@ package com.xr.ychat.session.viewholder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.widget.TextView;
 
+import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.session.emoji.MoonUtil;
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderBase;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseMultiItemFetchLoadAdapter;
+import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
+import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
+import com.netease.nimlib.sdk.msg.constant.NotificationType;
+import com.netease.nimlib.sdk.team.constant.TeamMemberType;
+import com.netease.nimlib.sdk.team.model.TeamMember;
 
 import java.util.Map;
 
@@ -44,7 +51,6 @@ public class MsgViewHolderTip extends MsgViewHolderBase {
         } else {
             text = message.getContent();
         }
-
         handleTextNotification(text);
     }
 

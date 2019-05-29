@@ -50,7 +50,7 @@ public class BlackListActivity extends SwipeBackUI implements TAdapterDelegate {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.black_list_activity);
+        setActivityView(R.layout.black_list_activity);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);

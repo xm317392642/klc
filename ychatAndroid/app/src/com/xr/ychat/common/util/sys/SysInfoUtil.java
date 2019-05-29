@@ -5,6 +5,7 @@ import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
 import android.os.Build;
 import android.os.PowerManager;
+
 import java.util.Iterator;
 import java.util.List;
 

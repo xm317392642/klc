@@ -3,81 +3,59 @@ package com.netease.nim.uikit.common.activity;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.LayoutRes;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.CacheMemoryUtils;
 import com.blankj.utilcode.util.KeyboardUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.R;
+import com.netease.nim.uikit.business.session.constant.Extras;
+import com.netease.nim.uikit.common.CommonUtil;
+import com.netease.nim.uikit.common.ContactHttpClient;
+import com.netease.nim.uikit.common.UpdateInfo;
 import com.netease.nim.uikit.common.fragment.TFragment;
-import com.netease.nim.uikit.common.swipeback.SwipeBackActivity;
+import com.netease.nim.uikit.common.swipebacklayout.lib.app.SwipeBackActivity;
+import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
+import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialog;
+import com.netease.nim.uikit.common.util.DownloadUtils;
+import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nim.uikit.common.util.sys.ReflectionUtil;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.tendcloud.tenddata.TCAgent;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import qiu.niorgai.StatusBarCompat;
 
 public abstract class SwipeBackUI extends SwipeBackActivity {
 
     private boolean destroyed = false;
 
     private static Handler handler;
-
-    private void applyKitKatTranslucency() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            setTranslucentStatus(true);
-            SystemBarTintManager mTintManager = new SystemBarTintManager(this);
-            mTintManager.setStatusBarTintEnabled(true);
-            String activityName = getClass().getSimpleName();
-            if ("RedpactRecordActivity".equals(activityName) || "RedpactDetailActivity".equals(activityName)) {
-                mTintManager.setStatusBarTintResource(R.color.redpacket);//红包记录
-            } else if ("WelcomeActivity".equals(activityName)) {
-                mTintManager.setStatusBarTintResource(Color.TRANSPARENT);//透明
-            } else if ("WatchMessagePictureActivity".equals(activityName) || "WatchVideoActivity".equals(activityName) || "CaptureVideoActivity".equals(activityName)) {
-                mTintManager.setStatusBarTintResource(R.color.black);
-            } else if ("LoginActivity".equals(activityName)) {
-                mTintManager.setStatusBarTintResource(R.color.white);
-            } else {
-                mTintManager.setStatusBarTintResource(R.color.color_be6913);//土黄色
-            }
-        }
-    }
-    public static void convertActivityFromTranslucent(Activity activity) {
-        try {
-            Method method = Activity.class.getDeclaredMethod("convertFromTranslucent");
-            method.setAccessible(true);
-            method.invoke(activity);
-        } catch (Throwable t) {
-        }
-    }
-    @TargetApi(19)
-    private void setTranslucentStatus(boolean on) {
-        Window win = getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        win.setAttributes(winParams);
-    }
 
     @Override
     protected void onStart() {
@@ -127,11 +105,38 @@ public abstract class SwipeBackUI extends SwipeBackActivity {
             boolean result = fixOrientation();
         }
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= 26) {
-            convertActivityFromTranslucent(this);
+    }
+
+    public void setActivityView(@LayoutRes int layoutResID) {
+        setContentView(layoutResID);
+        String activityName = getClass().getSimpleName();
+        if ("RedpactRecordActivity".equals(activityName) || "RedpactDetailActivity".equals(activityName)) {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.redpacket));//红包记录
+        } else if ("WelcomeActivity".equals(activityName) || "LoginAuthorizeActivity".equals(activityName)) {
+            StatusBarCompat.translucentStatusBar(this);
+        } else if ("WatchMessagePictureActivity".equals(activityName) || "WatchVideoActivity".equals(activityName) || "CaptureVideoActivity".equals(activityName)) {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.black));
+        } else if ("LoginActivity".equals(activityName)) {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        } else {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_be6913));
         }
-        applyKitKatTranslucency();
-        Log.e("activity!!!:", getClass().getName() + " onCreate()");
+    }
+
+    public void setActivityView(View view) {
+        setContentView(view);
+        String activityName = getClass().getSimpleName();
+        if ("RedpactRecordActivity".equals(activityName) || "RedpactDetailActivity".equals(activityName)) {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.redpacket));//红包记录
+        } else if ("WelcomeActivity".equals(activityName) || "LoginAuthorizeActivity".equals(activityName)) {
+            StatusBarCompat.translucentStatusBar(this);
+        } else if ("WatchMessagePictureActivity".equals(activityName) || "WatchVideoActivity".equals(activityName) || "CaptureVideoActivity".equals(activityName)) {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.black));
+        } else if ("LoginActivity".equals(activityName)) {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        } else {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_be6913));
+        }
     }
 
     @Override
@@ -144,19 +149,31 @@ public abstract class SwipeBackUI extends SwipeBackActivity {
     protected void onDestroy() {
         super.onDestroy();
         KeyboardUtils.hideSoftInput(this);
-
-        LogUtil.ui("activity: " + getClass().getSimpleName() + " onDestroy()");
         destroyed = true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        TCAgent.onPageStart(this, getClass().getName());
+        String activityName = getClass().getSimpleName();
+        if ("UserProtocolActivity".equals(activityName) || "ResetPasswordActivity".equals(activityName)) {
+            return;
+        }
+        if (CommonUtil.isDownloading) {
+            return;
+        }
+        DownloadUtils.queryAppVersion((boolean success, Object result, int code) -> {
+            if (success) {
+                update((UpdateInfo) result);
+            }
+        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        TCAgent.onPageEnd(this, getClass().getName());
     }
 
     @Override
@@ -338,12 +355,117 @@ public abstract class SwipeBackUI extends SwipeBackActivity {
     protected <T extends View> T findView(int resId) {
         return (T) (findViewById(resId));
     }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setRequestedOrientation(ActivityInfo .SCREEN_ORIENTATION_PORTRAIT);//竖屏
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//竖屏
         } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
         }
     }
+
+
+    /**
+     * 检查本地的apk是不是已经下载好的最新的apk
+     *
+     * @param isForce
+     */
+    public void checkLocalApk(String isForce) {
+        if (CommonUtil.localDialogIsShow) {
+            return;
+        }
+        if ("1".equals(CacheMemoryUtils.getInstance().get("cancel")) && "0".equals(isForce)) {
+            return;//更新接口返回非强制更新，并且本地的标记位为-1（说明用户点过一次取消，后面重新打开应用，才会再弹一次）
+        }
+        CommonUtil.localDialogIsShow = true;
+        EasyAlertDialog localDialog = new EasyAlertDialog(this);
+        localDialog.setMessage("检测到手机已有下载好的最新安装包，请前去安装!");
+        localDialog.setCancelable(false);
+        localDialog.addPositiveButton("确定", EasyAlertDialog.NO_TEXT_COLOR, EasyAlertDialog.NO_TEXT_SIZE,
+                v -> {
+                    CommonUtil.localDialogIsShow = false;
+                    localDialog.dismiss();
+                    DownloadUtils.installApk(this, (boolean success2, Object result2, int code2) -> {
+                        if (success2 == false) {
+                            DownloadUtils.queryAppVersion((boolean success, Object result, int code) -> {
+                                if (success) {
+                                    update((UpdateInfo) result);
+                                }
+                            });//安装失败后，再调用更新接口
+                        }
+                    });
+                });
+        if ("0".equals(isForce)) {
+            localDialog.addNegativeButton("取消", EasyAlertDialog.NO_TEXT_COLOR, EasyAlertDialog.NO_TEXT_SIZE,
+                    v -> {
+                        CommonUtil.localDialogIsShow = false;
+                        CommonUtil.setCancelValue(true);
+                        localDialog.dismiss();
+                    });
+        }
+        localDialog.show();
+    }
+
+
+    public void update(UpdateInfo updateInfo) {
+        if (CommonUtil.isDownloading) {
+            return;//当前正在下载的话，不要再弹出更新对话框
+        }
+        if ("1".equals(CacheMemoryUtils.getInstance().get("cancel")) && "0".equals(updateInfo.getIsForce())) {
+            return;//更新接口返回非强制更新，并且本地的标记位为-1（说明用户点过一次取消，后面重新打开应用，才会再弹一次）
+        }
+        String localApkPath = SPUtils.getInstance().getString("localApkPath");
+        if (!TextUtils.isEmpty(localApkPath) && localApkPath.contains(updateInfo.getVersion())) {//这说明本地的安装包是最新的。
+            checkLocalApk(updateInfo.getIsForce());
+        } else {
+            if (CommonUtil.updateDialogIsShow) {
+                return;
+            }
+            CommonUtil.updateDialogIsShow = true;
+            //强制更新只有一个确定按钮（非强制更新则有确定和取消）
+            EasyAlertDialog updateDialog = new EasyAlertDialog(this);
+            updateDialog.setTitle("当前最新版本为v" + updateInfo.getVersion());
+            updateDialog.setMessage("更新内容为：" + System.getProperty("line.separator") + updateInfo.getRelease_log());
+            updateDialog.setCancelable(false);
+            updateDialog.addPositiveButton("确定", EasyAlertDialog.NO_TEXT_COLOR, EasyAlertDialog.NO_TEXT_SIZE,
+                    v -> {
+                        CommonUtil.setCancelValue(false);
+                        CommonUtil.updateDialogIsShow = false;
+                        updateDialog.dismiss();
+                        DownloadUtils.breakPointDownload(updateInfo, (boolean success1, Object result1, int progressCode) -> {
+                            //下载成功
+                            if (success1) {
+                                DownloadUtils.installApk(this, (boolean success2, Object result2, int code2) -> {
+                                    if (success2 == false) {//安装失败后，再调用更新接口
+                                        DownloadUtils.queryAppVersion((boolean success3, Object result3, int code3) -> {
+                                            if (success3) {
+                                                update((UpdateInfo) result3);
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+                                //下载失败后，再调用更新接口
+//                                DownloadUtils.queryAppVersion((boolean success4, Object result4, int code4)-> {
+//                                    if (success4){
+//                                        update((UpdateInfo)result4);
+//                                    }
+//                                });
+                            }
+                        });
+                    });
+            if ("0".equals(updateInfo.getIsForce())) {
+                updateDialog.addNegativeButton("取消", EasyAlertDialog.NO_TEXT_COLOR, EasyAlertDialog.NO_TEXT_SIZE,
+                        v -> {
+                            CommonUtil.updateDialogIsShow = false;
+                            CommonUtil.setCancelValue(true);
+                            updateDialog.dismiss();
+                        });
+            }
+            updateDialog.show();
+        }
+    }
+
+
 }

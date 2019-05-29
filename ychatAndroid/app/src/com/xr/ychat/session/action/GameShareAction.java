@@ -1,19 +1,10 @@
 package com.xr.ychat.session.action;
 
-import android.content.Intent;
-
 import com.netease.nim.uikit.R;
-import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
 import com.netease.nim.uikit.business.session.actions.BaseAction;
-import com.netease.nim.uikit.business.session.constant.RequestCode;
-import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.uinfo.model.UserInfo;
-import com.xr.ychat.session.extension.BussinessCardAttachment;
 import com.xr.ychat.session.extension.GameShareAttachment;
-
-import java.util.ArrayList;
 
 /**
  * 游戏分享

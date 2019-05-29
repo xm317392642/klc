@@ -68,7 +68,7 @@ public class BindPhoneNumActivity extends SwipeBackUI implements OnKeyListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        setContentView(R.layout.activity_bind_phone_num);
+        setActivityView(R.layout.activity_bind_phone_num);
         flag = getIntent().getStringExtra("flag");
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);

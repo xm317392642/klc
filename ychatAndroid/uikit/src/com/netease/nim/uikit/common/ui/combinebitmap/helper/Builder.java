@@ -42,8 +42,7 @@ public class Builder {
     public int[] resourceIds;
     public String[] urls;
     public List<TeamMember> members;
-    public String teamUrl;
-    
+
     public Builder(Context context) {
         this.context = context;
     }
@@ -75,11 +74,6 @@ public class Builder {
 
     public Builder setLayoutManager(ILayoutManager layoutManager) {
         this.layoutManager = layoutManager;
-        return this;
-    }
-
-    public Builder setTeamUrl(String teamUrl) {
-        this.teamUrl = teamUrl;
         return this;
     }
 

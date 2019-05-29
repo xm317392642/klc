@@ -13,9 +13,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
 import com.netease.nim.uikit.business.session.actions.PickImageAction;
+import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
@@ -32,7 +34,6 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.nos.NosService;
-import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.constant.GenderEnum;
 import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
@@ -45,9 +46,7 @@ import com.xr.ychat.main.model.Extras;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by hzxuwen on 2015/9/14.
@@ -94,7 +93,7 @@ public class UserProfileSettingActivity extends SwipeBackUI implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_profile_set_activity);
+        setActivityView(R.layout.user_profile_set_activity);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
@@ -173,17 +172,23 @@ public class UserProfileSettingActivity extends SwipeBackUI implements View.OnCl
                 genderText.setText("女");
             }
         }
-        ContactHttpClient.getInstance().getYchatAccount(uid, myToken, account, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
-            @Override
-            public void onSuccess(RequestInfo aVoid) {
-                accountText.setText(aVoid.getYchatNo());
-            }
+        String ychatNo = SPUtils.getInstance().getString(CommonUtil.YCHAT_ACCOUNT);
+        if (TextUtils.isEmpty(ychatNo)) {
+            ContactHttpClient.getInstance().getYchatAccount(uid, myToken, account, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
+                @Override
+                public void onSuccess(RequestInfo aVoid) {
+                    SPUtils.getInstance().put(CommonUtil.YCHAT_ACCOUNT, aVoid.getYchatNo());
+                    accountText.setText(aVoid.getYchatNo());
+                }
 
-            @Override
-            public void onFailed(int code, String errorMsg) {
-                accountText.setText(userInfo.getAccount());
-            }
-        });
+                @Override
+                public void onFailed(int code, String errorMsg) {
+                    accountText.setText("");
+                }
+            });
+        } else {
+            accountText.setText(ychatNo);
+        }
     }
 
     MenuDialog dialog;

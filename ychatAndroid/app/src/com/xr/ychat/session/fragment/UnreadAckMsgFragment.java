@@ -4,23 +4,23 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
-import com.netease.nim.avchatkit.common.TFragment;
-import com.xr.ychat.R;
-import com.xr.ychat.session.activity.AckMsgInfoActivity;
-import com.xr.ychat.session.adapter.AckMsgDetailAdapter;
-import com.xr.ychat.session.model.AckMsgViewModel;
-import com.xr.ychat.session.viewholder.AckMsgDetailHolder;
 import com.netease.nim.uikit.business.team.ui.TeamInfoGridView;
 import com.netease.nim.uikit.common.adapter.TAdapterDelegate;
 import com.netease.nim.uikit.common.adapter.TViewHolder;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.TeamMsgAckInfo;
+import com.xr.ychat.R;
+import com.xr.ychat.session.activity.AckMsgInfoActivity;
+import com.xr.ychat.session.adapter.AckMsgDetailAdapter;
+import com.xr.ychat.session.model.AckMsgViewModel;
+import com.xr.ychat.session.viewholder.AckMsgDetailHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.List;
  * Created by winnie on 2018/3/19.
  */
 
-public class UnreadAckMsgFragment extends TFragment implements TAdapterDelegate {
+public class UnreadAckMsgFragment extends Fragment implements TAdapterDelegate {
     private AckMsgViewModel viewModel;
     private AckMsgDetailAdapter adapter;
     private List<AckMsgDetailAdapter.AckMsgDetailItem> dataSource;

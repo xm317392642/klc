@@ -17,12 +17,8 @@ import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectAct
 import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nim.uikit.common.TeamExtension;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.ui.combinebitmap.helper.BitmapLoader;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.team.TeamService;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.xr.ychat.R;
@@ -56,7 +52,7 @@ public class AdvancedTeamCopyActivity extends SwipeBackUI implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.nim_advanced_team_copy_activity);
+        setActivityView(R.layout.nim_advanced_team_copy_activity);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
@@ -99,42 +95,14 @@ public class AdvancedTeamCopyActivity extends SwipeBackUI implements View.OnClic
      */
     private void updateTeamInfo(final Team team) {
         if (team == null) {
-            YchatToastUtils.showShort( R.string.team_not_exist);
+            YchatToastUtils.showShort(R.string.team_not_exist);
             finish();
         } else {
-            NIMClient.getService(TeamService.class).queryMemberList(team.getId()).setCallback(new RequestCallback<List<TeamMember>>() {
-                @Override
-                public void onSuccess(List<TeamMember> param) {
-                    if (param != null && param.size() > 0) {
-                        robotId = getRobotId(team);
-                        int size = param.size() - (TextUtils.isEmpty(robotId) ? 0 : 1);
-                        memberCountText.setText(size + "人");
-                        teamNameText.setText(team.getName());
-                        BitmapLoader.getInstance(AdvancedTeamCopyActivity.this).removeBitmapToMemoryCache("ychat://com.xr.ychat?groupId=" + team.getId());
-                        groupHead.loadTeamIconByTeam(param, team);
-                    }
-                }
-
-                @Override
-                public void onFailed(int code) {
-                    List<TeamMember> teamMembers = NimUIKit.getTeamProvider().getTeamMemberList(team.getId());
-                    robotId = getRobotId(team);
-                    int size = teamMembers.size() - (TextUtils.isEmpty(robotId) ? 0 : 1);
-                    memberCountText.setText(size + "人");
-                    teamNameText.setText(team.getName());
-                    groupHead.loadTeamIconByTeam(teamMembers, team);
-                }
-
-                @Override
-                public void onException(Throwable exception) {
-                    List<TeamMember> teamMembers = NimUIKit.getTeamProvider().getTeamMemberList(team.getId());
-                    robotId = getRobotId(team);
-                    int size = teamMembers.size() - (TextUtils.isEmpty(robotId) ? 0 : 1);
-                    memberCountText.setText(size + "人");
-                    teamNameText.setText(team.getName());
-                    groupHead.loadTeamIconByTeam(teamMembers, team);
-                }
-            });
+            teamNameText.setText(team.getName());
+            groupHead.loadTeamIconByTeam(team);
+            robotId = getRobotId(team);
+            int size = team.getMemberCount() - (TextUtils.isEmpty(robotId) ? 0 : 1);
+            memberCountText.setText(size + "人");
         }
     }
 

@@ -4,15 +4,12 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.business.session.constant.Extras;
-import com.netease.nim.uikit.business.session.helper.TypefaceHelper;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.util.sys.ScreenUtil;
 import com.xr.ychat.R;
@@ -30,7 +27,7 @@ public class TypefaceActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_typeface);
+        setActivityView(R.layout.activity_typeface);
         initView();
         initData();
     }
@@ -50,11 +47,11 @@ public class TypefaceActivity extends SwipeBackUI {
     /**
      * 改变textsize 大小
      */
-    private void changeTextSize(int dimension) {
+    private void changeTextSize(float dimension) {
         txLeft1.setTextSize(dimension);
         txLeft2.setTextSize(dimension);
         txRight.setTextSize(dimension);
-        rightTextview.setTextSize(dimension - 1);
+        rightTextview.setTextSize(dimension - 1f);
         toolbarTitle.setTextSize(dimension + 1.5f);
     }
 
@@ -68,11 +65,11 @@ public class TypefaceActivity extends SwipeBackUI {
             public void onChangeListener(int position) {
                 int dimension = getResources().getDimensionPixelSize(R.dimen.sp_stander);
                 //根据position 获取字体倍数
-                fontSizeScale = (float) (0.875 + 0.125 * position);
+                fontSizeScale =(0.875f + 0.125f * position);
                 //放大后的sp单位
-                double v = fontSizeScale * (int) ScreenUtil.px2sp(getApplicationContext(), dimension);
+                float v = fontSizeScale *  ScreenUtil.px2sp(getApplicationContext(), dimension);
                 //改变当前页面大小
-                changeTextSize((int) v);
+                changeTextSize(v);
 
             }
         });

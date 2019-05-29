@@ -30,12 +30,17 @@ import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
 import com.netease.nim.uikit.api.model.session.SessionCustomization;
+import com.netease.nim.uikit.business.ait.AitContactType;
+import com.netease.nim.uikit.business.ait.AitManager;
 import com.netease.nim.uikit.business.ait.AitTextChangeListener;
 import com.netease.nim.uikit.business.session.actions.BaseAction;
+import com.netease.nim.uikit.business.session.activity.TeamMessageActivity;
 import com.netease.nim.uikit.business.session.emoji.EmoticonPickerView;
 import com.netease.nim.uikit.business.session.emoji.IEmoticonSelectedListener;
 import com.netease.nim.uikit.business.session.emoji.MoonUtil;
+import com.netease.nim.uikit.business.session.fragment.MessageFragment;
 import com.netease.nim.uikit.business.session.module.Container;
+import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialogHelper;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nim.uikit.common.util.log.LogUtil;
@@ -53,7 +58,10 @@ import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.msg.model.CustomNotificationConfig;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
+import org.apache.lucene.util.CollectionUtil;
+
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -754,7 +762,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         time.setBase(SystemClock.elapsedRealtime());
         time.start();
     }
-
+    private List<String> aitTeamMeberList;
     /**
      * 结束语音录制动画
      */
@@ -762,6 +770,19 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         audioAnimLayout.setVisibility(View.GONE);
         time.stop();
         time.setBase(SystemClock.elapsedRealtime());
+
+
+        Activity activity=container.activity;
+        if(activity instanceof TeamMessageActivity ){
+            TeamMessageActivity teamMessageActivity = (TeamMessageActivity) activity;
+            MessageFragment messageFragment = (MessageFragment) teamMessageActivity.getSupportFragmentManager().getFragments().get(0);
+            aitTeamMeberList=messageFragment.getAitManager().getAitTeamMember();
+            if(aitTeamMeberList!=null && aitTeamMeberList.size()>0){
+                messageFragment.getAitManager().reset();
+                messageEditText.setText("");
+            }
+
+        }
     }
 
     // 录音状态回调
@@ -791,8 +812,28 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     public void onRecordSuccess(File audioFile, long audioLength, RecordType recordType) {
         IMMessage audioMessage = MessageBuilder.createAudioMessage(container.account, container.sessionType, audioFile, audioLength);
         container.proxy.sendMessage(audioMessage);
+
+
+        setAitNickName();
+
     }
 
+    /**
+     * 修复demo里面一个@ 的bug(@他人的时候，切换语音，再发送语音，对方会显示“有人@你”)
+     */
+    private void setAitNickName(){
+        Activity activity=container.activity;
+        if(activity instanceof TeamMessageActivity ){
+            TeamMessageActivity teamMessageActivity = (TeamMessageActivity) activity;
+            MessageFragment messageFragment = (MessageFragment) teamMessageActivity.getSupportFragmentManager().getFragments().get(0);
+            if(aitTeamMeberList!=null && aitTeamMeberList.size()>0){
+                AitManager aitManager = messageFragment.getAitManager();
+                for(String aitId:aitTeamMeberList){
+                    aitManager.insertAitMemberInner(aitId, UserInfoHelper.getUserName(aitId), AitContactType.TEAM_MEMBER,getEditSelectionStart(), true);
+                }
+            }
+        }
+    }
     @Override
     public void onRecordFail() {
         if (started) {

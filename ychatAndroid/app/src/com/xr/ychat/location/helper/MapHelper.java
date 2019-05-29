@@ -7,9 +7,9 @@ import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
 import com.netease.nim.uikit.common.util.YchatToastUtils;
+import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.xr.ychat.R;
 import com.xr.ychat.location.model.NimLocation;
-import com.netease.nim.uikit.common.util.log.LogUtil;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;

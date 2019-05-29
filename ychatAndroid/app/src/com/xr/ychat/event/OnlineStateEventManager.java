@@ -7,12 +7,10 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.xr.ychat.DemoCache;
-import com.xr.ychat.R;
-import com.netease.nim.uikit.common.util.log.LogUtil;
-import com.netease.nim.uikit.common.util.sys.NetworkUtil;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.contact.ContactChangedObserver;
+import com.netease.nim.uikit.common.util.log.LogUtil;
+import com.netease.nim.uikit.common.util.sys.NetworkUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
@@ -27,6 +25,8 @@ import com.netease.nimlib.sdk.event.model.NimOnlineStateEvent;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.xr.ychat.DemoCache;
+import com.xr.ychat.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

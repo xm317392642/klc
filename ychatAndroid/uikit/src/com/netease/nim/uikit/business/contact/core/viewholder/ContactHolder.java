@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.contact.core.item.AbsContactItem;
@@ -53,33 +54,19 @@ public class ContactHolder extends AbsContactViewHolder<ContactItem> {
             }
         }
         if (contact.getContactType() == IContact.Type.Friend) {
-            if (TextUtils.equals(contact.getContactId(), CommonUtil.ASSISTANT_ACCOUNT)) {
+            if (TextUtils.equals(contact.getContactId(), SPUtils.getInstance().getString(CommonUtil.ASSISTANT))) {
                 head.setImageResource(R.drawable.nim_avatar_assistant);
             } else {
                 head.loadBuddyAvatar(contact.getContactId());
             }
-        } else {
-            String teamId = contact.getContactId();
-            head.loadTeamIconByTeam(NimUIKit.getTeamProvider().getTeamMemberList(teamId), teamId);
-            NIMClient.getService(TeamService.class).queryMemberList(teamId).setCallback(new RequestCallback<List<TeamMember>>() {
-                @Override
-                public void onSuccess(List<TeamMember> param) {
-                    if (param != null && param.size() > 0) {
-                        BitmapLoader.getInstance(context).removeBitmapToMemoryCache("ychat://com.xr.ychat?groupId=" + teamId);
-                        head.loadTeamIconByTeam(param, teamId);
-                    }
-                }
-
-                @Override
-                public void onFailed(int code) {
-
-                }
-
-                @Override
-                public void onException(Throwable exception) {
-
+            head.setOnClickListener(v -> {
+                if (NimUIKitImpl.getContactEventListener() != null) {
+                    NimUIKitImpl.getContactEventListener().onAvatarClick(context, item.getContact().getContactId());
                 }
             });
+        } else {
+            String teamId = contact.getContactId();
+            head.loadTeamIconByTeam(NimUIKit.getTeamProvider().getTeamById(teamId));
         }
         TextQuery textQuery = adapter.getQuery();
         if (textQuery != null && !TextUtils.isEmpty(textQuery.text)) {
@@ -87,13 +74,6 @@ public class ContactHolder extends AbsContactViewHolder<ContactItem> {
         } else {
             name.setText(contact.getDisplayName());
         }
-        head.setOnClickListener(v -> {
-            if (contact.getContactType() == IContact.Type.Friend) {
-                if (NimUIKitImpl.getContactEventListener() != null) {
-                    NimUIKitImpl.getContactEventListener().onAvatarClick(context, item.getContact().getContactId());
-                }
-            }
-        });
 
         // query result
         desc.setVisibility(View.GONE);
@@ -106,29 +86,6 @@ public class ContactHolder extends AbsContactViewHolder<ContactItem> {
             desc.setVisibility(View.GONE);
         }
         */
-    }
-
-    private boolean needRefresh(List<TeamMember> teamMembers) {
-        if (teamMembers == null) {
-            return true;
-        }
-        if (teamMembers.size() == 0) {
-            return true;
-        }
-        if (teamMembers.size() == 1) {
-            TeamMember teamMember = teamMembers.get(0);
-            if (teamMember.getType() == TeamMemberType.Owner) {
-                return true;
-            }
-        }
-        boolean hasOwner = true;
-        for (TeamMember teamMember : teamMembers) {
-            if (teamMember.getType() == TeamMemberType.Owner) {
-                hasOwner = false;
-                break;
-            }
-        }
-        return hasOwner;
     }
 
     @Override

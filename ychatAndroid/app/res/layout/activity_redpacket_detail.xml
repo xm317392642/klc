@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+    android:background="@color/white">
 
 
 
@@ -122,7 +122,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/redpacket_detail_money_unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -175,7 +174,6 @@
             android:textSize="12sp" />
 
         <View
-            android:id="@+id/recipient_top_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/color_d2d2d2" />
@@ -199,7 +197,6 @@
                 app:riv_corner_radius="5dp" />
 
             <LinearLayout
-                android:id="@+id/redpacket_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -237,7 +234,6 @@
                 app:layout_constraintTop_toTopOf="@+id/recipient_avatar" />
 
             <View
-                android:id="@+id/recipient_bottom_line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"

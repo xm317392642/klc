@@ -12,13 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.business.session.extension.RedPacketOpenedAttachment;
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderBase;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseMultiItemFetchLoadAdapter;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
 import com.xr.ychat.redpacket.NIMRedPacketClient;
-import com.xr.ychat.session.extension.RedPacketOpenedAttachment;
 
 
 public class MsgViewHolderOpenRedPacket extends MsgViewHolderBase {

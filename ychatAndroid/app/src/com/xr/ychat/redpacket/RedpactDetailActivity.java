@@ -10,14 +10,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.SimpleCallback;
+import com.netease.nim.uikit.business.session.extension.RedPacketAttachment;
 import com.netease.nim.uikit.business.session.helper.MessageListPanelHelper;
+import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.RequestInfo;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
 import com.netease.nim.uikit.common.util.sys.NetworkUtil;
@@ -27,9 +29,9 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.xr.ychat.DemoCache;
 import com.xr.ychat.R;
-import com.xr.ychat.session.extension.RedPacketAttachment;
 
 public class RedpactDetailActivity extends SwipeBackUI {
+    private static final int REQUEST_CODE_DETAIL = 101;
     private static final String FROM_ACCOUNT = "FromAccount";
     private static final String FROM_CONTENT = "FromContent";
     private static final String BRIBERY_ID = "BriberyId";
@@ -67,7 +69,7 @@ public class RedpactDetailActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_redpacket_detail);
+        setActivityView(R.layout.activity_redpacket_detail);
         initIntent();
         initToolbar();
         initView();
@@ -119,27 +121,12 @@ public class RedpactDetailActivity extends SwipeBackUI {
     private void initToolbar() {
         redpacketRecord = (TextView) findViewById(R.id.redpacket_detail_record);
         redpacketRecord.setOnClickListener(v -> {
-            if (!NetworkUtil.isNetAvailable(RedpactDetailActivity.this)) {
-                YchatToastUtils.showShort(R.string.network_is_not_available);
-                return;
+            String aliuid = SPUtils.getInstance().getString(CommonUtil.ALIPAYUID);
+            if (TextUtils.isEmpty(aliuid)) {
+                BindAlipayActivity.start(RedpactDetailActivity.this);
+            } else {
+                RedpactRecordActivity.start(RedpactDetailActivity.this, REQUEST_CODE_DETAIL);
             }
-            DialogMaker.showProgressDialog(RedpactDetailActivity.this, "", false);
-            ContactHttpClient.getInstance().queryAlipayAccount(uid, mytoken, new ContactHttpClient.ContactHttpCallback<RequestInfo>() {
-                @Override
-                public void onSuccess(RequestInfo aVoid) {
-                    DialogMaker.dismissProgressDialog();
-                    if (TextUtils.isEmpty(aVoid.getAliuid())) {
-                        BindAlipayActivity.start(RedpactDetailActivity.this);
-                    } else {
-                        RedpactRecordActivity.start(RedpactDetailActivity.this);
-                    }
-                }
-
-                @Override
-                public void onFailed(int code, String errorMsg) {
-                    DialogMaker.dismissProgressDialog();
-                }
-            });
         });
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
@@ -218,6 +205,17 @@ public class RedpactDetailActivity extends SwipeBackUI {
 
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_CODE_DETAIL) {
+            finish();
+        }
     }
 
     public static void start(Activity context, String fromAccount, String fromContent, String briberyId, String uid, String mytoken, String nickname, IMMessage message) {

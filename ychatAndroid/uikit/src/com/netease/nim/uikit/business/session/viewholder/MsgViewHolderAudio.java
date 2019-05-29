@@ -219,12 +219,13 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
 
     private void updateTime(long milliseconds) {
         long seconds = TimeUtil.getSecondsByMilliseconds(milliseconds);
-
-        if (seconds >= 0) {
-            durationLabel.setText(seconds + "\"");
-        } else {
-            durationLabel.setText("");
-        }
+        context.runOnUiThread(() -> {
+            if (seconds >= 0) {
+                durationLabel.setText(seconds + "\"");
+            } else {
+                durationLabel.setText("");
+            }
+        });
     }
 
     protected boolean isMessagePlaying(MessageAudioControl audioControl, IMMessage message) {

@@ -76,7 +76,7 @@ public class PreviewImageFromLocalActivity extends UI {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_preview_image_from_local_activity);
+        setActivityView(R.layout.nim_preview_image_from_local_activity);
 
         originalImageSizeTip = (TextView) findViewById(R.id.picker_image_preview_orignal_image_tip);
         originalImage = (ImageButton) findViewById(R.id.picker_image_preview_orignal_image);

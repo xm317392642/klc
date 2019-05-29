@@ -46,7 +46,7 @@ public class SystemNotificationActivity extends SwipeBackUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_system_notification);
+        setActivityView(R.layout.activity_system_notification);
         initToolbar();
         initViewPager();
         unreadIndicator = (ImageView) findViewById(R.id.unread_number_indicator);

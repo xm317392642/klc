@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -31,7 +30,7 @@ public class EasyEditDialog extends Dialog {
 
     private TextView mMessageTextView;
 
-    private EditText mEdit;
+    public EditText mEdit;
 
 
     private Button mPositiveBtn;
@@ -57,6 +56,7 @@ public class EasyEditDialog extends Dialog {
     private int mMaxEditTextLength;
 
     private int mMaxLines = 0;
+    public int mMaxNum = 0;
 
     private boolean mSingleLine = false;
 
@@ -210,6 +210,9 @@ public class EasyEditDialog extends Dialog {
             }
             if (mMaxLines > 0) {
                 mEdit.setMaxLines(mMaxLines);
+            }
+            if (mMaxNum > 0) {
+                mEdit.setMaxEms(mMaxNum);
             }
             if (mSingleLine) {
                 mEdit.setSingleLine();

@@ -4,13 +4,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.xr.ychat.R;
-import com.xr.ychat.contact.activity.BlackListAdapter;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.adapter.TViewHolder;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
+import com.xr.ychat.R;
+import com.xr.ychat.contact.activity.BlackListAdapter;
 
 /**
  * Created by huangjun on 2015/9/22.

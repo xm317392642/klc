@@ -46,7 +46,7 @@ public class PreviewImageFromCameraActivity extends SwipeBackUI {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nim_preview_image_from_camera_activity);
+        setActivityView(R.layout.nim_preview_image_from_camera_activity);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);

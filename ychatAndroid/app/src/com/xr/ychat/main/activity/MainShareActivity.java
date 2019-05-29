@@ -16,9 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.netease.nim.avchatkit.AVChatProfile;
-import com.netease.nim.avchatkit.activity.AVChatActivity;
-import com.netease.nim.avchatkit.constant.AVChatExtras;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.main.LoginSyncDataStatusObserver;
 import com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity;
@@ -42,6 +39,7 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.SystemMessageObserver;
 import com.netease.nimlib.sdk.msg.SystemMessageService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.xr.ychat.DemoCache;
@@ -61,6 +59,7 @@ import com.xr.ychat.session.SessionHelper;
 import com.xr.ychat.team.TeamCreateHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 分享主界面：选择一个聊天
@@ -86,14 +85,22 @@ public class MainShareActivity extends UI implements ViewPager.OnPageChangeListe
     private ViewPager pager;
     private int scrollState;
     private MainShareTabPagerAdapter adapter;
-
+    private List<SystemMessageType> systemMessageTypes;
 
     private boolean isFirstIn;
     private Observer<Integer> sysMsgUnreadCountChangedObserver = new Observer<Integer>() {
         @Override
         public void onEvent(Integer unreadCount) {
-            SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unreadCount);
-            ReminderManager.getInstance().updateContactUnreadNum(unreadCount);
+            int teamInviteNumber = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountByType(systemMessageTypes);
+            if (teamInviteNumber > 0) {
+                NIMClient.getService(SystemMessageService.class).resetSystemMessageUnreadCountByType(systemMessageTypes);
+            }
+            int count = unreadCount - teamInviteNumber;
+            if (count > 0) {
+                int unread = unreadCount + CustomNotificationCache.getUnreadCount();
+                SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unread);
+                ReminderManager.getInstance().updateContactUnreadNum(unread);
+            }
         }
     };
 
@@ -122,16 +129,15 @@ public class MainShareActivity extends UI implements ViewPager.OnPageChangeListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_share);
+        setActivityView(R.layout.activity_main_share);
         UserPreferences.setShare(true);//设置分享标记
         Uri data = getIntent().getData();
-        if(data==null){
+        if (data == null) {
             return;
-        }else{
+        } else {
             UserPreferences.setString(UserPreferences.KEY_SHARE_URI, data.toString());
         }
         String dataString = data.toString();
-        Log.e("xx","share dataUri="+dataString);
         UserPreferences.setString(UserPreferences.KEY_SCHEMA, data.getHost());
         if (dataString.contains(UserPreferences.SHARE_URL)) {
             UserPreferences.setShareValue(UserPreferences.SHARE_URL);
@@ -142,17 +148,17 @@ public class MainShareActivity extends UI implements ViewPager.OnPageChangeListe
             /**
              * 已经登陆过，自动登陆
              */
-                String account = Preferences.getUserAccount(this);
-                String token = Preferences.getUserToken(this);
-               if(!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)){
-                   if("/userinfo".equals(data.getPath())){
-                       ActivityUtils.startActivity(new Intent(this, AuthorizeLoginActivity.class).putExtra("scheme",data.getHost()));
-                   }else{
-                       MainActivity.start(this);//正常唤起要聊
-                   }
-               }else{
-                   LoginAuthorizeActivity.start(this);
-               }
+            String account = Preferences.getUserAccount(this);
+            String token = Preferences.getUserToken(this);
+            if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
+                if ("/userinfo".equals(data.getPath())) {
+                    ActivityUtils.startActivity(new Intent(this, AuthorizeLoginActivity.class).putExtra("scheme", data.getHost()));
+                } else {
+                    MainActivity.start(this);//正常唤起要聊
+                }
+            } else {
+                LoginAuthorizeActivity.start(this);
+            }
             finish();
             return;
         }
@@ -196,6 +202,8 @@ public class MainShareActivity extends UI implements ViewPager.OnPageChangeListe
     private void init() {
         observerSyncDataComplete();
         findViews();
+        systemMessageTypes = new ArrayList<>();
+        systemMessageTypes.add(SystemMessageType.TeamInvite);
         setupPager();
         setupTabs();
         registerMsgUnreadInfoObserver(true);
@@ -229,20 +237,20 @@ public class MainShareActivity extends UI implements ViewPager.OnPageChangeListe
             return true;
         }
 
-        if (intent.hasExtra(AVChatActivity.INTENT_ACTION_AVCHAT) && AVChatProfile.getInstance().isAVChatting()) {
-            intent.removeExtra(AVChatActivity.INTENT_ACTION_AVCHAT);
-            Intent localIntent = new Intent();
-            localIntent.setClass(this, AVChatActivity.class);
-            startActivity(localIntent);
-            return true;
-        }
-
-        String account = intent.getStringExtra(AVChatExtras.EXTRA_ACCOUNT);
-        if (intent.hasExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION) && !TextUtils.isEmpty(account)) {
-            intent.removeExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION);
-            NimUIKit.startP2PSession(this, account);
-            return true;
-        }
+//        if (intent.hasExtra(AVChatActivity.INTENT_ACTION_AVCHAT) && AVChatProfile.getInstance().isAVChatting()) {
+//            intent.removeExtra(AVChatActivity.INTENT_ACTION_AVCHAT);
+//            Intent localIntent = new Intent();
+//            localIntent.setClass(this, AVChatActivity.class);
+//            startActivity(localIntent);
+//            return true;
+//        }
+//
+//        String account = intent.getStringExtra(AVChatExtras.EXTRA_ACCOUNT);
+//        if (intent.hasExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION) && !TextUtils.isEmpty(account)) {
+//            intent.removeExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION);
+//            NimUIKit.startP2PSession(this, account);
+//            return true;
+//        }
 
         return false;
     }
@@ -318,7 +326,11 @@ public class MainShareActivity extends UI implements ViewPager.OnPageChangeListe
      * 查询系统消息未读数
      */
     private void requestSystemMessageUnreadCount() {
-        int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock() + CustomNotificationCache.getUnreadCount();
+        int teamInviteNumber = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountByType(systemMessageTypes);
+        if (teamInviteNumber > 0) {
+            NIMClient.getService(SystemMessageService.class).resetSystemMessageUnreadCountByType(systemMessageTypes);
+        }
+        int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock() - teamInviteNumber + CustomNotificationCache.getUnreadCount();
         SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unread);
         ReminderManager.getInstance().updateContactUnreadNum(unread);
     }
@@ -478,7 +490,7 @@ public class MainShareActivity extends UI implements ViewPager.OnPageChangeListe
             if (selected != null && !selected.isEmpty()) {
                 TeamCreateHelper.createNormalTeam(this, selected, false, null);
             } else {
-                YchatToastUtils.showShort( "请选择至少一个联系人！");
+                YchatToastUtils.showShort("请选择至少一个联系人！");
             }
         } else if (requestCode == REQUEST_CODE_ADVANCED) {
             final ArrayList<String> selected = data.getStringArrayListExtra(ContactSelectActivity.RESULT_DATA);
@@ -534,7 +546,7 @@ public class MainShareActivity extends UI implements ViewPager.OnPageChangeListe
     @OnMPermissionNeverAskAgain(BASIC_PERMISSION_REQUEST_CODE)
     public void onBasicPermissionFailed() {
         try {
-            YchatToastUtils.showShort( "未全部授权，部分功能可能无法正常运行！");
+            YchatToastUtils.showShort("未全部授权，部分功能可能无法正常运行！");
         } catch (Exception e) {
             e.printStackTrace();
         }

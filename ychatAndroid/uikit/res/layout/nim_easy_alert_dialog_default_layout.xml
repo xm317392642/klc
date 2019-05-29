@@ -18,13 +18,15 @@
 
         <TextView
             android:id="@+id/easy_dialog_message_text_view"
-            style="@style/dialog_message_text_style"
             tools:text="message"
             android:gravity="center"
             android:layout_width="match_parent"
             android:textSize="@dimen/big_text_size"
-            android:paddingTop="22dp"
-            android:paddingBottom="22dp"
+            android:textColor="@color/color_black_333333"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="18dp"
             android:layout_height="wrap_content" />
 
         <TextView

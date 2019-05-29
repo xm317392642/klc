@@ -20,15 +20,21 @@ import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.EncodeUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.session.constant.Extras;
 import com.netease.nim.uikit.business.session.helper.SendImageHelper;
+import com.netease.nim.uikit.business.team.activity.ScanCodeErrorActivity;
 import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nim.uikit.business.team.helper.UpdateMemberChangeService;
+import com.netease.nim.uikit.business.team.model.TeamExtras;
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper;
 import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
+import com.netease.nim.uikit.common.TeamExtension;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
 import com.netease.nim.uikit.common.media.picker.PickImageHelper;
 import com.netease.nim.uikit.common.ui.dialog.EasyEditDialog;
@@ -46,7 +52,6 @@ import com.xr.ychat.session.SessionHelper;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zbar.ZBarView;
@@ -60,10 +65,6 @@ import io.reactivex.schedulers.Schedulers;
 public class ScanCodeActivity extends SwipeBackUI implements QRCodeView.Delegate {
     // 支付宝包名
     private static final String ALIPAY_PACKAGE_NAME = "com.eg.android.AlipayGphone";
-    // 旧版支付宝二维码通用 Intent Scheme Url 格式
-    private static final String INTENT_URL_FORMAT = "intent://platformapi/startapp?saId=10000007&" +
-            "clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2F{urlCode}%3F_s" +
-            "%3Dweb-other&_t=1472443966571#Intent;" + "scheme=alipayqr;package=com.eg.android.AlipayGphone;end";
     private static final int PICK_AVATAR_REQUEST = 0x0E;
     private Toolbar mToolbar;
     private TextView toolbarTitle;
@@ -73,7 +74,7 @@ public class ScanCodeActivity extends SwipeBackUI implements QRCodeView.Delegate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan_qrcode);
+        setActivityView(R.layout.activity_scan_qrcode);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
@@ -221,7 +222,14 @@ public class ScanCodeActivity extends SwipeBackUI implements QRCodeView.Delegate
     }
 
     public static boolean startAlipayClient(Activity activity, String urlCode) {
-        return startIntentUrl(activity, INTENT_URL_FORMAT.replace("{urlCode}", urlCode));
+        try {
+            String intentFullUrl = "alipayqr://platformapi/startapp?saId=10000007&qrcode=" + EncodeUtils.urlEncode(urlCode);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(intentFullUrl));
+            activity.startActivity(intent);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
@@ -295,65 +303,73 @@ public class ScanCodeActivity extends SwipeBackUI implements QRCodeView.Delegate
                             SessionHelper.startTeamSession(ScanCodeActivity.this, teamId);
                             finish();
                         } else {
-                            if (result.getVerifyType() != VerifyTypeEnum.Free) {
-                                String url = "scheme://ychat/jointeam?EXTRA_ID=" + teamId;
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                                startActivity(intent);
+                            Gson gson = new Gson();
+                            TeamExtension extension = gson.fromJson(result.getExtension(), new TypeToken<TeamExtension>() {
+                            }.getType());
+                            if (extension != null && TeamExtras.OPEN.equals(extension.getInviteVerity())) {
+                                //该群已开启进群验证，只可通过邀请进群
+                                startActivity(new Intent(ScanCodeActivity.this, ScanCodeErrorActivity.class));
                             } else {
-                                final EasyEditDialog requestDialog = new EasyEditDialog(ScanCodeActivity.this);
-                                requestDialog.setTitle("申请加入群组");
-                                requestDialog.setEditText("我是" + UserInfoHelper.getUserDisplayName(NimUIKit.getAccount()));
-                                requestDialog.addNegativeButtonListener(R.string.cancel, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        requestDialog.dismiss();
-                                    }
-                                });
-                                requestDialog.addPositiveButtonListener(R.string.send, com.netease.nim.uikit.R.color.color_activity_blue_bg, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        requestDialog.dismiss();
-                                        UpdateMemberChangeService.start(ScanCodeActivity.this, NimUIKit.getAccount(), teamId, 1, "qr");
-                                        String msg = requestDialog.getEditMessage();
-                                        if (TextUtils.isEmpty(msg)) {
-                                            msg = String.format("我是%1$s", UserInfoHelper.getUserName(NimUIKit.getAccount()));
+                                if (result.getVerifyType() != VerifyTypeEnum.Free) {
+                                    String url = "scheme://ychat/jointeam?EXTRA_ID=" + teamId;
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                    startActivity(intent);
+                                } else {
+                                    final EasyEditDialog requestDialog = new EasyEditDialog(ScanCodeActivity.this);
+                                    requestDialog.setTitle("申请加入群组");
+                                    requestDialog.setEditText("我是" + UserInfoHelper.getUserDisplayName(NimUIKit.getAccount()));
+                                    requestDialog.addNegativeButtonListener(R.string.cancel, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            requestDialog.dismiss();
                                         }
-                                        NIMClient.getService(TeamService.class).applyJoinTeam(result.getId(), msg).setCallback(new RequestCallback<Team>() {
-                                            @Override
-                                            public void onSuccess(Team team) {
-                                                SessionHelper.startTeamSession(ScanCodeActivity.this, teamId);
-                                                finish();
+                                    });
+                                    requestDialog.addPositiveButtonListener(R.string.send, com.netease.nim.uikit.R.color.color_activity_blue_bg, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            requestDialog.dismiss();
+                                            UpdateMemberChangeService.start(ScanCodeActivity.this, NimUIKit.getAccount(), teamId, 1, "qr");
+                                            String msg = requestDialog.getEditMessage();
+                                            if (TextUtils.isEmpty(msg)) {
+                                                msg = String.format("我是%1$s", UserInfoHelper.getUserName(NimUIKit.getAccount()));
                                             }
-
-                                            @Override
-                                            public void onFailed(int code) {
-                                                //仅仅是申请成功
-                                                if (code == ResponseCode.RES_TEAM_APPLY_SUCCESS) {
-                                                    YchatToastUtils.showShort(R.string.team_apply_to_join_send_success);
-                                                } else if (code == ResponseCode.RES_TEAM_ALREADY_IN) {
-                                                    YchatToastUtils.showShort(R.string.has_exist_in_team);
-                                                } else if (code == ResponseCode.RES_TEAM_LIMIT) {
-                                                    YchatToastUtils.showShort(R.string.team_num_limit);
-                                                } else {
-                                                    YchatToastUtils.showShort("failed, error code =" + code);
+                                            NIMClient.getService(TeamService.class).applyJoinTeam(result.getId(), msg).setCallback(new RequestCallback<Team>() {
+                                                @Override
+                                                public void onSuccess(Team team) {
+                                                    SessionHelper.startTeamSession(ScanCodeActivity.this, teamId);
+                                                    finish();
                                                 }
-                                                finish();
-                                            }
 
-                                            @Override
-                                            public void onException(Throwable exception) {
+                                                @Override
+                                                public void onFailed(int code) {
+                                                    //仅仅是申请成功
+                                                    if (code == ResponseCode.RES_TEAM_APPLY_SUCCESS) {
+                                                        YchatToastUtils.showShort(R.string.team_apply_to_join_send_success);
+                                                    } else if (code == ResponseCode.RES_TEAM_ALREADY_IN) {
+                                                        YchatToastUtils.showShort(R.string.has_exist_in_team);
+                                                    } else if (code == ResponseCode.RES_TEAM_LIMIT) {
+                                                        YchatToastUtils.showShort(R.string.team_num_limit);
+                                                    } else {
+                                                        YchatToastUtils.showShort("failed, error code =" + code);
+                                                    }
+                                                    finish();
+                                                }
 
-                                            }
-                                        });
-                                    }
-                                });
-                                requestDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                    @Override
-                                    public void onCancel(DialogInterface dialog) {
+                                                @Override
+                                                public void onException(Throwable exception) {
 
-                                    }
-                                });
-                                requestDialog.show();
+                                                }
+                                            });
+                                        }
+                                    });
+                                    requestDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                        @Override
+                                        public void onCancel(DialogInterface dialog) {
+
+                                        }
+                                    });
+                                    requestDialog.show();
+                                }
                             }
                         }
                     }
@@ -369,11 +385,8 @@ public class ScanCodeActivity extends SwipeBackUI implements QRCodeView.Delegate
                     }
                 });
             } else if (result.toLowerCase().contains("qr.alipay.com")) {
-                Uri uri = Uri.parse(result);
-                List<String> pathSegments = uri.getPathSegments();
-                String path = pathSegments.get(0);
                 if (hasInstalledAlipayClient(ScanCodeActivity.this)) {
-                    startAlipayClient(ScanCodeActivity.this, path);
+                    startAlipayClient(ScanCodeActivity.this, result);
                 } else {
                     YchatToastUtils.showShort("未安装支付宝");
                 }
@@ -383,6 +396,8 @@ public class ScanCodeActivity extends SwipeBackUI implements QRCodeView.Delegate
                     intent.setData(Uri.parse(result));
                     intent.setAction(Intent.ACTION_VIEW);
                     startActivity(intent);
+                } else {
+                    YchatToastUtils.showShort("未发现二维码");
                 }
             }
         } catch (Exception e) {

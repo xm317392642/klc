@@ -1,7 +1,12 @@
 package com.netease.nim.uikit.impl.customization;
 
 import com.netease.nim.uikit.api.model.recent.RecentCustomization;
+import com.netease.nim.uikit.business.session.extension.CustomAttachment;
+import com.netease.nim.uikit.business.session.extension.CustomAttachmentType;
+import com.netease.nim.uikit.business.session.extension.GameShareAttachment;
+import com.netease.nim.uikit.business.session.extension.TeamAuthAttachment;
 import com.netease.nim.uikit.business.session.helper.TeamNotificationHelper;
+import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
@@ -51,6 +56,27 @@ public class DefaultRecentCustomization extends RecentCustomization {
                         (NotificationAttachment) recent.getAttachment());
             case robot:
                 return "[机器人消息]";
+            case custom: {
+                CustomAttachment msgAttachment = (CustomAttachment) recent.getAttachment();
+                switch (msgAttachment.getType()) {
+                    case CustomAttachmentType.TEAM_AUTHENTICATION:
+                        return CommonUtil.getInviteTipContent(recent.getContactId(), (TeamAuthAttachment) msgAttachment);
+                    case CustomAttachmentType.TeamInvite:
+                        return "[邀请你入群]";
+                    case CustomAttachmentType.Mahjong:
+                        return "[机器人消息]";
+                    case CustomAttachmentType.GameShare:
+                        GameShareAttachment attachment = (GameShareAttachment) msgAttachment;
+                        return "[链接]" + attachment.getShareLinkTitle();
+                    case CustomAttachmentType.BusinessCard:
+                        return "[个人名片]";
+                    case CustomAttachmentType.OpenedRedPacket:
+                    case CustomAttachmentType.RedPacket:
+                        return "[红包消息]";
+                    default:
+                        return "[自定义消息]";
+                }
+            }
             default:
                 return "[自定义消息] ";
         }

@@ -1,9 +1,15 @@
 package com.xr.ychat.team;
 
+import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.business.session.activity.TeamMessageActivity;
+import com.netease.nim.uikit.business.session.extension.TeamAuthAttachment;
+import com.netease.nim.uikit.business.session.fragment.MessageFragment;
 import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nim.uikit.business.team.helper.UpdateMemberChangeService;
 import com.netease.nim.uikit.business.team.helper.UpdateTeamStatusService;
@@ -23,9 +29,9 @@ import com.netease.nimlib.sdk.team.constant.TeamBeInviteModeEnum;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
 import com.netease.nimlib.sdk.team.constant.TeamInviteModeEnum;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
+import com.netease.nimlib.sdk.team.constant.VerifyTypeEnum;
 import com.netease.nimlib.sdk.team.model.CreateTeamResult;
 import com.netease.nimlib.sdk.team.model.Team;
-import com.xr.ychat.DemoCache;
 import com.xr.ychat.main.activity.MainActivity;
 import com.xr.ychat.session.SessionHelper;
 
@@ -87,7 +93,7 @@ public class TeamCreateHelper {
                         DialogMaker.dismissProgressDialog();
                         if (code == ResponseCode.RES_TEAM_ECOUNT_LIMIT) {
                             String tip = context.getString(com.netease.nim.uikit.R.string.over_team_member_capacity, DEFAULT_TEAM_CAPACITY);
-                            YchatToastUtils.showShort( tip);
+                            YchatToastUtils.showShort(tip);
                         } else {
                             YchatToastUtils.showShort(com.netease.nim.uikit.R.string.create_team_failed);
                         }
@@ -101,6 +107,33 @@ public class TeamCreateHelper {
                     }
                 }
         );
+    }
+
+    /**
+     * 普用户首次创建群的时候，发tipType=2的消息
+     */
+    public static void sendTip2(String teamId, List<String> memberAccounts) {
+        TeamAuthAttachment authAttachment = new TeamAuthAttachment();
+        authAttachment.setInviteTipType(TeamAuthAttachment.CREATE_TEAM4);
+        authAttachment.setInviteTipId(System.currentTimeMillis() / 1000 + NimUIKit.getAccount());//msgid:时间戳+accid(时间戳单位：秒)
+        authAttachment.setInviteTipFromId(NimUIKit.getAccount());
+        String toId = "";
+        for (int i = 0, len = memberAccounts.size(); i < len; i++) {
+            String id = memberAccounts.get(i);
+            if (i == len - 1) {
+                toId = toId + id;
+            } else {
+                toId = toId + id + ",";
+            }
+        }
+        authAttachment.setInviteTipToId(toId);
+        authAttachment.setInviteTipContent(" " + TeamHelper.getTeamMemberDisplayNameYou(teamId, NimUIKit.getAccount()) + "创建了群聊 ");
+        CustomMessageConfig config = new CustomMessageConfig();
+        config.enableHistory = false;
+        config.enablePush = false;
+        config.enableUnreadCount = false;
+        IMMessage imMessage = MessageBuilder.createCustomMessage(teamId, SessionTypeEnum.Team, "", authAttachment, config);
+        NIMClient.getService(MsgService.class).sendMessage(imMessage, false);
     }
 
     /**
@@ -124,6 +157,8 @@ public class TeamCreateHelper {
                     public void onSuccess(CreateTeamResult result) {
                         Log.i(TAG, "create team success, team id =" + result.getTeam().getId() + ", now begin to update property...");
                         onCreateSuccess(context, result, memberAccounts);
+
+                        sendTip2(result.getTeam().getId(), memberAccounts);
                     }
 
                     @Override
@@ -174,41 +209,40 @@ public class TeamCreateHelper {
         if (failedAccounts != null && !failedAccounts.isEmpty()) {
             TeamHelper.onMemberTeamNumOverrun(failedAccounts, context);
         } else {
-            if ("AdvancedTeamCopyActivity".equals(context.getClass().getSimpleName())) {
-                YchatToastUtils.showShort( "复制成功");//一键复制新群
-            } else {
-                YchatToastUtils.showShort( com.netease.nim.uikit.R.string.create_team_success);
-            }
             UpdateMemberChangeService.start(context, NimUIKit.getAccount(), result.getTeam().getId(), 1, NimUIKit.getAccount());
             UpdateMemberChangeService.start(context, createMembersString(memberAccounts), result.getTeam().getId(), 1, NimUIKit.getAccount());
             UpdateTeamStatusService.start(context, result.getTeam().getId(), 1);
+            if ("AdvancedTeamCopyActivity".equals(context.getClass().getSimpleName())) {
+                YchatToastUtils.showShort("复制成功");//一键复制新群
+                // 演示：向群里插入一条Tip消息，使得该群能立即出现在最近联系人列表（会话列表）中，满足部分开发者需求
+                Map<String, Object> content = new HashMap<>(1);
+                content.put("content", "成功创建群聊");
+                IMMessage msg = MessageBuilder.createTipMessage(team.getId(), SessionTypeEnum.Team);
+                msg.setRemoteExtension(content);
+                CustomMessageConfig config = new CustomMessageConfig();
+                config.enableUnreadCount = false;
+                msg.setConfig(config);
+                msg.setStatus(MsgStatusEnum.success);
+                NIMClient.getService(MsgService.class).saveMessageToLocal(msg, true).setCallback(new RequestCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void param) {
+                        SessionHelper.startTeamSession(context, team.getId());
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+                        SessionHelper.startTeamSession(context, team.getId());
+                    }
+
+                    @Override
+                    public void onException(Throwable exception) {
+
+                    }
+                });
+            } else {
+                YchatToastUtils.showShort(com.netease.nim.uikit.R.string.create_team_success);
+            }
         }
-
-        // 演示：向群里插入一条Tip消息，使得该群能立即出现在最近联系人列表（会话列表）中，满足部分开发者需求
-        Map<String, Object> content = new HashMap<>(1);
-        content.put("content", "成功创建群聊");
-        IMMessage msg = MessageBuilder.createTipMessage(team.getId(), SessionTypeEnum.Team);
-        msg.setRemoteExtension(content);
-        CustomMessageConfig config = new CustomMessageConfig();
-        config.enableUnreadCount = false;
-        msg.setConfig(config);
-        msg.setStatus(MsgStatusEnum.success);
-        NIMClient.getService(MsgService.class).saveMessageToLocal(msg, true).setCallback(new RequestCallback<Void>() {
-            @Override
-            public void onSuccess(Void param) {
-                SessionHelper.startTeamSession(context, team.getId());
-            }
-
-            @Override
-            public void onFailed(int code) {
-                SessionHelper.startTeamSession(context, team.getId());
-            }
-
-            @Override
-            public void onException(Throwable exception) {
-
-            }
-        });
     }
 
     public static String createMembersString(List<String> accounts) {

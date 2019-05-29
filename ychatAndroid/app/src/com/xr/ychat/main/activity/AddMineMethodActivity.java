@@ -11,7 +11,6 @@ import com.netease.nim.uikit.common.ContactHttpClient;
 import com.netease.nim.uikit.common.Preferences;
 import com.netease.nim.uikit.common.RequestInfo;
 import com.netease.nim.uikit.common.activity.SwipeBackUI;
-import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.ui.widget.SwitchButton;
 import com.netease.nim.uikit.common.util.YchatToastUtils;
@@ -38,7 +37,7 @@ public class AddMineMethodActivity extends SwipeBackUI implements SwitchButton.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_mine_method);
+        setActivityView(R.layout.activity_add_mine_method);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         mToolbar.setNavigationIcon(R.drawable.back_white_icon);
