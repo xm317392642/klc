@@ -14,6 +14,6 @@ public final class BuildConfig {
   public static final String ASSISTANT_ID = "1001026";
   public static final String BUGLY_APPID = "ce5b727c4c";
   // Fields from default config.
-  public static final String BUILD_DATE = "2019-5-29 17:35:44";
-  public static final String GIT_REVISION = "9c315fd";
+  public static final String BUILD_DATE = "2019-5-29 17:55:04";
+  public static final String GIT_REVISION = "9f3ca9d";
 }

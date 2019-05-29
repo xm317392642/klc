@@ -1062,13 +1062,9 @@ public class ContactHttpClient {
                     }.getType());
                     int resCode = loginInfo.getCode();
                     if (resCode == RESULT_SUCCESS) {
-                        activity.runOnUiThread(() -> {
-                            callback.onSuccess(loginInfo);
-                        });
+                        activity.runOnUiThread(() -> callback.onSuccess(loginInfo));
                     } else {
-                        activity.runOnUiThread(() -> {
-                            callback.onFailed(resCode, null);
-                        });
+                        activity.runOnUiThread(() -> callback.onFailed(resCode, null));
                     }
                 } catch (Exception e) {
                     activity.runOnUiThread(() -> {
