@@ -97,7 +97,18 @@
                 android:id="@+id/team_authentication_layout"
                 layout="@layout/nim_advanced_team_info_divider_item" />
 
-
+            <include
+                android:id="@+id/open_team_authentication_layout"
+                layout="@layout/nim_advanced_team_info_notification_layout" />
+            <TextView
+                android:id="@+id/open_team_authentication_tips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="12dp"
+                android:text="启用后，群成员需要群主确认才能邀请朋友进群。扫描二维码进群将同时停用。"
+                android:textSize="13sp" />
             <include
                 android:id="@+id/team_invite_layout"
                 layout="@layout/nim_advanced_team_info_divider_item" />
@@ -119,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp"
-                android:paddingBottom="12dp"
+                android:paddingBottom="3dp"
                 android:text="开启后，成员退群需要群主同意方可退群"
                 android:textSize="13sp" />
             <include
@@ -129,7 +140,6 @@
             <include
                 android:id="@+id/team_transfer_team_layout"
                 layout="@layout/nim_advanced_team_info_divider_item" />
-
 
 
         </LinearLayout>

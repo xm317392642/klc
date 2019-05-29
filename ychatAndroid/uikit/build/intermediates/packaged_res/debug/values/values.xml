@@ -66,8 +66,10 @@
     <color name="action_bar_black_title_1f1f1f">#1f1f1f</color>
     <color name="action_bar_black_title_color">#252525</color>
     <color name="black">#000000</color>
+    <color name="clarity_white">#F2FFFFFF</color>
     <color name="color_010101">#010101</color>
     <color name="color_1e1e1e">#1E1E1E</color>
+    <color name="color_201e1e">#201E1E</color>
     <color name="color_3774fe">#3774FE</color>
     <color name="color_888888">#888888</color>
     <color name="color_aaaaaa_content_text">#ffaaaaaa</color>
@@ -157,7 +159,7 @@
     <dimen name="light_line_size">1px</dimen>
     <dimen name="mask_sticker_bubble_width">120dip</dimen>
     <dimen name="max_bubble_width">240dip</dimen>
-    <dimen name="max_text_bubble_width">222dip</dimen>
+    <dimen name="max_text_bubble_width">254dip</dimen>
     <dimen name="message_bottom_function_viewpager_height">220dp</dimen>
     <dimen name="normal_text_size">16sp</dimen>
     <dimen name="robot_message_image_width">200dp</dimen>
@@ -225,6 +227,7 @@
     <string name="input_panel_business_card">个人名片</string>
     <string name="input_panel_game_share">游戏分享</string>
     <string name="input_panel_location">位置</string>
+    <string name="input_panel_paymentcode">支付宝收款</string>
     <string name="input_panel_photo">图片</string>
     <string name="input_panel_take">拍照</string>
     <string name="input_panel_video">视频</string>
@@ -387,6 +390,14 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:itemTextAppearance">?android:attr/actionMenuTextAppearance</item>
+    </style>
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/color_be6913</item>
+        <item name="colorPrimaryDark">@color/redpacket</item>
+        <item name="colorAccent">@color/redpacket</item>
+        <!-- Customize your theme here. -->
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
     <style name="DarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->

@@ -12,130 +12,130 @@ public final class R {
     public static final class color {
         private color() {}
 
-        public static final int upsdk_black = 0x7f060104;
-        public static final int upsdk_blue_text_007dff = 0x7f060105;
-        public static final int upsdk_category_button_select_pressed = 0x7f060106;
-        public static final int upsdk_category_button_select_stroke = 0x7f060107;
-        public static final int upsdk_white = 0x7f060108;
+        public static final int upsdk_black = 0x7f0600ea;
+        public static final int upsdk_blue_text_007dff = 0x7f0600eb;
+        public static final int upsdk_category_button_select_pressed = 0x7f0600ec;
+        public static final int upsdk_category_button_select_stroke = 0x7f0600ed;
+        public static final int upsdk_white = 0x7f0600ee;
     }
     public static final class dimen {
         private dimen() {}
 
-        public static final int upsdk_dialog_content_size = 0x7f07014f;
-        public static final int upsdk_dialog_subtitle_size = 0x7f070150;
+        public static final int upsdk_dialog_content_size = 0x7f070141;
+        public static final int upsdk_dialog_subtitle_size = 0x7f070142;
     }
     public static final class drawable {
         private drawable() {}
 
-        public static final int upsdk_btn_emphasis_normal_layer = 0x7f080271;
-        public static final int upsdk_cancel_normal = 0x7f080272;
-        public static final int upsdk_cancel_pressed = 0x7f080273;
-        public static final int upsdk_third_download_bg = 0x7f080274;
-        public static final int upsdk_update_all_button = 0x7f080275;
+        public static final int upsdk_btn_emphasis_normal_layer = 0x7f08020f;
+        public static final int upsdk_cancel_normal = 0x7f080210;
+        public static final int upsdk_cancel_pressed = 0x7f080211;
+        public static final int upsdk_third_download_bg = 0x7f080212;
+        public static final int upsdk_update_all_button = 0x7f080213;
     }
     public static final class id {
         private id() {}
 
         public static final int action = 0x7f09000f;
-        public static final int appsize_textview = 0x7f09003a;
-        public static final int big_pic = 0x7f090080;
-        public static final int cancel_imageview = 0x7f0900af;
-        public static final int content_layout = 0x7f0900d6;
-        public static final int content_textview = 0x7f0900d8;
-        public static final int divider = 0x7f0900f5;
-        public static final int download_info_progress = 0x7f0900fc;
-        public static final int hms_message_text = 0x7f090165;
-        public static final int hms_progress_bar = 0x7f090166;
-        public static final int hms_progress_text = 0x7f090167;
-        public static final int icon = 0x7f09016d;
-        public static final int line1 = 0x7f09019e;
-        public static final int line3 = 0x7f09019f;
-        public static final int linear_buttons = 0x7f0901a0;
-        public static final int linear_icons = 0x7f0901a1;
-        public static final int name = 0x7f09022f;
-        public static final int name_layout = 0x7f090230;
-        public static final int name_textview = 0x7f090231;
-        public static final int right_btn = 0x7f0902d7;
-        public static final int size = 0x7f090343;
-        public static final int size_layout = 0x7f090344;
-        public static final int small_btn = 0x7f090347;
-        public static final int smallicon = 0x7f09034a;
-        public static final int status_bar_latest_event_content = 0x7f09035a;
-        public static final int text = 0x7f0903bb;
-        public static final int third_app_dl_progress_text = 0x7f0903c9;
-        public static final int third_app_dl_progressbar = 0x7f0903ca;
-        public static final int third_app_warn_text = 0x7f0903cb;
-        public static final int title = 0x7f0903d3;
-        public static final int version = 0x7f09042d;
-        public static final int version_layout = 0x7f09042f;
-        public static final int version_textview = 0x7f090430;
+        public static final int appsize_textview = 0x7f09003e;
+        public static final int big_pic = 0x7f090055;
+        public static final int cancel_imageview = 0x7f090078;
+        public static final int content_layout = 0x7f09009e;
+        public static final int content_textview = 0x7f0900a0;
+        public static final int divider = 0x7f0900bc;
+        public static final int download_info_progress = 0x7f0900c3;
+        public static final int hms_message_text = 0x7f09011f;
+        public static final int hms_progress_bar = 0x7f090120;
+        public static final int hms_progress_text = 0x7f090121;
+        public static final int icon = 0x7f090127;
+        public static final int line1 = 0x7f090156;
+        public static final int line3 = 0x7f090157;
+        public static final int linear_buttons = 0x7f090159;
+        public static final int linear_icons = 0x7f09015a;
+        public static final int name = 0x7f0901da;
+        public static final int name_layout = 0x7f0901db;
+        public static final int name_textview = 0x7f0901dc;
+        public static final int right_btn = 0x7f09027e;
+        public static final int size = 0x7f0902e6;
+        public static final int size_layout = 0x7f0902e7;
+        public static final int small_btn = 0x7f0902e9;
+        public static final int smallicon = 0x7f0902ea;
+        public static final int status_bar_latest_event_content = 0x7f0902fa;
+        public static final int text = 0x7f090360;
+        public static final int third_app_dl_progress_text = 0x7f09036e;
+        public static final int third_app_dl_progressbar = 0x7f09036f;
+        public static final int third_app_warn_text = 0x7f090370;
+        public static final int title = 0x7f090377;
+        public static final int version = 0x7f0903d4;
+        public static final int version_layout = 0x7f0903d6;
+        public static final int version_textview = 0x7f0903d7;
     }
     public static final class layout {
         private layout() {}
 
-        public static final int hms_download_progress = 0x7f0c0074;
-        public static final int hwpush_buttons_layout = 0x7f0c0075;
-        public static final int hwpush_icons_layout = 0x7f0c0076;
-        public static final int hwpush_layout2 = 0x7f0c0077;
-        public static final int hwpush_layout4 = 0x7f0c0078;
-        public static final int hwpush_layout7 = 0x7f0c0079;
-        public static final int hwpush_layout8 = 0x7f0c007a;
-        public static final int upsdk_app_dl_progress_dialog = 0x7f0c0158;
-        public static final int upsdk_ota_update_view = 0x7f0c0159;
+        public static final int hms_download_progress = 0x7f0c006a;
+        public static final int hwpush_buttons_layout = 0x7f0c006b;
+        public static final int hwpush_icons_layout = 0x7f0c006c;
+        public static final int hwpush_layout2 = 0x7f0c006d;
+        public static final int hwpush_layout4 = 0x7f0c006e;
+        public static final int hwpush_layout7 = 0x7f0c006f;
+        public static final int hwpush_layout8 = 0x7f0c0070;
+        public static final int upsdk_app_dl_progress_dialog = 0x7f0c014c;
+        public static final int upsdk_ota_update_view = 0x7f0c014d;
     }
     public static final class string {
         private string() {}
 
-        public static final int connect_server_fail_prompt_toast = 0x7f10007a;
-        public static final int getting_message_fail_prompt_toast = 0x7f1000a4;
-        public static final int hms_abort = 0x7f1000aa;
-        public static final int hms_abort_message = 0x7f1000ab;
-        public static final int hms_bindfaildlg_message = 0x7f1000ac;
-        public static final int hms_bindfaildlg_title = 0x7f1000ad;
-        public static final int hms_cancel = 0x7f1000ae;
-        public static final int hms_check_failure = 0x7f1000af;
-        public static final int hms_check_no_update = 0x7f1000b0;
-        public static final int hms_checking = 0x7f1000b1;
-        public static final int hms_confirm = 0x7f1000b2;
-        public static final int hms_download_failure = 0x7f1000b3;
-        public static final int hms_download_no_space = 0x7f1000b4;
-        public static final int hms_download_retry = 0x7f1000b5;
-        public static final int hms_downloading = 0x7f1000b6;
-        public static final int hms_downloading_loading = 0x7f1000b7;
-        public static final int hms_downloading_new = 0x7f1000b8;
-        public static final int hms_gamebox_name = 0x7f1000b9;
-        public static final int hms_install = 0x7f1000ba;
-        public static final int hms_install_message = 0x7f1000bb;
-        public static final int hms_push_channel = 0x7f1000bc;
-        public static final int hms_retry = 0x7f1000bd;
-        public static final int hms_update = 0x7f1000be;
-        public static final int hms_update_message = 0x7f1000bf;
-        public static final int hms_update_message_new = 0x7f1000c0;
-        public static final int hms_update_title = 0x7f1000c1;
-        public static final int no_available_network_prompt_toast = 0x7f100130;
-        public static final int third_app_dl_cancel_download_prompt_ex = 0x7f100214;
-        public static final int third_app_dl_install_failed = 0x7f100215;
-        public static final int third_app_dl_sure_cancel_download = 0x7f100216;
-        public static final int upsdk_app_dl_installing = 0x7f100225;
-        public static final int upsdk_app_download_info_new = 0x7f100226;
-        public static final int upsdk_app_size = 0x7f100227;
-        public static final int upsdk_app_version = 0x7f100228;
-        public static final int upsdk_cancel = 0x7f100229;
-        public static final int upsdk_checking_update_prompt = 0x7f10022a;
-        public static final int upsdk_choice_update = 0x7f10022b;
-        public static final int upsdk_detail = 0x7f10022c;
-        public static final int upsdk_install = 0x7f10022d;
-        public static final int upsdk_ota_app_name = 0x7f10022e;
-        public static final int upsdk_ota_cancel = 0x7f10022f;
-        public static final int upsdk_ota_force_cancel_new = 0x7f100230;
-        public static final int upsdk_ota_notify_updatebtn = 0x7f100231;
-        public static final int upsdk_ota_title = 0x7f100232;
-        public static final int upsdk_update_check_no_new_version = 0x7f100233;
-        public static final int upsdk_updating = 0x7f100234;
+        public static final int connect_server_fail_prompt_toast = 0x7f100050;
+        public static final int getting_message_fail_prompt_toast = 0x7f100078;
+        public static final int hms_abort = 0x7f10007e;
+        public static final int hms_abort_message = 0x7f10007f;
+        public static final int hms_bindfaildlg_message = 0x7f100080;
+        public static final int hms_bindfaildlg_title = 0x7f100081;
+        public static final int hms_cancel = 0x7f100082;
+        public static final int hms_check_failure = 0x7f100083;
+        public static final int hms_check_no_update = 0x7f100084;
+        public static final int hms_checking = 0x7f100085;
+        public static final int hms_confirm = 0x7f100086;
+        public static final int hms_download_failure = 0x7f100087;
+        public static final int hms_download_no_space = 0x7f100088;
+        public static final int hms_download_retry = 0x7f100089;
+        public static final int hms_downloading = 0x7f10008a;
+        public static final int hms_downloading_loading = 0x7f10008b;
+        public static final int hms_downloading_new = 0x7f10008c;
+        public static final int hms_gamebox_name = 0x7f10008d;
+        public static final int hms_install = 0x7f10008e;
+        public static final int hms_install_message = 0x7f10008f;
+        public static final int hms_push_channel = 0x7f100090;
+        public static final int hms_retry = 0x7f100091;
+        public static final int hms_update = 0x7f100092;
+        public static final int hms_update_message = 0x7f100093;
+        public static final int hms_update_message_new = 0x7f100094;
+        public static final int hms_update_title = 0x7f100095;
+        public static final int no_available_network_prompt_toast = 0x7f1000f3;
+        public static final int third_app_dl_cancel_download_prompt_ex = 0x7f1001a0;
+        public static final int third_app_dl_install_failed = 0x7f1001a1;
+        public static final int third_app_dl_sure_cancel_download = 0x7f1001a2;
+        public static final int upsdk_app_dl_installing = 0x7f1001b2;
+        public static final int upsdk_app_download_info_new = 0x7f1001b3;
+        public static final int upsdk_app_size = 0x7f1001b4;
+        public static final int upsdk_app_version = 0x7f1001b5;
+        public static final int upsdk_cancel = 0x7f1001b6;
+        public static final int upsdk_checking_update_prompt = 0x7f1001b7;
+        public static final int upsdk_choice_update = 0x7f1001b8;
+        public static final int upsdk_detail = 0x7f1001b9;
+        public static final int upsdk_install = 0x7f1001ba;
+        public static final int upsdk_ota_app_name = 0x7f1001bb;
+        public static final int upsdk_ota_cancel = 0x7f1001bc;
+        public static final int upsdk_ota_force_cancel_new = 0x7f1001bd;
+        public static final int upsdk_ota_notify_updatebtn = 0x7f1001be;
+        public static final int upsdk_ota_title = 0x7f1001bf;
+        public static final int upsdk_update_check_no_new_version = 0x7f1001c0;
+        public static final int upsdk_updating = 0x7f1001c1;
     }
     public static final class style {
         private style() {}
 
-        public static final int upsdkDlDialog = 0x7f11022d;
+        public static final int upsdkDlDialog = 0x7f110228;
     }
 }

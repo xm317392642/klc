@@ -13,11 +13,11 @@ public final class R {
         private style() {}
 
         public static final int ActivityTranslucent = 0x7f110001;
-        public static final int DialogTransparent = 0x7f1100cd;
+        public static final int DialogTransparent = 0x7f1100cc;
     }
     public static final class xml {
         private xml() {}
 
-        public static final int util_code_provider_paths = 0x7f130003;
+        public static final int util_code_provider_paths = 0x7f130002;
     }
 }

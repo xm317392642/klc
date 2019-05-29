@@ -23,6 +23,7 @@
             android:ellipsize="end"
             android:maxWidth="210dp"
             android:maxLines="1"
+            tools:text="title"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />

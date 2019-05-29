@@ -2,6 +2,6 @@
 <layer-list
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:drawable="@drawable/nim_actionbar_dark_logo_icon"
+        android:drawable="@drawable/nim_actionbar_white_back_icon"
         android:right="5dp"/>
 </layer-list>

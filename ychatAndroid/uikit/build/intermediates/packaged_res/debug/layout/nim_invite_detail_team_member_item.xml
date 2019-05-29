@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+        <com.netease.nim.uikit.common.ui.imageview.HeadImageView
+            android:id="@+id/imageViewHeader"
+            android:layout_width="@dimen/avatar_size_default"
+            android:layout_height="@dimen/avatar_size_default"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="6dp" />
+
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageViewHeader"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/color_black_333333"
+        android:textSize="12sp"/>
+
+</LinearLayout>

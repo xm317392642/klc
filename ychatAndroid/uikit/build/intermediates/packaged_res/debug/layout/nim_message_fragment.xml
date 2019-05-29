@@ -34,13 +34,14 @@
         </LinearLayout>
             <TextView
                 android:id="@+id/tx_ait"
-                android:layout_width="111dp"
+                android:layout_width="wrap_content"
                 android:layout_height="41dp"
                 android:background="@drawable/nim_unread_bg_selector"
                 android:textSize="13sp"
                 android:paddingLeft="15dp"
                 android:layout_gravity="right"
                 android:paddingBottom="2dp"
+                android:paddingRight="3dp"
                 android:drawablePadding="9dp"
                 android:gravity="center_vertical"
                 android:layout_marginTop="14dp"
@@ -83,7 +84,7 @@
 
             <LinearLayout
                 android:id="@+id/timer_tip_container"
-                android:layout_width="188dp"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_gravity="bottom"
                 android:gravity="center">

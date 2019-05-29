@@ -4,41 +4,7 @@
             "outputFile": "D:\\workspace\\yaoliao\\ychatAndroid\\ychatAndroid\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-gu\\values-gu.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\push-2.6.0.301.aar\\1229473822d8071e859ed4372cdc930e\\res\\values-gu\\values-gu.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "76",
-                        "endOffsets": "127"
-                    },
-                    "to": {
-                        "startLines": "48",
-                        "startColumns": "4",
-                        "startOffsets": "4966",
-                        "endColumns": "76",
-                        "endOffsets": "5038"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0.aar\\3fc0cf14ee1c653c6a4a0cf1c2db3443\\res\\values-gu\\values-gu.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "105,214,318,425,512,613,736,813,891,982,1075,1174,1268,1369,1462,1557,1654,1745,1836,1916,2022,2124,2221,2330,2429,2539,2699,2802",
-                        "endColumns": "108,103,106,86,100,122,76,77,90,92,98,93,100,92,94,96,90,90,79,105,101,96,108,98,109,159,102,79",
-                        "endOffsets": "209,313,420,507,608,731,808,886,977,1070,1169,1263,1364,1457,1552,1649,1740,1831,1911,2017,2119,2216,2325,2424,2534,2694,2797,2877"
-                    },
-                    "to": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,55",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "105,214,318,425,512,613,736,813,891,982,1075,1174,1268,1369,1462,1557,1654,1745,1836,1916,2022,2124,2221,2330,2429,2539,2699,5720",
-                        "endColumns": "108,103,106,86,100,122,76,77,90,92,98,93,100,92,94,96,90,90,79,105,101,96,108,98,109,159,102,79",
-                        "endOffsets": "209,313,420,507,608,731,808,886,977,1070,1169,1263,1364,1457,1552,1649,1740,1831,1911,2017,2119,2216,2325,2424,2534,2694,2797,5795"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\base-2.6.0.301.aar\\c5dd77bd7c4bc5bbf6c95045ddefc719\\res\\values-gu\\values-gu.xml",
+                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\base-2.6.0.301.aar\\358aff51f83315ca0b149f52a202b2f7\\res\\values-gu\\values-gu.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -55,7 +21,41 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-28.0.0.aar\\c8171521c5aa7ee13d472e46dd891ab7\\res\\values-gu\\values-gu.xml",
+                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0.aar\\22639ecd5eaf194a2c3ccfd0b002a107\\res\\values-gu\\values-gu.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,214,318,425,512,613,736,813,891,982,1075,1174,1268,1369,1462,1557,1654,1745,1836,1916,2022,2124,2221,2330,2429,2539,2699,2802",
+                        "endColumns": "108,103,106,86,100,122,76,77,90,92,98,93,100,92,94,96,90,90,79,105,101,96,108,98,109,159,102,79",
+                        "endOffsets": "209,313,420,507,608,731,808,886,977,1070,1169,1263,1364,1457,1552,1649,1740,1831,1911,2017,2119,2216,2325,2424,2534,2694,2797,2877"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,55",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,214,318,425,512,613,736,813,891,982,1075,1174,1268,1369,1462,1557,1654,1745,1836,1916,2022,2124,2221,2330,2429,2539,2699,5720",
+                        "endColumns": "108,103,106,86,100,122,76,77,90,92,98,93,100,92,94,96,90,90,79,105,101,96,108,98,109,159,102,79",
+                        "endOffsets": "209,313,420,507,608,731,808,886,977,1070,1169,1263,1364,1457,1552,1649,1740,1831,1911,2017,2119,2216,2325,2424,2534,2694,2797,5795"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\push-2.6.0.301.aar\\11898212087d65bf7ab02b57468140af\\res\\values-gu\\values-gu.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "76",
+                        "endOffsets": "127"
+                    },
+                    "to": {
+                        "startLines": "48",
+                        "startColumns": "4",
+                        "startOffsets": "4966",
+                        "endColumns": "76",
+                        "endOffsets": "5038"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-28.0.0.aar\\047681d7f2b5a3c7f77fa1197a44f74c\\res\\values-gu\\values-gu.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

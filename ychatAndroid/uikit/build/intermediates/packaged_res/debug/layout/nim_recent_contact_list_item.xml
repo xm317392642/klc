@@ -43,8 +43,8 @@
 
     <com.netease.nim.uikit.common.ui.drop.DropFake
         android:id="@+id/unread_number_tip"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_gravity="center"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="6dp"
@@ -58,8 +58,8 @@
 
     <ImageView
         android:id="@+id/unread_number_explosion"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:visibility="gone"

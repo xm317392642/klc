@@ -1,7 +1,26 @@
-﻿// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+/**
+ * 图片压缩插件配置,后文有对配置信息介绍
+ * way:设置压缩的方式,支持3种常见的压缩,"tinypng","pngquant","zopflip" 3选1,压缩方式选择及压缩效果见下图
+ * test:设置测试模式是否开启,false表示压缩后图片直接覆盖原图,true表示会把原图及压缩图输出到测试目录(Project/ImageCompressTest)
+ * whiteFiles:选填,白名单文件数组,不进行压缩
+ * minSize:单位为KB,设置原图大于某个数值才触发压缩,0表示全部都压缩
+ * tinyKeys:选填,仅在way="tinypng"情况下才需要,tinyKeys申请教程入口
+ * 链接：https://www.jianshu.com/p/1c5fb2cecf1c
+ */
+//apply plugin: 'img-compressor'
+//imgCompressOpt{
+//    way="pngquant"
+//    test = false
+//    whiteFiles=["text_pic1.png","test_pic2.jpg"]
+//    minSize=0
+//    tinyKeys=["your key"]
+//}
+
 
 buildscript {
     ext.kotlin_version = '1.3.21'
+
     repositories {
         google()
         jcenter()
@@ -9,7 +28,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.kingkingdu.plugin:img-compressor:1.1.4'
+        //classpath 'com.kingkingdu.plugin:img-compressor:1.1.4'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -19,6 +38,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+
         maven { url 'http://developer.huawei.com/repo' }
         maven { url 'https://jitpack.io' }
         maven { url 'https://dl.bintray.com/linkedme2016/lkme-deeplinks' }
@@ -39,8 +59,8 @@ ext {
     minSdkVersion = 19
     targetSdkVersion = 28
     appTargetSdkVersion = 28
-    versionCode = 4
-    versionName = '1.0.4'
+    versionCode = 9
+    versionName = '1.0.9'
     sdkSourceCompatibility = 1.8
     sdkTargetCompatibility = 1.8
     appSourceCompatibility = 1.8

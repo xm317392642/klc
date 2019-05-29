@@ -10,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/bubble_time_layout_margin_bottom"
         android:layout_marginTop="@dimen/bubble_time_layout_margin_top"
+        android:layout_marginBottom="@dimen/bubble_time_layout_margin_bottom"
         android:background="@drawable/nim_bg_message_tip"
         android:paddingLeft="7dip"
         android:paddingRight="7dip"
@@ -24,8 +24,8 @@
         android:id="@+id/message_item_portrait_left"
         android:layout_width="@dimen/avatar_size_in_session"
         android:layout_height="@dimen/avatar_size_in_session"
-        android:layout_alignParentLeft="true"
         android:layout_below="@id/message_item_time"
+        android:layout_alignParentLeft="true"
         android:layout_marginRight="@dimen/bubble_head_margin_horizontal"
         android:visibility="gone" />
 
@@ -33,8 +33,8 @@
         android:id="@+id/message_item_portrait_right"
         android:layout_width="@dimen/avatar_size_in_session"
         android:layout_height="@dimen/avatar_size_in_session"
-        android:layout_alignParentRight="true"
         android:layout_below="@id/message_item_time"
+        android:layout_alignParentRight="true"
         android:layout_marginLeft="@dimen/bubble_head_margin_horizontal"
         android:visibility="gone" />
 
@@ -52,8 +52,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/message_item_time"
-            android:layout_marginBottom="3dp"
             android:layout_marginRight="3dp"
+            android:layout_marginBottom="3dp"
             android:layout_toRightOf="@id/message_item_portrait_left"
             android:visibility="gone" />
 
@@ -62,8 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/message_item_time"
-            android:layout_marginBottom="3dp"
             android:layout_marginTop="-3dp"
+            android:layout_marginBottom="3dp"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxWidth="160dip"
@@ -90,13 +90,13 @@
 
             <ProgressBar
                 android:id="@+id/message_item_progress"
+                style="@style/Widget.AppCompat.ProgressBar"
                 android:layout_width="20dip"
                 android:layout_height="20dip"
                 android:layout_gravity="center"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:indeterminate="true"
-                android:indeterminateDrawable="@drawable/nim_progress_small_white"
                 android:visibility="gone" />
 
             <ImageView
@@ -116,11 +116,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:paddingTop="5dp"
                 android:layout_marginBottom="3dip"
                 android:background="@color/transparent"
+                android:paddingTop="5dp"
                 android:textColor="#666666"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
             <FrameLayout
                 android:id="@+id/message_item_content"

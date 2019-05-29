@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xr.ychat"
     android:installLocation="auto"
-    android:versionCode="4"
-    android:versionName="1.0.4" >
+    android:versionCode="9"
+    android:versionName="1.0.9" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -101,7 +101,8 @@
     <uses-permission android:name="com.oppo.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.oppo.launcher.permission.WRITE_SETTINGS" /> <!-- for EvMe -->
     <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_READ" />
-    <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_WRITE" />
+    <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_WRITE" /> <!-- To allow starting foreground services on Android P+ - https://developer.android.com/preview/behavior-changes#fg-svc -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-feature
         android:name="android.hardware.camera.autofocus"
@@ -137,12 +138,12 @@
 
         <!--
         线上：b8d10e9fd09b753c22e8e89ed8d7028a
-        本地：59e25b68cbacfda7d03225ccac77dfab
+        本地：beb13d848e728801b520c3482eaa6745 魏强 41
         正式：55d27dbe9a63a2e430a621c06835ec86
         -->
         <meta-data
             android:name="com.netease.nim.appKey"
-            android:value="55d27dbe9a63a2e430a621c06835ec86" />
+            android:value="beb13d848e728801b520c3482eaa6745" />
 
         <!-- 全面屏配置 -->
         <meta-data
@@ -216,13 +217,13 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
             <!--
-                <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                &lt;!&ndash;通过这种方式，可以把自己的app加入系统分享中 	指定分享类型 &ndash;&gt;
-                <data android:mimeType="text/plain"/>
-                <data android:mimeType="image/*" />
-            </intent-filter>
+                            <intent-filter>
+                            <action android:name="android.intent.action.SEND"/>
+                            <category android:name="android.intent.category.DEFAULT"/>
+                            &lt;!&ndash;通过这种方式，可以把自己的app加入系统分享中 	指定分享类型 &ndash;&gt;
+                            <data android:mimeType="text/plain"/>
+                            <data android:mimeType="image/*" />
+                        </intent-filter>
             -->
         </activity>
 
@@ -252,7 +253,18 @@
             android:configChanges="orientation"
             android:label="@string/login"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="h5"
+                    android:path="/enter"
+                    android:scheme="web" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.xr.ychat.main.activity.AuthorizeLoginActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -324,6 +336,11 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.xr.ychat.redpacket.BindAlipayActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name="com.xr.ychat.redpacket.PaymentCodeActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -482,6 +499,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
+            android:name="com.xr.ychat.main.activity.InviteDetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
             android:name="com.xr.ychat.main.activity.SystemNotificationActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
@@ -513,6 +536,12 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.xr.ychat.team.activity.AdvancedTeamCopyActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.xr.ychat.team.activity.AdvancedTeamInviteActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
@@ -791,6 +820,20 @@
         <service
             android:name="com.xiaomi.mipush.sdk.MessageHandleService"
             android:enabled="true" />
+        <service
+            android:name="com.talkingdata.sdk.TDAntiCheatingService"
+            android:process="com.talkingdata.sdk.TDAntiCheatingService" > <!-- 用户质量评估Service可以配置在主进程或者单独进程 -->
+            <intent-filter>
+                <action android:name="com.talkingdata.sdk.TDAntiCheatingService" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="TD_APP_ID"
+            android:value="DC163C5DE81548878E6F9E51F589AAB5" />
+        <meta-data
+            android:name="TD_CHANNEL_ID"
+            android:value="Android" />
 
         <receiver
             android:name="com.netease.nimlib.mixpush.mi.MiPushReceiver"
@@ -867,6 +910,8 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
+        <service android:name="com.netease.nim.uikit.common.UnsentRedPacketService" />
+
         <meta-data
             android:name="com.netease.nim.uikit.support.glide.NIMGlideModule"
             android:value="GlideModule" /> <!-- 会话窗口 -->
@@ -879,118 +924,99 @@
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.session.activity.TeamMessageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- 群聊 -->
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.NormalTeamInfoActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.AdvancedTeamInfoActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.AdvancedTeamMemberActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.AdvancedTeamAnnounceActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.AdvancedTeamMemberInfoActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.TeamManagmentActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.netease.nim.uikit.business.team.activity.TeamAutoGetRedpacketActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.TeamMemberChangeActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.TeamMemberChatTimeActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.TeamMuteActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.AdvancedTeamNicknameActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.AdvancedTeamCreateAnnounceActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.team.activity.TeamPropertySettingActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.common.activity.GroupCodeActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name="com.netease.nim.uikit.business.team.activity.TeamIconSetActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- 联系人选择器 -->
         <activity
             android:name="com.netease.nim.uikit.business.contact.selector.activity.ContactSelectActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/contact_selector"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" /> <!-- @ 选择器 -->
         <activity
             android:name="com.netease.nim.uikit.business.ait.selector.AitContactSelectorActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" /> <!-- 照片选择 -->
+            android:screenOrientation="portrait" /> <!-- 照片选择 -->
         <activity
             android:name="com.netease.nim.uikit.common.media.picker.activity.PickImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.netease.nim.uikit.common.media.picker.activity.CropImageActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.netease.nim.uikit.common.media.picker.activity.PickerAlbumActivity"
             android:screenOrientation="portrait"
@@ -1011,26 +1037,27 @@
             android:label="@string/input_panel_take"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- 视频 -->
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.netease.nim.uikit.business.team.activity.ScanCodeErrorActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" /> <!-- 视频 -->
         <activity
             android:name="com.netease.nim.uikit.business.session.activity.CaptureVideoActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.netease.nim.uikit.business.session.activity.WatchVideoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/video_play"
-            android:theme="@style/AppTheme.NoActionBar" /> <!-- 查看大图 -->
+            android:label="@string/video_play" /> <!-- 查看大图 -->
         <activity
             android:name="com.netease.nim.uikit.business.session.activity.WatchMessagePictureActivity"
-            android:configChanges="keyboardHidden"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:configChanges="keyboardHidden" />
         <activity
             android:name="com.netease.nim.uikit.business.session.activity.WatchPicAndVideoMenuActivity"
-            android:configChanges="keyboardHidden"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:configChanges="keyboardHidden" />
 
         <service android:name="com.netease.nim.uikit.common.UpdateMemberChatTimeService" />
         <service android:name="com.netease.nim.uikit.business.team.helper.UpdateMemberChangeService" />
@@ -1046,28 +1073,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
-        <activity
-            android:name="com.netease.nim.avchatkit.activity.AVChatActivity"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:theme="@style/FullScreenTheme"
-            android:windowSoftInputMode="stateAlwaysHidden" /> <!-- 音视频 -->
-        <activity
-            android:name="com.netease.nim.avchatkit.teamavchat.activity.TeamAVChatActivity"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:theme="@style/FullScreenTheme"
-            android:windowSoftInputMode="stateAlwaysHidden" /> <!-- NRTC Settings -->
-        <activity
-            android:name="com.netease.nim.avchatkit.activity.AVChatSettingsActivity"
-            android:screenOrientation="portrait" /> <!-- 申明本地电话状态（通话状态）的广播接收器，第三方APP集成时音视频模块时，如果需要在App中处理网络通话与本地电话的交互请加上此接收器 -->
-        <!-- 在Demo的示例代码中是在Application进行了网络通话与本地电话的互斥处理 -->
-        <receiver android:name="com.netease.nim.avchatkit.receiver.IncomingCallReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE" />
-            </intent-filter>
-        </receiver>
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -1132,6 +1137,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/util_code_provider_paths" />
         </provider>
+
+        <service android:name="com.liulishuo.filedownloader.services.FileDownloadService$SharedMainProcessService" />
+        <service
+            android:name="com.liulishuo.filedownloader.services.FileDownloadService$SeparateProcessService"
+            android:process=":filedownloader" />
 
         <activity
             android:name="com.huawei.hms.activity.BridgeActivity"
