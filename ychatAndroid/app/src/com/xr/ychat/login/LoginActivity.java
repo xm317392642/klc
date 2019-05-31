@@ -69,7 +69,7 @@ import com.xr.ychat.main.activity.MainShareActivity;
 
 /**
  * 登录/注册界面
- *  feature_z
+ *  feature
  */
 public class LoginActivity extends UI implements OnKeyListener {
 
