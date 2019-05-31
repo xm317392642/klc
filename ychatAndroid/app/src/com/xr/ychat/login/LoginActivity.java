@@ -69,8 +69,7 @@ import com.xr.ychat.main.activity.MainShareActivity;
 
 /**
  * 登录/注册界面
- * <p/>
- * Created by huangjun on 2015/2/1.
+ * 测试分支一
  */
 public class LoginActivity extends UI implements OnKeyListener {
 
